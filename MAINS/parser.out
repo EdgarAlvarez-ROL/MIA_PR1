@@ -1,0 +1,1352 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    LETRA_MKDISK
+
+Grammar
+
+Rule 0     S' -> comando
+Rule 1     comando -> MKDISK atributosm
+Rule 2     atributosm -> atributosm atributom
+Rule 3     atributosm -> atributom
+Rule 4     atributom -> GUION PATH IGUAL DIR
+Rule 5     atributom -> GUION FIT IGUAL LETRAS_FIT
+Rule 6     atributom -> GUION UNIT IGUAL LETRA_FDISK
+Rule 7     atributom -> GUION SIZE IGUAL NUM
+Rule 8     comando -> FDISK atributos
+Rule 9     atributos -> atributos atributo
+Rule 10    atributos -> atributo
+Rule 11    atributo -> GUION PATH IGUAL DIR
+Rule 12    atributo -> GUION TYPE IGUAL LETRA_FDISK
+Rule 13    atributo -> GUION UNIT IGUAL LETRA_FDISK
+Rule 14    atributo -> GUION NAME IGUAL CADENA
+Rule 15    atributo -> GUION SIZE IGUAL NUM
+Rule 16    atributo -> GUION FIT IGUAL LETRAS_FIT
+Rule 17    atributo -> GUION ADD IGUAL NUM
+Rule 18    atributo -> GUION DELETE
+Rule 19    comando -> REP GUION PATH IGUAL DIR
+Rule 20    comando -> RMDISK GUION PATH IGUAL DIR
+Rule 21    comando -> MOUNT atributos_mount
+Rule 22    atributos_mount -> atributos_mount atributo_mm
+Rule 23    atributos_mount -> atributo_mm
+Rule 24    atributo_mm -> GUION PATH IGUAL DIR
+Rule 25    atributo_mm -> GUION NAME IGUAL CADENA
+Rule 26    comando -> UNMOUNT GUION ID IGUAL CADENA
+Rule 27    comando -> MKFS atributos_mkfs
+Rule 28    atributos_mkfs -> atributos_mkfs atributosSolo_mkfs
+Rule 29    atributos_mkfs -> atributosSolo_mkfs
+Rule 30    atributosSolo_mkfs -> GUION ID IGUAL NAME
+Rule 31    atributosSolo_mkfs -> GUION TYPE IGUAL CADENA
+Rule 32    atributosSolo_mkfs -> GUION FS IGUAL FS_VAL
+Rule 33    comando -> LOGIN atributos_login
+Rule 34    atributos_login -> atributos_login atributosSolo_login
+Rule 35    atributos_login -> atributosSolo_login
+Rule 36    atributosSolo_login -> GUION USER IGUAL CADENA
+Rule 37    atributosSolo_login -> GUION PASS IGUAL CADENA
+Rule 38    atributosSolo_login -> GUION ID IGUAL CADENA
+Rule 39    comando -> LOGOUT
+Rule 40    comando -> MKGRP GUION NAME IGUAL CADENA
+Rule 41    comando -> RMGRP GUION NAME IGUAL CADENA
+Rule 42    comando -> MKUSR atributos_mkusr
+Rule 43    atributos_mkusr -> atributos_mkusr atributosSolo_mkusr
+Rule 44    atributos_mkusr -> atributosSolo_mkusr
+Rule 45    atributosSolo_mkusr -> GUION USER IGUAL CADENA
+Rule 46    atributosSolo_mkusr -> GUION PASS IGUAL CADENA
+Rule 47    atributosSolo_mkusr -> GUION GRP IGUAL CADENA
+Rule 48    comando -> RMUSR GUION NAME IGUAL CADENA
+Rule 49    comando -> MKFILE atributos_mkfile
+Rule 50    atributos_mkfile -> atributos_mkfile atributosSolo_mkfile
+Rule 51    atributos_mkfile -> atributosSolo_mkfile
+Rule 52    atributosSolo_mkfile -> GUION PATH IGUAL DIR
+Rule 53    atributosSolo_mkfile -> GUION SIZE IGUAL NUM
+Rule 54    atributosSolo_mkfile -> GUION CONT IGUAL CADENA
+Rule 55    atributosSolo_mkfile -> GUION R
+
+Terminals, with rules where they appear
+
+ADD                  : 17
+CADENA               : 14 25 26 31 36 37 38 40 41 45 46 47 48 54
+CONT                 : 54
+DELETE               : 18
+DIR                  : 4 11 19 20 24 52
+FDISK                : 8
+FIT                  : 5 16
+FS                   : 32
+FS_VAL               : 32
+GRP                  : 47
+GUION                : 4 5 6 7 11 12 13 14 15 16 17 18 19 20 24 25 26 30 31 32 36 37 38 40 41 45 46 47 48 52 53 54 55
+ID                   : 26 30 38
+IGUAL                : 4 5 6 7 11 12 13 14 15 16 17 19 20 24 25 26 30 31 32 36 37 38 40 41 45 46 47 48 52 53 54
+LETRAS_FIT           : 5 16
+LETRA_FDISK          : 6 12 13
+LETRA_MKDISK         : 
+LOGIN                : 33
+LOGOUT               : 39
+MKDISK               : 1
+MKFILE               : 49
+MKFS                 : 27
+MKGRP                : 40
+MKUSR                : 42
+MOUNT                : 21
+NAME                 : 14 25 30 40 41 48
+NUM                  : 7 15 17 53
+PASS                 : 37 46
+PATH                 : 4 11 19 20 24 52
+R                    : 55
+REP                  : 19
+RMDISK               : 20
+RMGRP                : 41
+RMUSR                : 48
+SIZE                 : 7 15 53
+TYPE                 : 12 31
+UNIT                 : 6 13
+UNMOUNT              : 26
+USER                 : 36 45
+error                : 
+
+Nonterminals, with rules where they appear
+
+atributo             : 9 10
+atributo_mm          : 22 23
+atributom            : 2 3
+atributos            : 8 9
+atributosSolo_login  : 34 35
+atributosSolo_mkfile : 50 51
+atributosSolo_mkfs   : 28 29
+atributosSolo_mkusr  : 43 44
+atributos_login      : 33 34
+atributos_mkfile     : 49 50
+atributos_mkfs       : 27 28
+atributos_mkusr      : 42 43
+atributos_mount      : 21 22
+atributosm           : 1 2
+comando              : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . comando
+    (1) comando -> . MKDISK atributosm
+    (8) comando -> . FDISK atributos
+    (19) comando -> . REP GUION PATH IGUAL DIR
+    (20) comando -> . RMDISK GUION PATH IGUAL DIR
+    (21) comando -> . MOUNT atributos_mount
+    (26) comando -> . UNMOUNT GUION ID IGUAL CADENA
+    (27) comando -> . MKFS atributos_mkfs
+    (33) comando -> . LOGIN atributos_login
+    (39) comando -> . LOGOUT
+    (40) comando -> . MKGRP GUION NAME IGUAL CADENA
+    (41) comando -> . RMGRP GUION NAME IGUAL CADENA
+    (42) comando -> . MKUSR atributos_mkusr
+    (48) comando -> . RMUSR GUION NAME IGUAL CADENA
+    (49) comando -> . MKFILE atributos_mkfile
+
+    MKDISK          shift and go to state 2
+    FDISK           shift and go to state 3
+    REP             shift and go to state 4
+    RMDISK          shift and go to state 5
+    MOUNT           shift and go to state 6
+    UNMOUNT         shift and go to state 7
+    MKFS            shift and go to state 8
+    LOGIN           shift and go to state 9
+    LOGOUT          shift and go to state 10
+    MKGRP           shift and go to state 11
+    RMGRP           shift and go to state 12
+    MKUSR           shift and go to state 13
+    RMUSR           shift and go to state 14
+    MKFILE          shift and go to state 15
+
+    comando                        shift and go to state 1
+
+state 1
+
+    (0) S' -> comando .
+
+
+
+state 2
+
+    (1) comando -> MKDISK . atributosm
+    (2) atributosm -> . atributosm atributom
+    (3) atributosm -> . atributom
+    (4) atributom -> . GUION PATH IGUAL DIR
+    (5) atributom -> . GUION FIT IGUAL LETRAS_FIT
+    (6) atributom -> . GUION UNIT IGUAL LETRA_FDISK
+    (7) atributom -> . GUION SIZE IGUAL NUM
+
+    GUION           shift and go to state 18
+
+    atributosm                     shift and go to state 16
+    atributom                      shift and go to state 17
+
+state 3
+
+    (8) comando -> FDISK . atributos
+    (9) atributos -> . atributos atributo
+    (10) atributos -> . atributo
+    (11) atributo -> . GUION PATH IGUAL DIR
+    (12) atributo -> . GUION TYPE IGUAL LETRA_FDISK
+    (13) atributo -> . GUION UNIT IGUAL LETRA_FDISK
+    (14) atributo -> . GUION NAME IGUAL CADENA
+    (15) atributo -> . GUION SIZE IGUAL NUM
+    (16) atributo -> . GUION FIT IGUAL LETRAS_FIT
+    (17) atributo -> . GUION ADD IGUAL NUM
+    (18) atributo -> . GUION DELETE
+
+    GUION           shift and go to state 21
+
+    atributos                      shift and go to state 19
+    atributo                       shift and go to state 20
+
+state 4
+
+    (19) comando -> REP . GUION PATH IGUAL DIR
+
+    GUION           shift and go to state 22
+
+
+state 5
+
+    (20) comando -> RMDISK . GUION PATH IGUAL DIR
+
+    GUION           shift and go to state 23
+
+
+state 6
+
+    (21) comando -> MOUNT . atributos_mount
+    (22) atributos_mount -> . atributos_mount atributo_mm
+    (23) atributos_mount -> . atributo_mm
+    (24) atributo_mm -> . GUION PATH IGUAL DIR
+    (25) atributo_mm -> . GUION NAME IGUAL CADENA
+
+    GUION           shift and go to state 26
+
+    atributos_mount                shift and go to state 24
+    atributo_mm                    shift and go to state 25
+
+state 7
+
+    (26) comando -> UNMOUNT . GUION ID IGUAL CADENA
+
+    GUION           shift and go to state 27
+
+
+state 8
+
+    (27) comando -> MKFS . atributos_mkfs
+    (28) atributos_mkfs -> . atributos_mkfs atributosSolo_mkfs
+    (29) atributos_mkfs -> . atributosSolo_mkfs
+    (30) atributosSolo_mkfs -> . GUION ID IGUAL NAME
+    (31) atributosSolo_mkfs -> . GUION TYPE IGUAL CADENA
+    (32) atributosSolo_mkfs -> . GUION FS IGUAL FS_VAL
+
+    GUION           shift and go to state 30
+
+    atributos_mkfs                 shift and go to state 28
+    atributosSolo_mkfs             shift and go to state 29
+
+state 9
+
+    (33) comando -> LOGIN . atributos_login
+    (34) atributos_login -> . atributos_login atributosSolo_login
+    (35) atributos_login -> . atributosSolo_login
+    (36) atributosSolo_login -> . GUION USER IGUAL CADENA
+    (37) atributosSolo_login -> . GUION PASS IGUAL CADENA
+    (38) atributosSolo_login -> . GUION ID IGUAL CADENA
+
+    GUION           shift and go to state 33
+
+    atributos_login                shift and go to state 31
+    atributosSolo_login            shift and go to state 32
+
+state 10
+
+    (39) comando -> LOGOUT .
+
+    $end            reduce using rule 39 (comando -> LOGOUT .)
+
+
+state 11
+
+    (40) comando -> MKGRP . GUION NAME IGUAL CADENA
+
+    GUION           shift and go to state 34
+
+
+state 12
+
+    (41) comando -> RMGRP . GUION NAME IGUAL CADENA
+
+    GUION           shift and go to state 35
+
+
+state 13
+
+    (42) comando -> MKUSR . atributos_mkusr
+    (43) atributos_mkusr -> . atributos_mkusr atributosSolo_mkusr
+    (44) atributos_mkusr -> . atributosSolo_mkusr
+    (45) atributosSolo_mkusr -> . GUION USER IGUAL CADENA
+    (46) atributosSolo_mkusr -> . GUION PASS IGUAL CADENA
+    (47) atributosSolo_mkusr -> . GUION GRP IGUAL CADENA
+
+    GUION           shift and go to state 38
+
+    atributos_mkusr                shift and go to state 36
+    atributosSolo_mkusr            shift and go to state 37
+
+state 14
+
+    (48) comando -> RMUSR . GUION NAME IGUAL CADENA
+
+    GUION           shift and go to state 39
+
+
+state 15
+
+    (49) comando -> MKFILE . atributos_mkfile
+    (50) atributos_mkfile -> . atributos_mkfile atributosSolo_mkfile
+    (51) atributos_mkfile -> . atributosSolo_mkfile
+    (52) atributosSolo_mkfile -> . GUION PATH IGUAL DIR
+    (53) atributosSolo_mkfile -> . GUION SIZE IGUAL NUM
+    (54) atributosSolo_mkfile -> . GUION CONT IGUAL CADENA
+    (55) atributosSolo_mkfile -> . GUION R
+
+    GUION           shift and go to state 42
+
+    atributos_mkfile               shift and go to state 40
+    atributosSolo_mkfile           shift and go to state 41
+
+state 16
+
+    (1) comando -> MKDISK atributosm .
+    (2) atributosm -> atributosm . atributom
+    (4) atributom -> . GUION PATH IGUAL DIR
+    (5) atributom -> . GUION FIT IGUAL LETRAS_FIT
+    (6) atributom -> . GUION UNIT IGUAL LETRA_FDISK
+    (7) atributom -> . GUION SIZE IGUAL NUM
+
+    $end            reduce using rule 1 (comando -> MKDISK atributosm .)
+    GUION           shift and go to state 18
+
+    atributom                      shift and go to state 43
+
+state 17
+
+    (3) atributosm -> atributom .
+
+    GUION           reduce using rule 3 (atributosm -> atributom .)
+    $end            reduce using rule 3 (atributosm -> atributom .)
+
+
+state 18
+
+    (4) atributom -> GUION . PATH IGUAL DIR
+    (5) atributom -> GUION . FIT IGUAL LETRAS_FIT
+    (6) atributom -> GUION . UNIT IGUAL LETRA_FDISK
+    (7) atributom -> GUION . SIZE IGUAL NUM
+
+    PATH            shift and go to state 44
+    FIT             shift and go to state 45
+    UNIT            shift and go to state 46
+    SIZE            shift and go to state 47
+
+
+state 19
+
+    (8) comando -> FDISK atributos .
+    (9) atributos -> atributos . atributo
+    (11) atributo -> . GUION PATH IGUAL DIR
+    (12) atributo -> . GUION TYPE IGUAL LETRA_FDISK
+    (13) atributo -> . GUION UNIT IGUAL LETRA_FDISK
+    (14) atributo -> . GUION NAME IGUAL CADENA
+    (15) atributo -> . GUION SIZE IGUAL NUM
+    (16) atributo -> . GUION FIT IGUAL LETRAS_FIT
+    (17) atributo -> . GUION ADD IGUAL NUM
+    (18) atributo -> . GUION DELETE
+
+    $end            reduce using rule 8 (comando -> FDISK atributos .)
+    GUION           shift and go to state 21
+
+    atributo                       shift and go to state 48
+
+state 20
+
+    (10) atributos -> atributo .
+
+    GUION           reduce using rule 10 (atributos -> atributo .)
+    $end            reduce using rule 10 (atributos -> atributo .)
+
+
+state 21
+
+    (11) atributo -> GUION . PATH IGUAL DIR
+    (12) atributo -> GUION . TYPE IGUAL LETRA_FDISK
+    (13) atributo -> GUION . UNIT IGUAL LETRA_FDISK
+    (14) atributo -> GUION . NAME IGUAL CADENA
+    (15) atributo -> GUION . SIZE IGUAL NUM
+    (16) atributo -> GUION . FIT IGUAL LETRAS_FIT
+    (17) atributo -> GUION . ADD IGUAL NUM
+    (18) atributo -> GUION . DELETE
+
+    PATH            shift and go to state 49
+    TYPE            shift and go to state 50
+    UNIT            shift and go to state 51
+    NAME            shift and go to state 52
+    SIZE            shift and go to state 53
+    FIT             shift and go to state 54
+    ADD             shift and go to state 55
+    DELETE          shift and go to state 56
+
+
+state 22
+
+    (19) comando -> REP GUION . PATH IGUAL DIR
+
+    PATH            shift and go to state 57
+
+
+state 23
+
+    (20) comando -> RMDISK GUION . PATH IGUAL DIR
+
+    PATH            shift and go to state 58
+
+
+state 24
+
+    (21) comando -> MOUNT atributos_mount .
+    (22) atributos_mount -> atributos_mount . atributo_mm
+    (24) atributo_mm -> . GUION PATH IGUAL DIR
+    (25) atributo_mm -> . GUION NAME IGUAL CADENA
+
+    $end            reduce using rule 21 (comando -> MOUNT atributos_mount .)
+    GUION           shift and go to state 26
+
+    atributo_mm                    shift and go to state 59
+
+state 25
+
+    (23) atributos_mount -> atributo_mm .
+
+    GUION           reduce using rule 23 (atributos_mount -> atributo_mm .)
+    $end            reduce using rule 23 (atributos_mount -> atributo_mm .)
+
+
+state 26
+
+    (24) atributo_mm -> GUION . PATH IGUAL DIR
+    (25) atributo_mm -> GUION . NAME IGUAL CADENA
+
+    PATH            shift and go to state 60
+    NAME            shift and go to state 61
+
+
+state 27
+
+    (26) comando -> UNMOUNT GUION . ID IGUAL CADENA
+
+    ID              shift and go to state 62
+
+
+state 28
+
+    (27) comando -> MKFS atributos_mkfs .
+    (28) atributos_mkfs -> atributos_mkfs . atributosSolo_mkfs
+    (30) atributosSolo_mkfs -> . GUION ID IGUAL NAME
+    (31) atributosSolo_mkfs -> . GUION TYPE IGUAL CADENA
+    (32) atributosSolo_mkfs -> . GUION FS IGUAL FS_VAL
+
+    $end            reduce using rule 27 (comando -> MKFS atributos_mkfs .)
+    GUION           shift and go to state 30
+
+    atributosSolo_mkfs             shift and go to state 63
+
+state 29
+
+    (29) atributos_mkfs -> atributosSolo_mkfs .
+
+    GUION           reduce using rule 29 (atributos_mkfs -> atributosSolo_mkfs .)
+    $end            reduce using rule 29 (atributos_mkfs -> atributosSolo_mkfs .)
+
+
+state 30
+
+    (30) atributosSolo_mkfs -> GUION . ID IGUAL NAME
+    (31) atributosSolo_mkfs -> GUION . TYPE IGUAL CADENA
+    (32) atributosSolo_mkfs -> GUION . FS IGUAL FS_VAL
+
+    ID              shift and go to state 64
+    TYPE            shift and go to state 65
+    FS              shift and go to state 66
+
+
+state 31
+
+    (33) comando -> LOGIN atributos_login .
+    (34) atributos_login -> atributos_login . atributosSolo_login
+    (36) atributosSolo_login -> . GUION USER IGUAL CADENA
+    (37) atributosSolo_login -> . GUION PASS IGUAL CADENA
+    (38) atributosSolo_login -> . GUION ID IGUAL CADENA
+
+    $end            reduce using rule 33 (comando -> LOGIN atributos_login .)
+    GUION           shift and go to state 33
+
+    atributosSolo_login            shift and go to state 67
+
+state 32
+
+    (35) atributos_login -> atributosSolo_login .
+
+    GUION           reduce using rule 35 (atributos_login -> atributosSolo_login .)
+    $end            reduce using rule 35 (atributos_login -> atributosSolo_login .)
+
+
+state 33
+
+    (36) atributosSolo_login -> GUION . USER IGUAL CADENA
+    (37) atributosSolo_login -> GUION . PASS IGUAL CADENA
+    (38) atributosSolo_login -> GUION . ID IGUAL CADENA
+
+    USER            shift and go to state 68
+    PASS            shift and go to state 69
+    ID              shift and go to state 70
+
+
+state 34
+
+    (40) comando -> MKGRP GUION . NAME IGUAL CADENA
+
+    NAME            shift and go to state 71
+
+
+state 35
+
+    (41) comando -> RMGRP GUION . NAME IGUAL CADENA
+
+    NAME            shift and go to state 72
+
+
+state 36
+
+    (42) comando -> MKUSR atributos_mkusr .
+    (43) atributos_mkusr -> atributos_mkusr . atributosSolo_mkusr
+    (45) atributosSolo_mkusr -> . GUION USER IGUAL CADENA
+    (46) atributosSolo_mkusr -> . GUION PASS IGUAL CADENA
+    (47) atributosSolo_mkusr -> . GUION GRP IGUAL CADENA
+
+    $end            reduce using rule 42 (comando -> MKUSR atributos_mkusr .)
+    GUION           shift and go to state 38
+
+    atributosSolo_mkusr            shift and go to state 73
+
+state 37
+
+    (44) atributos_mkusr -> atributosSolo_mkusr .
+
+    GUION           reduce using rule 44 (atributos_mkusr -> atributosSolo_mkusr .)
+    $end            reduce using rule 44 (atributos_mkusr -> atributosSolo_mkusr .)
+
+
+state 38
+
+    (45) atributosSolo_mkusr -> GUION . USER IGUAL CADENA
+    (46) atributosSolo_mkusr -> GUION . PASS IGUAL CADENA
+    (47) atributosSolo_mkusr -> GUION . GRP IGUAL CADENA
+
+    USER            shift and go to state 74
+    PASS            shift and go to state 75
+    GRP             shift and go to state 76
+
+
+state 39
+
+    (48) comando -> RMUSR GUION . NAME IGUAL CADENA
+
+    NAME            shift and go to state 77
+
+
+state 40
+
+    (49) comando -> MKFILE atributos_mkfile .
+    (50) atributos_mkfile -> atributos_mkfile . atributosSolo_mkfile
+    (52) atributosSolo_mkfile -> . GUION PATH IGUAL DIR
+    (53) atributosSolo_mkfile -> . GUION SIZE IGUAL NUM
+    (54) atributosSolo_mkfile -> . GUION CONT IGUAL CADENA
+    (55) atributosSolo_mkfile -> . GUION R
+
+    $end            reduce using rule 49 (comando -> MKFILE atributos_mkfile .)
+    GUION           shift and go to state 42
+
+    atributosSolo_mkfile           shift and go to state 78
+
+state 41
+
+    (51) atributos_mkfile -> atributosSolo_mkfile .
+
+    GUION           reduce using rule 51 (atributos_mkfile -> atributosSolo_mkfile .)
+    $end            reduce using rule 51 (atributos_mkfile -> atributosSolo_mkfile .)
+
+
+state 42
+
+    (52) atributosSolo_mkfile -> GUION . PATH IGUAL DIR
+    (53) atributosSolo_mkfile -> GUION . SIZE IGUAL NUM
+    (54) atributosSolo_mkfile -> GUION . CONT IGUAL CADENA
+    (55) atributosSolo_mkfile -> GUION . R
+
+    PATH            shift and go to state 79
+    SIZE            shift and go to state 80
+    CONT            shift and go to state 81
+    R               shift and go to state 82
+
+
+state 43
+
+    (2) atributosm -> atributosm atributom .
+
+    GUION           reduce using rule 2 (atributosm -> atributosm atributom .)
+    $end            reduce using rule 2 (atributosm -> atributosm atributom .)
+
+
+state 44
+
+    (4) atributom -> GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 83
+
+
+state 45
+
+    (5) atributom -> GUION FIT . IGUAL LETRAS_FIT
+
+    IGUAL           shift and go to state 84
+
+
+state 46
+
+    (6) atributom -> GUION UNIT . IGUAL LETRA_FDISK
+
+    IGUAL           shift and go to state 85
+
+
+state 47
+
+    (7) atributom -> GUION SIZE . IGUAL NUM
+
+    IGUAL           shift and go to state 86
+
+
+state 48
+
+    (9) atributos -> atributos atributo .
+
+    GUION           reduce using rule 9 (atributos -> atributos atributo .)
+    $end            reduce using rule 9 (atributos -> atributos atributo .)
+
+
+state 49
+
+    (11) atributo -> GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 87
+
+
+state 50
+
+    (12) atributo -> GUION TYPE . IGUAL LETRA_FDISK
+
+    IGUAL           shift and go to state 88
+
+
+state 51
+
+    (13) atributo -> GUION UNIT . IGUAL LETRA_FDISK
+
+    IGUAL           shift and go to state 89
+
+
+state 52
+
+    (14) atributo -> GUION NAME . IGUAL CADENA
+
+    IGUAL           shift and go to state 90
+
+
+state 53
+
+    (15) atributo -> GUION SIZE . IGUAL NUM
+
+    IGUAL           shift and go to state 91
+
+
+state 54
+
+    (16) atributo -> GUION FIT . IGUAL LETRAS_FIT
+
+    IGUAL           shift and go to state 92
+
+
+state 55
+
+    (17) atributo -> GUION ADD . IGUAL NUM
+
+    IGUAL           shift and go to state 93
+
+
+state 56
+
+    (18) atributo -> GUION DELETE .
+
+    GUION           reduce using rule 18 (atributo -> GUION DELETE .)
+    $end            reduce using rule 18 (atributo -> GUION DELETE .)
+
+
+state 57
+
+    (19) comando -> REP GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 94
+
+
+state 58
+
+    (20) comando -> RMDISK GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 95
+
+
+state 59
+
+    (22) atributos_mount -> atributos_mount atributo_mm .
+
+    GUION           reduce using rule 22 (atributos_mount -> atributos_mount atributo_mm .)
+    $end            reduce using rule 22 (atributos_mount -> atributos_mount atributo_mm .)
+
+
+state 60
+
+    (24) atributo_mm -> GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 96
+
+
+state 61
+
+    (25) atributo_mm -> GUION NAME . IGUAL CADENA
+
+    IGUAL           shift and go to state 97
+
+
+state 62
+
+    (26) comando -> UNMOUNT GUION ID . IGUAL CADENA
+
+    IGUAL           shift and go to state 98
+
+
+state 63
+
+    (28) atributos_mkfs -> atributos_mkfs atributosSolo_mkfs .
+
+    GUION           reduce using rule 28 (atributos_mkfs -> atributos_mkfs atributosSolo_mkfs .)
+    $end            reduce using rule 28 (atributos_mkfs -> atributos_mkfs atributosSolo_mkfs .)
+
+
+state 64
+
+    (30) atributosSolo_mkfs -> GUION ID . IGUAL NAME
+
+    IGUAL           shift and go to state 99
+
+
+state 65
+
+    (31) atributosSolo_mkfs -> GUION TYPE . IGUAL CADENA
+
+    IGUAL           shift and go to state 100
+
+
+state 66
+
+    (32) atributosSolo_mkfs -> GUION FS . IGUAL FS_VAL
+
+    IGUAL           shift and go to state 101
+
+
+state 67
+
+    (34) atributos_login -> atributos_login atributosSolo_login .
+
+    GUION           reduce using rule 34 (atributos_login -> atributos_login atributosSolo_login .)
+    $end            reduce using rule 34 (atributos_login -> atributos_login atributosSolo_login .)
+
+
+state 68
+
+    (36) atributosSolo_login -> GUION USER . IGUAL CADENA
+
+    IGUAL           shift and go to state 102
+
+
+state 69
+
+    (37) atributosSolo_login -> GUION PASS . IGUAL CADENA
+
+    IGUAL           shift and go to state 103
+
+
+state 70
+
+    (38) atributosSolo_login -> GUION ID . IGUAL CADENA
+
+    IGUAL           shift and go to state 104
+
+
+state 71
+
+    (40) comando -> MKGRP GUION NAME . IGUAL CADENA
+
+    IGUAL           shift and go to state 105
+
+
+state 72
+
+    (41) comando -> RMGRP GUION NAME . IGUAL CADENA
+
+    IGUAL           shift and go to state 106
+
+
+state 73
+
+    (43) atributos_mkusr -> atributos_mkusr atributosSolo_mkusr .
+
+    GUION           reduce using rule 43 (atributos_mkusr -> atributos_mkusr atributosSolo_mkusr .)
+    $end            reduce using rule 43 (atributos_mkusr -> atributos_mkusr atributosSolo_mkusr .)
+
+
+state 74
+
+    (45) atributosSolo_mkusr -> GUION USER . IGUAL CADENA
+
+    IGUAL           shift and go to state 107
+
+
+state 75
+
+    (46) atributosSolo_mkusr -> GUION PASS . IGUAL CADENA
+
+    IGUAL           shift and go to state 108
+
+
+state 76
+
+    (47) atributosSolo_mkusr -> GUION GRP . IGUAL CADENA
+
+    IGUAL           shift and go to state 109
+
+
+state 77
+
+    (48) comando -> RMUSR GUION NAME . IGUAL CADENA
+
+    IGUAL           shift and go to state 110
+
+
+state 78
+
+    (50) atributos_mkfile -> atributos_mkfile atributosSolo_mkfile .
+
+    GUION           reduce using rule 50 (atributos_mkfile -> atributos_mkfile atributosSolo_mkfile .)
+    $end            reduce using rule 50 (atributos_mkfile -> atributos_mkfile atributosSolo_mkfile .)
+
+
+state 79
+
+    (52) atributosSolo_mkfile -> GUION PATH . IGUAL DIR
+
+    IGUAL           shift and go to state 111
+
+
+state 80
+
+    (53) atributosSolo_mkfile -> GUION SIZE . IGUAL NUM
+
+    IGUAL           shift and go to state 112
+
+
+state 81
+
+    (54) atributosSolo_mkfile -> GUION CONT . IGUAL CADENA
+
+    IGUAL           shift and go to state 113
+
+
+state 82
+
+    (55) atributosSolo_mkfile -> GUION R .
+
+    GUION           reduce using rule 55 (atributosSolo_mkfile -> GUION R .)
+    $end            reduce using rule 55 (atributosSolo_mkfile -> GUION R .)
+
+
+state 83
+
+    (4) atributom -> GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 114
+
+
+state 84
+
+    (5) atributom -> GUION FIT IGUAL . LETRAS_FIT
+
+    LETRAS_FIT      shift and go to state 115
+
+
+state 85
+
+    (6) atributom -> GUION UNIT IGUAL . LETRA_FDISK
+
+    LETRA_FDISK     shift and go to state 116
+
+
+state 86
+
+    (7) atributom -> GUION SIZE IGUAL . NUM
+
+    NUM             shift and go to state 117
+
+
+state 87
+
+    (11) atributo -> GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 118
+
+
+state 88
+
+    (12) atributo -> GUION TYPE IGUAL . LETRA_FDISK
+
+    LETRA_FDISK     shift and go to state 119
+
+
+state 89
+
+    (13) atributo -> GUION UNIT IGUAL . LETRA_FDISK
+
+    LETRA_FDISK     shift and go to state 120
+
+
+state 90
+
+    (14) atributo -> GUION NAME IGUAL . CADENA
+
+    CADENA          shift and go to state 121
+
+
+state 91
+
+    (15) atributo -> GUION SIZE IGUAL . NUM
+
+    NUM             shift and go to state 122
+
+
+state 92
+
+    (16) atributo -> GUION FIT IGUAL . LETRAS_FIT
+
+    LETRAS_FIT      shift and go to state 123
+
+
+state 93
+
+    (17) atributo -> GUION ADD IGUAL . NUM
+
+    NUM             shift and go to state 124
+
+
+state 94
+
+    (19) comando -> REP GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 125
+
+
+state 95
+
+    (20) comando -> RMDISK GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 126
+
+
+state 96
+
+    (24) atributo_mm -> GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 127
+
+
+state 97
+
+    (25) atributo_mm -> GUION NAME IGUAL . CADENA
+
+    CADENA          shift and go to state 128
+
+
+state 98
+
+    (26) comando -> UNMOUNT GUION ID IGUAL . CADENA
+
+    CADENA          shift and go to state 129
+
+
+state 99
+
+    (30) atributosSolo_mkfs -> GUION ID IGUAL . NAME
+
+    NAME            shift and go to state 130
+
+
+state 100
+
+    (31) atributosSolo_mkfs -> GUION TYPE IGUAL . CADENA
+
+    CADENA          shift and go to state 131
+
+
+state 101
+
+    (32) atributosSolo_mkfs -> GUION FS IGUAL . FS_VAL
+
+    FS_VAL          shift and go to state 132
+
+
+state 102
+
+    (36) atributosSolo_login -> GUION USER IGUAL . CADENA
+
+    CADENA          shift and go to state 133
+
+
+state 103
+
+    (37) atributosSolo_login -> GUION PASS IGUAL . CADENA
+
+    CADENA          shift and go to state 134
+
+
+state 104
+
+    (38) atributosSolo_login -> GUION ID IGUAL . CADENA
+
+    CADENA          shift and go to state 135
+
+
+state 105
+
+    (40) comando -> MKGRP GUION NAME IGUAL . CADENA
+
+    CADENA          shift and go to state 136
+
+
+state 106
+
+    (41) comando -> RMGRP GUION NAME IGUAL . CADENA
+
+    CADENA          shift and go to state 137
+
+
+state 107
+
+    (45) atributosSolo_mkusr -> GUION USER IGUAL . CADENA
+
+    CADENA          shift and go to state 138
+
+
+state 108
+
+    (46) atributosSolo_mkusr -> GUION PASS IGUAL . CADENA
+
+    CADENA          shift and go to state 139
+
+
+state 109
+
+    (47) atributosSolo_mkusr -> GUION GRP IGUAL . CADENA
+
+    CADENA          shift and go to state 140
+
+
+state 110
+
+    (48) comando -> RMUSR GUION NAME IGUAL . CADENA
+
+    CADENA          shift and go to state 141
+
+
+state 111
+
+    (52) atributosSolo_mkfile -> GUION PATH IGUAL . DIR
+
+    DIR             shift and go to state 142
+
+
+state 112
+
+    (53) atributosSolo_mkfile -> GUION SIZE IGUAL . NUM
+
+    NUM             shift and go to state 143
+
+
+state 113
+
+    (54) atributosSolo_mkfile -> GUION CONT IGUAL . CADENA
+
+    CADENA          shift and go to state 144
+
+
+state 114
+
+    (4) atributom -> GUION PATH IGUAL DIR .
+
+    GUION           reduce using rule 4 (atributom -> GUION PATH IGUAL DIR .)
+    $end            reduce using rule 4 (atributom -> GUION PATH IGUAL DIR .)
+
+
+state 115
+
+    (5) atributom -> GUION FIT IGUAL LETRAS_FIT .
+
+    GUION           reduce using rule 5 (atributom -> GUION FIT IGUAL LETRAS_FIT .)
+    $end            reduce using rule 5 (atributom -> GUION FIT IGUAL LETRAS_FIT .)
+
+
+state 116
+
+    (6) atributom -> GUION UNIT IGUAL LETRA_FDISK .
+
+    GUION           reduce using rule 6 (atributom -> GUION UNIT IGUAL LETRA_FDISK .)
+    $end            reduce using rule 6 (atributom -> GUION UNIT IGUAL LETRA_FDISK .)
+
+
+state 117
+
+    (7) atributom -> GUION SIZE IGUAL NUM .
+
+    GUION           reduce using rule 7 (atributom -> GUION SIZE IGUAL NUM .)
+    $end            reduce using rule 7 (atributom -> GUION SIZE IGUAL NUM .)
+
+
+state 118
+
+    (11) atributo -> GUION PATH IGUAL DIR .
+
+    GUION           reduce using rule 11 (atributo -> GUION PATH IGUAL DIR .)
+    $end            reduce using rule 11 (atributo -> GUION PATH IGUAL DIR .)
+
+
+state 119
+
+    (12) atributo -> GUION TYPE IGUAL LETRA_FDISK .
+
+    GUION           reduce using rule 12 (atributo -> GUION TYPE IGUAL LETRA_FDISK .)
+    $end            reduce using rule 12 (atributo -> GUION TYPE IGUAL LETRA_FDISK .)
+
+
+state 120
+
+    (13) atributo -> GUION UNIT IGUAL LETRA_FDISK .
+
+    GUION           reduce using rule 13 (atributo -> GUION UNIT IGUAL LETRA_FDISK .)
+    $end            reduce using rule 13 (atributo -> GUION UNIT IGUAL LETRA_FDISK .)
+
+
+state 121
+
+    (14) atributo -> GUION NAME IGUAL CADENA .
+
+    GUION           reduce using rule 14 (atributo -> GUION NAME IGUAL CADENA .)
+    $end            reduce using rule 14 (atributo -> GUION NAME IGUAL CADENA .)
+
+
+state 122
+
+    (15) atributo -> GUION SIZE IGUAL NUM .
+
+    GUION           reduce using rule 15 (atributo -> GUION SIZE IGUAL NUM .)
+    $end            reduce using rule 15 (atributo -> GUION SIZE IGUAL NUM .)
+
+
+state 123
+
+    (16) atributo -> GUION FIT IGUAL LETRAS_FIT .
+
+    GUION           reduce using rule 16 (atributo -> GUION FIT IGUAL LETRAS_FIT .)
+    $end            reduce using rule 16 (atributo -> GUION FIT IGUAL LETRAS_FIT .)
+
+
+state 124
+
+    (17) atributo -> GUION ADD IGUAL NUM .
+
+    GUION           reduce using rule 17 (atributo -> GUION ADD IGUAL NUM .)
+    $end            reduce using rule 17 (atributo -> GUION ADD IGUAL NUM .)
+
+
+state 125
+
+    (19) comando -> REP GUION PATH IGUAL DIR .
+
+    $end            reduce using rule 19 (comando -> REP GUION PATH IGUAL DIR .)
+
+
+state 126
+
+    (20) comando -> RMDISK GUION PATH IGUAL DIR .
+
+    $end            reduce using rule 20 (comando -> RMDISK GUION PATH IGUAL DIR .)
+
+
+state 127
+
+    (24) atributo_mm -> GUION PATH IGUAL DIR .
+
+    GUION           reduce using rule 24 (atributo_mm -> GUION PATH IGUAL DIR .)
+    $end            reduce using rule 24 (atributo_mm -> GUION PATH IGUAL DIR .)
+
+
+state 128
+
+    (25) atributo_mm -> GUION NAME IGUAL CADENA .
+
+    GUION           reduce using rule 25 (atributo_mm -> GUION NAME IGUAL CADENA .)
+    $end            reduce using rule 25 (atributo_mm -> GUION NAME IGUAL CADENA .)
+
+
+state 129
+
+    (26) comando -> UNMOUNT GUION ID IGUAL CADENA .
+
+    $end            reduce using rule 26 (comando -> UNMOUNT GUION ID IGUAL CADENA .)
+
+
+state 130
+
+    (30) atributosSolo_mkfs -> GUION ID IGUAL NAME .
+
+    GUION           reduce using rule 30 (atributosSolo_mkfs -> GUION ID IGUAL NAME .)
+    $end            reduce using rule 30 (atributosSolo_mkfs -> GUION ID IGUAL NAME .)
+
+
+state 131
+
+    (31) atributosSolo_mkfs -> GUION TYPE IGUAL CADENA .
+
+    GUION           reduce using rule 31 (atributosSolo_mkfs -> GUION TYPE IGUAL CADENA .)
+    $end            reduce using rule 31 (atributosSolo_mkfs -> GUION TYPE IGUAL CADENA .)
+
+
+state 132
+
+    (32) atributosSolo_mkfs -> GUION FS IGUAL FS_VAL .
+
+    GUION           reduce using rule 32 (atributosSolo_mkfs -> GUION FS IGUAL FS_VAL .)
+    $end            reduce using rule 32 (atributosSolo_mkfs -> GUION FS IGUAL FS_VAL .)
+
+
+state 133
+
+    (36) atributosSolo_login -> GUION USER IGUAL CADENA .
+
+    GUION           reduce using rule 36 (atributosSolo_login -> GUION USER IGUAL CADENA .)
+    $end            reduce using rule 36 (atributosSolo_login -> GUION USER IGUAL CADENA .)
+
+
+state 134
+
+    (37) atributosSolo_login -> GUION PASS IGUAL CADENA .
+
+    GUION           reduce using rule 37 (atributosSolo_login -> GUION PASS IGUAL CADENA .)
+    $end            reduce using rule 37 (atributosSolo_login -> GUION PASS IGUAL CADENA .)
+
+
+state 135
+
+    (38) atributosSolo_login -> GUION ID IGUAL CADENA .
+
+    GUION           reduce using rule 38 (atributosSolo_login -> GUION ID IGUAL CADENA .)
+    $end            reduce using rule 38 (atributosSolo_login -> GUION ID IGUAL CADENA .)
+
+
+state 136
+
+    (40) comando -> MKGRP GUION NAME IGUAL CADENA .
+
+    $end            reduce using rule 40 (comando -> MKGRP GUION NAME IGUAL CADENA .)
+
+
+state 137
+
+    (41) comando -> RMGRP GUION NAME IGUAL CADENA .
+
+    $end            reduce using rule 41 (comando -> RMGRP GUION NAME IGUAL CADENA .)
+
+
+state 138
+
+    (45) atributosSolo_mkusr -> GUION USER IGUAL CADENA .
+
+    GUION           reduce using rule 45 (atributosSolo_mkusr -> GUION USER IGUAL CADENA .)
+    $end            reduce using rule 45 (atributosSolo_mkusr -> GUION USER IGUAL CADENA .)
+
+
+state 139
+
+    (46) atributosSolo_mkusr -> GUION PASS IGUAL CADENA .
+
+    GUION           reduce using rule 46 (atributosSolo_mkusr -> GUION PASS IGUAL CADENA .)
+    $end            reduce using rule 46 (atributosSolo_mkusr -> GUION PASS IGUAL CADENA .)
+
+
+state 140
+
+    (47) atributosSolo_mkusr -> GUION GRP IGUAL CADENA .
+
+    GUION           reduce using rule 47 (atributosSolo_mkusr -> GUION GRP IGUAL CADENA .)
+    $end            reduce using rule 47 (atributosSolo_mkusr -> GUION GRP IGUAL CADENA .)
+
+
+state 141
+
+    (48) comando -> RMUSR GUION NAME IGUAL CADENA .
+
+    $end            reduce using rule 48 (comando -> RMUSR GUION NAME IGUAL CADENA .)
+
+
+state 142
+
+    (52) atributosSolo_mkfile -> GUION PATH IGUAL DIR .
+
+    GUION           reduce using rule 52 (atributosSolo_mkfile -> GUION PATH IGUAL DIR .)
+    $end            reduce using rule 52 (atributosSolo_mkfile -> GUION PATH IGUAL DIR .)
+
+
+state 143
+
+    (53) atributosSolo_mkfile -> GUION SIZE IGUAL NUM .
+
+    GUION           reduce using rule 53 (atributosSolo_mkfile -> GUION SIZE IGUAL NUM .)
+    $end            reduce using rule 53 (atributosSolo_mkfile -> GUION SIZE IGUAL NUM .)
+
+
+state 144
+
+    (54) atributosSolo_mkfile -> GUION CONT IGUAL CADENA .
+
+    GUION           reduce using rule 54 (atributosSolo_mkfile -> GUION CONT IGUAL CADENA .)
+    $end            reduce using rule 54 (atributosSolo_mkfile -> GUION CONT IGUAL CADENA .)
+
