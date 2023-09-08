@@ -46,6 +46,9 @@ tokens = (
     'CONT',
     'MKFILE',
     'R',
+    'FILE1',
+    'FILE2',
+    'CAT',
     'CADENA',
 )
 
@@ -85,7 +88,10 @@ reserved = {
     'rmusr' : 'RMUSR',
     'r' : 'R',
     'mkfile' : 'MKFILE',
+    'file1' : 'FILE1',
+    'file2' : 'FILE2',
     'cont' : 'CONT',
+    'cat' : 'CAT',
     'grp' : 'GRP'
     # Agrega todas tus palabras clave aquí
 }
@@ -127,10 +133,21 @@ t_LETRAS_FIT = r'wf|bf|ff'
 t_IGUAL = r'='
 t_RMDISK = r'rmdisk'
 t_RMGRP = r'rmgrp'
+t_CAT = r'cat'
+
+def t_FILE1(t):
+    r'file[1]'
+    return t
+
+def t_FILE2(t):
+    r'file[0-9][0-9]*'
 
 # Expresión regular para directorio
 def t_DIR(t):
     # r'\/[a-zA-Z0-9_\/\.]+ | \"\/[a-zA-Z0-9_\/\.]+\"'
+
+    # r'C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk | \"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk\"'
+
     r'C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
     if t.value.startswith('"') or t.value.startswith("'"):
         t.value = t.value[1:-1]  # Eliminar las comillas alrededor de la cadena
@@ -671,6 +688,73 @@ def p_atributoSolo_mkfile(p):
     else:
         p[0] = (p[2], p[4])
 
+# =======================================================================================================
+
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+# PROBAR EN LINUX
+
+def p_comando_cat(p):
+    '''comando : CAT listaFilesCAT'''   
+    global permiso_Usuario, user, sesion_Iniciada
+    
+    path_cat =""
+    size_cat= ""
+    cont_cat = ""
+    arreglar = ""
+    first_file = ""
+    for atributo in p[2]:
+        if atributo[0][:-1] == "file":
+            # print(atributo[0] + " " + atributo[1])
+            first_file = atributo[0]
+            arreglar = atributo[1]
+
+    # print(arreglar)
+    arreglar = arreglar.split(" ")
+    l_arreglado = []
+    pepe = (first_file, arreglar[0].replace("\"",""))
+    l_arreglado.append(pepe)
+
+    name_File = ""
+    dir_path = ""
+    for data in arreglar:
+        name_File = data[0:7]
+        name_File = name_File.replace("-","")
+        name_File = name_File.replace("=","")
+        dir_path = data[7:]
+        dir_path = dir_path.replace("=","")
+        dir_path = dir_path.replace("\"","")       
+        pepe = (name_File, dir_path)
+        l_arreglado.append(pepe)
+            
+    # print(name_File)
+    # print(dir_path)
+    del l_arreglado[1]
+    # for i in l_arreglado:
+    #     print(i)
+    adminCarpetas.cat(l_arreglado)
+
+# cat -file1="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt" -file2="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\hola to.txt" -file3="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt"
+
+def p_listaFilesCAT(p):
+    '''listaFilesCAT : listaFilesCAT atributosSolo_CAT
+                        | atributosSolo_CAT'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_CAT(p):
+    '''atributosSolo_CAT : GUION FILE1 IGUAL DIR
+                         | GUION FILE2 IGUAL DIR'''
+    p[0] = (p[2], p[4])
+
+#  =======================================================================================================
 
 # Manejo de errores sintácticos
 def p_error(p):

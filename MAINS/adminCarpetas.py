@@ -64,7 +64,22 @@ def otro(carpeta):
     for archivo in os.listdir(carpeta):
         print(archivo)
 
-    
+
+def cat(lista):
+    for data in lista:
+        path = data[1]
+
+        # print(path)
+
+        with open(path, "r") as archivo2:
+                contenido = archivo2.read()
+                # print(contenido)
+                archivo2.close()
+        
+        print(contenido)
 
 # crearArchivo(r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt",13,True,"")
 # otro(r"C:\Users\wwwed\OneDrive\Escritorio\pruebas_todoTipo\Organizers")
+
+# lista = [1,0,0,1,5,8,8]
+# cat(lista)
