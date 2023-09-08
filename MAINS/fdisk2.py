@@ -361,7 +361,9 @@ class FDisk:
             partitions = [mbr.mbr_Partition_1, mbr.mbr_Partition_2, mbr.mbr_Partition_3, mbr.mbr_Partition_4]
             ext = False
             extended = Particion()
+            # print("bandera")
 
+            # print("CUASUAU")
             for partition in partitions:
                 if partition.part_status == '1':
                     if partition.part_name == name:
@@ -369,7 +371,7 @@ class FDisk:
                     elif partition.part_type == 'E':
                         ext = True
                         extended = partition
-
+            # print("bandera2")
             if ext:
                 ebrs = self.get_logicas(extended, path)
                 for ebr in ebrs:

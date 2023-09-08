@@ -48,6 +48,7 @@ tokens = (
     'R',
     'FILE1',
     'FILE2',
+    'REMOVE',
     'CAT',
     'CADENA',
 )
@@ -92,6 +93,7 @@ reserved = {
     'file2' : 'FILE2',
     'cont' : 'CONT',
     'cat' : 'CAT',
+    'remove': 'REMOVE',
     'grp' : 'GRP'
     # Agrega todas tus palabras clave aquí
 }
@@ -134,6 +136,7 @@ t_IGUAL = r'='
 t_RMDISK = r'rmdisk'
 t_RMGRP = r'rmgrp'
 t_CAT = r'cat'
+t_REMOVE = r'remove'
 
 def t_FILE1(t):
     r'file[1]'
@@ -497,6 +500,7 @@ def p_comando_login(p):
             else:
                 permiso_Usuario = "664"
             print("mandamos la data a la particion con el id")
+
         else:
             print("Usuario NO encontrado")
         # aqui verifican los datos en users.txt
@@ -755,6 +759,17 @@ def p_atributoSolo_CAT(p):
     p[0] = (p[2], p[4])
 
 #  =======================================================================================================
+
+
+
+# REMOVE
+
+def p_comando_remove(p):
+    '''comando : REMOVE GUION PATH IGUAL DIR'''
+    global user, password, id, permiso_Usuario, sesion_Iniciada
+
+
+
 
 # Manejo de errores sintácticos
 def p_error(p):

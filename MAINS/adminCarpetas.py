@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def crearArchivo(path,size,r,cont):
     # Tamaño en caracteres deseado
@@ -77,6 +78,10 @@ def cat(lista):
                 archivo2.close()
         
         print(contenido)
+
+
+def remover(path):
+    print()
 
 # crearArchivo(r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt",13,True,"")
 # otro(r"C:\Users\wwwed\OneDrive\Escritorio\pruebas_todoTipo\Organizers")

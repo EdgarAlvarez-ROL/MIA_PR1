@@ -223,24 +223,56 @@ class Mount:
         if not (id[0] == '4' and id[1] == '4'):
             raise RuntimeError("el primer identificador no es válido")
         past = id
-        letter = id[-1]
-        id = id[2:-1]
+        letter = id[3:]
+        id = id[2:-5]
         i = int(id) - 1
         if i < 0:
             raise RuntimeError("identificador de disco inválido")
 
+        # print(letter, id, i)
+
         for j in range(26):
             if self.discoMontado[i].particiones[j].estado == '1':
                 if self.discoMontado[i].particiones[j].letra == letter:
+                    # print("entramos : "+ letter)
                     if not os.path.exists(self.discoMontado[i].path):
                         raise RuntimeError("disco no existente")
 
                     disk = MBR()  # Replace with actual initialization
-                    with open(self.discoMontado[i].path, "rb") as validate:
-                        validate.seek(0)
-                        validate.readinto(disk)
-                    p[0] = self.discoMontado[i].path
-                    return FDisk.buscarParticiones(disk, self.discoMontado[i].particiones[j].nombre, self.discoMontado[i].path)
+                    # with open(self.discoMontado[i].path, "rb") as validate:
+                        # validate.seek(0)
+                        # validate.readinto(disk)
+
+                        #  ================================================
+                    try:
+                        with open(self.discoMontado[i].path, "rb") as validate:
+                            mbr_data = validate.read()
+                            # if len(mbr_data) != MBR.SIZE:  # Make sure the read data has the expected size
+                            #     raise RuntimeError("Invalid MBR data size")
+                            # Unpack the MBR data into the disk object
+                            disk.mbr_tamano = struct.unpack("<i", mbr_data[:4])[0]
+                            disk.mbr_fecha_creacion = struct.unpack("<i", mbr_data[4:8])[0]
+                            disk.mbr_disk_signature = struct.unpack("<i", mbr_data[8:12])[0]
+                            disk.disk_fit = mbr_data[12:14].decode('utf-8')
+                            # Unpack each partition
+                            partition_size = struct.calcsize("<iii16s")
+                            partition_data = mbr_data[14:14 + partition_size]
+                            disk.mbr_Partition_1.__setstate__(partition_data)
+                            partition_data = mbr_data[14 + partition_size:14 + 2 * partition_size]
+                            disk.mbr_Partition_2.__setstate__(partition_data)
+                            partition_data = mbr_data[14 + 2 * partition_size:14 + 3 * partition_size]
+                            disk.mbr_Partition_3.__setstate__(partition_data)
+                            partition_data = mbr_data[14 + 3 * partition_size:14 + 4 * partition_size]
+                            disk.mbr_Partition_4.__setstate__(partition_data)
+                    except Exception as e:
+                        raise RuntimeError("Error reading and unpacking MBR data from the disk file: " + str(e))
+
+                        #  ================================================
+
+                    
+                    p = self.discoMontado[i].path
+                    # print(self.discoMontado[i].particiones[j].nombre)
+                    return FDisk.buscarParticiones(self, disk, self.discoMontado[i].particiones[j].nombre, self.discoMontado[i].path), p
         raise RuntimeError("partición no existente")
  
     def listaMount(self):

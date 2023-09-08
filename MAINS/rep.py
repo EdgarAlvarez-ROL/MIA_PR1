@@ -30,15 +30,12 @@ class reporte:
                 partition1 = Particion()
                 partition1.__setstate__(particion_data)
        
-                partition2 = Particion()
-                partition2.__setstate__(particion_data)
-
             print("\tMBR tamaño:", mbr.mbr_tamano)
             print("\tMBR fecha creación:", mbr.mbr_fecha_creacion)
             print("\tDisco fit:", mbr.disk_fit)
             print("\tMBR disk signature:", mbr.mbr_disk_signature)
 
-            print("\tMBR particion 1: ", partition2.part_fit)
+            print("\tMBR particion 1: ", partition1.part_name)
 
         except Exception as e:
             print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
