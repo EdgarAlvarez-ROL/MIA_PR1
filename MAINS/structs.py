@@ -100,7 +100,7 @@ class DiscoMontado:
 
 
 # nuebo
-import struct
+# import struct
 
 
 class Usuario:
@@ -181,6 +181,7 @@ class SuperBloque:
                 struct.pack("<i", self.s_bm_block_start) +
                 struct.pack("<i", self.s_inode_start) +
                 struct.pack("<i", self.s_block_start))
+    
     
 class Content:
     def __init__(self):

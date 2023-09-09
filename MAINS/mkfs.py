@@ -50,7 +50,7 @@ class MKFS:
             p = ""
             partition, p = self.mount.getmount(id, p)
             
-            print(p)
+            # print(p)
 
             n = 0
             tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
@@ -96,6 +96,9 @@ class MKFS:
             with open(path, "rb+") as bfile:
                 bfile.seek(p.part_start-1)
                 bfile.write(bytes(spr))
+
+                print("askdfañslkdfjañsldkfjasñlkdfj")
+                print(bytes(spr))
                 
                 zero = b'0'
                 bfile.seek(spr.s_bm_inode_start)
@@ -200,3 +203,4 @@ class MKFS:
                 bfiles.write(bytes(fileb))
         except Exception as e:
             print(e)
+        

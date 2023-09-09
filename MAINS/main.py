@@ -25,21 +25,21 @@ def main():
     # partition.path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
     # partition.name = "cosa"
     # partition.fit = "WF"
-    # # partition.add = '100'
+    # # # partition.add = '100'
     # partition.fdisk()
 
-    mount = Mount()
-    path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
-    name = "cosa" #nombre de la particion a cargar
-    mount.mount(path, name)
-    mount.listaMount()
-    # mount.unmount("441disco")
+    # mount = Mount()
+    # path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
+    # name = "cosa" #nombre de la particion a cargar
+    # mount.mount(path, name)
     # mount.listaMount()
+    # # mount.unmount("441disco")
+    # # mount.listaMount()
 
     
-    fileSystem = MKFS(mount)
-    tks = ["441disco","Full","2fs"]
-    fileSystem.mkfs(tks)
+    # fileSystem = MKFS(mount)
+    # tks = ["441disco","Full","2fs"]
+    # fileSystem.mkfs(tks)
     
 
     repo = reporte()

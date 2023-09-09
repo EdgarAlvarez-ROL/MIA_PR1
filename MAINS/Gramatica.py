@@ -6,6 +6,7 @@ from fdisk2 import FDisk
 from mount import *
 import adminUG
 import adminCarpetas
+from mkfs import MKFS
 
 # Definición de tokens
 tokens = (
@@ -204,6 +205,10 @@ user = ""
 password = ""
 permiso_Usuario = "777"
 
+mount = Mount()
+path_mount = ""
+name_mount = ""
+
 
 # Reglas de gramática
 def p_comando_mkdisk(p):
@@ -388,25 +393,24 @@ def p_comando_rmdisk(p):
 
 def p_comando_mount(p):
     '''comando : MOUNT atributos_mount'''
-    global numParticion, path, name
+    global numParticion, path_mount, name_mount, mount
     # MONTA UNA PARTICION DEL DISCO, como: saber?
     # inicioParticion = "44"
     command = "mount"
     print(f"Comando: {command}")
     for atributo in p[2]:
         if atributo[0] == "path":
-            path = atributo[1] 
+            path_mount = atributo[1] 
         elif atributo[0] == "name":
-            name = atributo[1]
+            name_mount = atributo[1]
     
-    if name == "" or path == "":
+    if name_mount == "" or path_mount == "":
         print("Se necesita el path y el name para ejecutar el comando Mount")
     else:
-        print("Path: "+str(path))
-        print("Name de la particion a usar: "+str(name))
-
-    path = ""
-    name = ""
+        print("Path: "+str(path_mount))
+        print("Name de la particion a usar: "+str(name_mount))
+        mount(path_mount, name_mount)
+        mount.listaMount()
 
 def p_atributos_mount(p):
     '''atributos_mount : atributos_mount atributo_mm
@@ -426,17 +430,21 @@ def p_atributo_mount(p):
 
 def p_comando_unmount(p):
     '''comando : UNMOUNT GUION ID IGUAL CADENA'''
-    # global path
+    global path_mount, name_mount, mount
     # id = ""
     command = "unmount"
     print(f"Comando: {command}")
     id = p[5]
     print(f"ID: {id}")
+    mount.unmount(id)
+    
 
 
 def p_comando_mkfs(p):
     '''comando : MKFS atributos_mkfs'''
-    global fs_val, id, type
+    global fs_val, id, type, mount
+    type_mkfs = "Full"
+    fs_val = "2fs"
     command = "mkfs"
     for atributo in p[2]:
         if atributo[0] == "id":
@@ -449,8 +457,12 @@ def p_comando_mkfs(p):
     if id != "":
         print(f"Comando: {command}")
         print(f"ID: {id}")
-        print(f"Type: {type}")
+        print(f"Type: {type_mkfs}")
         print(f"Fs: {fs_val}")
+
+        fileSystem = MKFS(mount)
+        tks = [id,type,fs_val]
+        fileSystem.mkfs(tks)
     else: 
         print("El comando MKFS requiere obligatoriamente de un id")
 
