@@ -7,6 +7,7 @@ from mount import *
 import adminUG
 import adminCarpetas
 from mkfs import MKFS
+import structs
 
 # Definición de tokens
 tokens = (
@@ -412,6 +413,9 @@ def p_comando_mount(p):
         mount(path_mount, name_mount)
         mount.listaMount()
 
+    
+
+
 def p_atributos_mount(p):
     '''atributos_mount : atributos_mount atributo_mm
                  | atributo_mm'''
@@ -515,7 +519,6 @@ def p_comando_login(p):
 
         else:
             print("Usuario NO encontrado")
-        # aqui verifican los datos en users.txt
     else:
         print("Porfavor ingrese todos los datos del user, password, id\n")
 
@@ -678,6 +681,10 @@ def p_comando_mkfile(p):
                 print("Ejecutando...")
                 # print("Comando MKFILE")
                 adminCarpetas.crearArchivo(path_mkfile,int(size_mkfile),r,cont_mkfile)
+
+                # momento tabla inodos
+                
+
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:

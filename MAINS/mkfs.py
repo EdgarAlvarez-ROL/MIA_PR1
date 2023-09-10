@@ -55,19 +55,28 @@ class MKFS:
             n = 0
             tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
             tamanioInodos = struct.calcsize("<iiiddd15ici")                     #investigar las diferencias de obtener el tamaño de un struct 
+
+            # tamanioInodos2 = sys.getsizeof(structs.Inodos()) 
             tamanioBloquesArchivos = len(bytes(structs.BloquesArchivos()))      #con struct.calcsize, sys.getsizeof y len(bytes(struct))
             tamanioJournaling = sys.getsizeof(structs.Journaling())             #y utilicen el que les parezca más conveniente.
             if fs.lower() == "2fs":
                 n = (partition.part_size -  tamanioSuperBloque) // (4 + tamanioInodos + 3 * tamanioBloquesArchivos)
             else:
                 n = (partition.part_size - tamanioSuperBloque) // (4 + tamanioInodos + 3 * tamanioBloquesArchivos + tamanioJournaling)
-            
+
+
+            # print(f"Este es n: {n}")
+            print(f"Este es tamanioInodos: {tamanioInodos}")
+            # print(f"Este es tamanioInodos2: {tamanioInodos2}")
+            # print(f"Este es Tamaño : {tamanioSuperBloque}")
+
+
             spr = structs.SuperBloque()
             spr.s_inodes_count = spr.s_free_inodes_count = n
             spr.s_blocks_count = spr.s_free_blocks_count = 3 * n
             spr.s_mtime = int(time.time())
             spr.s_umtime = int(time.time())
-            spr.s_mnt_count = 1
+            spr.s_mnt_count = spr.s_mnt_count + 1
             
             if fs.lower() == "2fs":
                 spr.s_filesystem_type = 2
@@ -97,20 +106,23 @@ class MKFS:
                 bfile.seek(p.part_start-1)
                 bfile.write(bytes(spr))
 
-                print("askdfañslkdfjañsldkfjasñlkdfj")
-                print(bytes(spr))
+                # print("p.part_start-1")
+                # print(p.part_start-1)
                 
                 zero = b'0'
                 bfile.seek(spr.s_bm_inode_start)
                 bfile.write(zero * n)
-                
+
                 bfile.seek(spr.s_bm_block_start)
                 bfile.write(zero * (3 * n))
                 
                 inode = structs.Inodos()
                 bfile.seek(spr.s_inode_start)
+                # print("spr.s_inode_start")
+                # print(spr.s_inode_start)
                 for _ in range(n):
                     bfile.write(bytes(inode))
+                    
                 
                 folder = structs.BloquesCarpetas()
                 bfile.seek(spr.s_block_start)
@@ -198,6 +210,9 @@ class MKFS:
                 bfiles.write(bytes(inode))
                 bfiles.write(bytes(inodetmp))
                 
+                print(bytes(inode))
+                print(bytes(inodetmp))
+
                 bfiles.seek(spr.s_block_start)
                 bfiles.write(bytes(fb))
                 bfiles.write(bytes(fileb))

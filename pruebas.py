@@ -1,7 +1,7 @@
 import datetime
 import time
 
-timestamp = 1694234234.0  # Suponiendo que tienes una marca de tiempo en `timestamp`
+timestamp = 1694314749  # Suponiendo que tienes una marca de tiempo en `timestamp`
 fecha_y_hora = datetime.datetime.utcfromtimestamp(timestamp)
 
 # Formatear la fecha y hora según tus preferencias
