@@ -178,7 +178,7 @@ class FDisk:
                     print("FDISK", "partición extendida:", n, "creada correctamente")
                     return
                 print("FDISK", "partición primaria:", n, "creada correctamente")
-                print(mbr.__bytes__())
+                # print(mbr.__bytes__())
                 # print(f"Temporal name: {mbr.mbr_Partition_1.part_name}")
         except ValueError as e: 
             print("FDISK", "-size debe ser un entero")

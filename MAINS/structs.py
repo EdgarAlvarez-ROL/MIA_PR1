@@ -122,15 +122,15 @@ class Usuario:
 
 class Inodos:
     def __init__(self):
-        self.i_uid = -1
-        self.i_gid = -1
-        self.i_size = -1
-        self.i_atime = 0
-        self.i_ctime = 0
-        self.i_mtime = 0
-        self.i_block = [-1] * 15
-        self.i_type = 0
-        self.i_perm = -1
+        self.i_uid      = -1
+        self.i_gid      = -1
+        self.i_size     = -1
+        self.i_atime    = 0
+        self.i_ctime    = 0
+        self.i_mtime    = 0
+        self.i_block    = [-1] * 15
+        self.i_type     = 0
+        self.i_perm     = -1
 
     def __bytes__(self):
         return (struct.pack("<i", self.i_uid) +

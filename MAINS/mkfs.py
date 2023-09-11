@@ -172,6 +172,8 @@ class MKFS:
         inode.i_type = 0
         inode.i_perm = 664
         inode.i_block[0] = 0 #porque es una carpeta
+
+       
         
         fb = structs.BloquesCarpetas()
         fb.b_content[0].b_name = "."
@@ -198,6 +200,13 @@ class MKFS:
         fileb = structs.BloquesArchivos()
         fileb.b_content = data
         
+
+        print("UID INODE 1")
+        print(inode.i_gid)
+        print("UID INODE 2")
+        print(inodetmp.i_gid)
+
+
         try:            
             with open(path, "rb+") as bfiles:
                 bfiles.seek(spr.s_bm_inode_start)
