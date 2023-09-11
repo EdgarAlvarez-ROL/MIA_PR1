@@ -2,5 +2,6 @@
 1,U,root,root,123
 1,G,hola
 3,G,estudiantes
-0,U,hola,paladin,83afa
-0,G,usuarios
+4,U,hola,paladin,123
+5,G,usuarios
+6,U,usuarios,uno,uno

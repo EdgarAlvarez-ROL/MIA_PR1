@@ -53,7 +53,7 @@ class reporte:
                 superBloque_data = superBloque_data[:-6]
                 # print(superBloque_data)
                 data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
-                # print(data)
+                print(superBloque_data)
                 # print("============================")
                 """==================================="""
                 # lo que deberia
@@ -117,17 +117,25 @@ class reporte:
             inode.i_type  = struct.unpack("<c", recuperado[96:97])[0] #recuperado[28:32].decode('utf-8')
             inode.i_perm  = struct.unpack("<i", recuperado[97:101])[0]
 
+
+            inodeTemp = structs.Inodos()            
+            with open(self.path, "rb") as archivo:
+                archivo.seek(p+len(recuperado))
+                archivo.readinto(recuperado)
+
+            inodeTemp.i_perm  = struct.unpack("<i", recuperado[97:101])[0]
+            print(inodeTemp.i_perm)
             # print(recuperado)
             """<iiiddd15ici"""
-            print(inode.i_uid  )
-            print(inode.i_gid  )
-            print(inode.i_size )
-            print(inode.i_atime)
-            print(inode.i_ctime)
-            print(inode.i_mtime)
-            print(inode.i_block)
-            print(inode.i_type )
-            print(inode.i_perm )
+            # print(inode.i_uid  )
+            # print(inode.i_gid  )
+            # print(inode.i_size )
+            # print(inode.i_atime)
+            # print(inode.i_ctime)
+            # print(inode.i_mtime)
+            # print(inode.i_block)
+            # print(inode.i_type )
+            # print(inode.i_perm )
                         
             
             

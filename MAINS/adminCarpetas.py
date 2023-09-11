@@ -1,7 +1,7 @@
 import os
 import shutil
 
-def crearArchivo(path,size,r,cont):
+def crearArchivo(path,size,r,cont,usuario,permisos):
     # Tamaño en caracteres deseado
     tamano_caracteres = size  # Cambia este valor al tamaño deseado en caracteres
 
@@ -88,3 +88,21 @@ def remover(path):
 
 # lista = [1,0,0,1,5,8,8]
 # cat(lista)
+
+
+# def wr_Inodes(path):
+#     try:            
+#         with open(path, "rb+") as bfiles:art)
+#             bfiles.write(bytes(inode))
+#             bfiles.write(bytes(inodetmp))
+            
+#             print(bytes(inode))
+#             print(bytes(inodetmp))
+
+#             bfiles.seek(spr.s_block_start)
+#             bfiles.write(bytes(fb))
+#             bfiles.write(bytes(fileb))
+#     except Exception as e:
+#             print(e)
+
+

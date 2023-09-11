@@ -201,10 +201,13 @@ add = 0
 id = ""
 numParticion = 1
 fs_val = "ext2"
+
 sesion_Iniciada = False
 user = ""
 password = ""
 permiso_Usuario = "777"
+uid = -1
+gid = -1
 
 mount = Mount()
 path_mount = ""
@@ -505,8 +508,8 @@ def p_comando_login(p):
         print(f"User: {user}")
         print(f"Pass: {password}")
         print(f"ID: {id}")
-
-        encontrado = adminUG.login(user,password)
+        
+        encontrado, uid, gid = adminUG.login(user,password)
         # print(encontrado)
         sesion_Iniciada = encontrado
 
@@ -680,7 +683,7 @@ def p_comando_mkfile(p):
             else:
                 print("Ejecutando...")
                 # print("Comando MKFILE")
-                adminCarpetas.crearArchivo(path_mkfile,int(size_mkfile),r,cont_mkfile)
+                adminCarpetas.crearArchivo(path_mkfile,int(size_mkfile),r,cont_mkfile,user,permiso_Usuario)
 
                 # momento tabla inodos
                 

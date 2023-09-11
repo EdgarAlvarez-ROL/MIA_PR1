@@ -28,16 +28,58 @@ def login(user, password):
     i = 0
     x = 0
     encontrado = False
+    uid = -1
+    gid = -1
     for i in range(len(cola)):
         for x in range(len(cola[i])):
-            if len(cola[i]) > 3:
+            if len(cola[i]) > 4:
+                # print( cola[i][x])
                 if cola[i][x] == user and cola[i][x+1] == password:
                     # print(user)
                     # print(password)
                     encontrado = True
+                    uid = int(cola[i][0])
+                    gid = buscarGrupoYDevolver(cola[i][2])
+                    break
+    return encontrado, uid, gid
 
-    return encontrado
+def buscarGrupoYDevolver(grupo):
+    indice = 0
+    with open('TXTS/users.txt', 'r') as archivo:
+        contenido = archivo.read()
+        archivo.close()
 
+    # Haz algo con el contenido del archivo
+    # print(contenido)
+    matriz1 = contenido.split("\n")
+    # print(matriz1)
+
+    cola = []
+    for x in matriz1:
+        linea = x.split(",")
+        cola.append(linea)
+        
+    # print(cola)
+    i = 0
+    x = 0
+    e_ar = False
+    # print(len(cola))
+    try:
+        for i in range(len(cola)):
+            for x in range(len(cola[i])):
+                # print(cola[i])
+                if len(cola[i]) < 4:
+                    # print("sdfa "+cola[i][2])
+                    if cola[i][2] == grupo:
+                        # print(f"El Grupo Ingresado: - {grupo} - ya Existe")
+                        e_ar = False
+                        return cola[i][0]
+                        raise SalirDeBucles
+                    else:
+                        e_ar = True
+                        indice = cola[i][x-2]
+    except SalirDeBucles:
+        pass  # Maneja la excepción para salir de todos los bucles
 
 
 def crearGrupo(name):
@@ -280,3 +322,6 @@ def rmuser(user):
 
 # mkusr("paladin2","83afa","usuarios")
 # rmuser("paladin")
+
+# encontrado, uid, gid = login("uno","uno")
+# print(f"encontrado: {encontrado}, uid: {uid}, gid: {gid}")

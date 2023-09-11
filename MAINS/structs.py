@@ -143,6 +143,18 @@ class Inodos:
                 struct.pack("<B", self.i_type) +  # Use "<B" format for a single byte
                 struct.pack("<i", self.i_perm))
     
+    def __setstate__(self, recuperado):
+        # Desempaquetar los datos del bytearray recuperado
+        self.i_uid   = struct.unpack("<i", recuperado[:4])[0]
+        self.i_gid   = struct.unpack("<i", recuperado[4:8])[0] 
+        self.i_size  = struct.unpack("<i", recuperado[8:12])[0]
+        self.i_atime = struct.unpack("<d", recuperado[12:20])[0]
+        self.i_ctime = struct.unpack("<d", recuperado[20:28])[0]
+        self.i_mtime = struct.unpack("<d", recuperado[28:36])[0]
+        self.i_block = struct.unpack("<15i", recuperado[36:96])
+        self.i_type  = struct.unpack("<c", recuperado[96:97])[0] #recuperado[28:32].decode('utf-8')
+        self.i_perm  = struct.unpack("<i", recuperado[97:101])[0]
+    
 class SuperBloque:
     def __init__(self):
         self.s_filesystem_type = 0
@@ -181,6 +193,7 @@ class SuperBloque:
                 struct.pack("<i", self.s_bm_block_start) +
                 struct.pack("<i", self.s_inode_start) +
                 struct.pack("<i", self.s_block_start))
+    
     
     
 class Content:

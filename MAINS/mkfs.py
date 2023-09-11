@@ -170,7 +170,7 @@ class MKFS:
         inode.i_ctime = spr.s_umtime
         inode.i_mtime = spr.s_umtime
         inode.i_type = 0
-        inode.i_perm = 664
+        inode.i_perm = 777
         inode.i_block[0] = 0 #porque es una carpeta
 
        
@@ -182,7 +182,8 @@ class MKFS:
         fb.b_content[1].b_inodo = 0
         fb.b_content[2].b_name = "user.txt"
         fb.b_content[2].b_inodo = 1
-        
+
+
         data = "1,G,root\n1,U,root,root,123\n"
         inodetmp = structs.Inodos()
         inodetmp.i_uid = 1
@@ -201,10 +202,10 @@ class MKFS:
         fileb.b_content = data
         
 
-        print("UID INODE 1")
-        print(inode.i_gid)
-        print("UID INODE 2")
-        print(inodetmp.i_gid)
+        # print("FB CONTENT")
+        # print(fb.b_content)
+        # print("FILEB CONTENT")
+        # print(fileb.b_content)
 
 
         try:            
@@ -219,8 +220,8 @@ class MKFS:
                 bfiles.write(bytes(inode))
                 bfiles.write(bytes(inodetmp))
                 
-                print(bytes(inode))
-                print(bytes(inodetmp))
+                # print(bytes(inode))
+                # print(bytes(inodetmp))
 
                 bfiles.seek(spr.s_block_start)
                 bfiles.write(bytes(fb))
