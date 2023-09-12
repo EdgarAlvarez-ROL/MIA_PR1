@@ -1,7 +1,8 @@
 import os
 import shutil
+from WR import *
 
-def crearArchivo(path,size,r,cont,usuario,permisos):
+def crearArchivo(path_del_disco,path,size,r,cont,usuario,permisos,uid,gid,bandera_mkfile,newPP,newBLOCKStart):
     # Tamaño en caracteres deseado
     tamano_caracteres = size  # Cambia este valor al tamaño deseado en caracteres
 
@@ -37,7 +38,21 @@ def crearArchivo(path,size,r,cont,usuario,permisos):
             print(f"Se ha creado el archivo de texto con {tamano_caracteres} bytes que contiene la secuencia de números del 0 al 9.")
         except Exception as e:
             print(f"Error las carpetas que preceden al archivo no existen {path}: {str(e)}")
-
+        
+        
+        # SECCION DEL BLOQUE ARCHIVO E INODO
+        archivo = 1
+        pp = -1
+        block = -1
+        if bandera_mkfile:
+            aa, bb = mkfileInodo(path_del_disco,path,usuario,permisos,archivo,uid,gid,newPP,newBLOCKStart)
+        else:
+            aa, bb = mkfileInodo(path_del_disco,path,usuario,permisos,archivo,uid,gid,"","")
+        pp = aa
+        block = bb
+        
+        return pp, block
+        """"""
 
 
 def crear_carpetas_si_no_existen(path):

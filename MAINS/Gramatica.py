@@ -213,11 +213,16 @@ mount = Mount()
 path_mount = ""
 name_mount = ""
 
+path_del_disco = ""
+bandera_mkfile = False
+pp = -1
+block_start = -1
+
 
 # Reglas de gramática
 def p_comando_mkdisk(p):
     '''comando : MKDISK atributosm'''
-    global command, size, unit, path, fit
+    global command, size, unit, path, fit, path_del_disco
     command = "mkdisk"
     print(f"Comando: {command}")
     for atributo in p[2]:
@@ -244,7 +249,7 @@ def p_comando_mkdisk(p):
     print("Fit: "+str(fit))
     print("Path: "+str(path))
     
-    
+    path_del_disco = path
     # creacion del disco con los valores ingresados
     disk = MkDisk()
     disk.path = path
@@ -493,7 +498,7 @@ def p_atributoSolo_mkfs(p):
 
 def p_comando_login(p):
     '''comando : LOGIN atributos_login'''
-    global sesion_Iniciada, user, password, id, permiso_Usuario
+    global sesion_Iniciada, user, password, id, permiso_Usuario, uid, gid
     command = "login"
     print(f"Command: {command}")
     for atributo in p[2]:
@@ -648,7 +653,7 @@ def p_comando_rmusr(p):
 
 def p_comando_mkfile(p):
     '''comando : MKFILE atributos_mkfile'''
-    global permiso_Usuario, user, sesion_Iniciada
+    global permiso_Usuario, user, sesion_Iniciada, bandera_mkfile, pp, block_start
     
     path_mkfile =""
     size_mkfile = ""
@@ -683,10 +688,12 @@ def p_comando_mkfile(p):
             else:
                 print("Ejecutando...")
                 # print("Comando MKFILE")
-                adminCarpetas.crearArchivo(path_mkfile,int(size_mkfile),r,cont_mkfile,user,permiso_Usuario)
-
-                # momento tabla inodos
                 
+                aa, bb = adminCarpetas.crearArchivo(path_del_disco,path_mkfile,int(size_mkfile),r,cont_mkfile,user,permiso_Usuario,uid,gid,bandera_mkfile,pp,block_start)
+                pp = aa
+                block_start = bb
+                bandera_mkfile = True
+    
 
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")

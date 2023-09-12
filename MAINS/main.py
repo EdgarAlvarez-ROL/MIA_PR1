@@ -9,7 +9,7 @@ def main():
     disk = MkDisk()
     disk.fit  = "FF"
     disk.path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
-    disk.size = 6
+    disk.size = 10
     disk.unit = "M"
     disk.create()
 
