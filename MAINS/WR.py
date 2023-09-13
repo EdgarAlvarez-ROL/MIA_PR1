@@ -15,12 +15,6 @@ block_start = 0
 
 
 
-class Bloquesito:
-    def __init__(self, block_start):
-        self.block_start = block_start
-
-
-
 def mkfileInodo(path,archivo,usuario,permiso,tipo_AC,uid,gid,newPP,newBLOCKSTAR):
     global cc, pp, block_start
 
@@ -225,13 +219,12 @@ def ingresarInode(path, archivo, uid, gid, tipo_AC, permiso,bandera):
 
     # Creacion del bloque carpeta
     bloques_carpetas = structs.BloquesCarpetas()
+    bytes_BLOQUES= bytes(bloques_carpetas)  # Obtener los bytes de la instancia
     bloques_carpetas.b_content[cc].b_name = nombre_archivo
     bloques_carpetas.b_content[cc].b_inodo = cc
 
     # Creacion Bloque Archivo  
     bloque_archivo = structs.BloquesArchivos()
-    
-    bytes_BLOQUES= bytes(bloques_carpetas)  # Obtener los bytes de la instancia
     recuperado = bytearray(len(bytes_BLOQUES))  # Crear un bytearray del mismo tamaño
 
     contenido = ""
@@ -262,7 +255,7 @@ def ingresarInode(path, archivo, uid, gid, tipo_AC, permiso,bandera):
         bfiles.write(bytes(inodeNuevo))
         bfiles.close()
 
-    print("PASAMOS")
+    # print("PASAMOS")
     # ESCRIBIR BLOQUE CARPETA y ARCHIVO
     if bandera:
         block_start += 192

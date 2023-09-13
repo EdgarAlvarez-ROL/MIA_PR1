@@ -57,7 +57,7 @@ class MKFS:
             tamanioInodos = struct.calcsize("<iiiddd15ici")                     #investigar las diferencias de obtener el tamaño de un struct 
 
             # tamanioInodos2 = sys.getsizeof(structs.Inodos()) 
-            tamanioBloquesArchivos = len(bytes(structs.BloquesArchivos()))      #con struct.calcsize, sys.getsizeof y len(bytes(struct))
+            tamanioBloquesArchivos = struct.calcsize("64s")   #con struct.calcsize, sys.getsizeof y len(bytes(struct))
             tamanioJournaling = sys.getsizeof(structs.Journaling())             #y utilicen el que les parezca más conveniente.
             if fs.lower() == "2fs":
                 n = (partition.part_size -  tamanioSuperBloque) // (4 + tamanioInodos + 3 * tamanioBloquesArchivos)

@@ -52,6 +52,10 @@ tokens = (
     'FILE2',
     'REMOVE',
     'CAT',
+    'EDIT',
+    'RENAME',
+    'COPY',
+    'DESTINO',
     'CADENA',
 )
 
@@ -96,6 +100,10 @@ reserved = {
     'cont' : 'CONT',
     'cat' : 'CAT',
     'remove': 'REMOVE',
+    'edit' : 'EDIT',
+    'remove' : 'REMOVE',
+    'copy' : 'COPY',
+    'destino' : 'DESTINO',
     'grp' : 'GRP'
     # Agrega todas tus palabras clave aquí
 }
@@ -139,6 +147,10 @@ t_RMDISK = r'rmdisk'
 t_RMGRP = r'rmgrp'
 t_CAT = r'cat'
 t_REMOVE = r'remove'
+t_EDIT = r'edit'
+t_RENAME = r'rename'
+t_COPY = r'copy'
+t_DESTINO = r'destino'
 
 def t_FILE1(t):
     r'file[1]'
@@ -696,7 +708,7 @@ def p_comando_mkfile(p):
     
 
         else:
-            print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+            print("Porfavor INICIE SESION para ejecutar este comando")
     else:
         print("Porfavor INICIE SESION para ejecutar este comando")
 
@@ -792,10 +804,201 @@ def p_atributoSolo_CAT(p):
 
 
 # REMOVE
-
 def p_comando_remove(p):
     '''comando : REMOVE GUION PATH IGUAL DIR'''
     global user, password, id, permiso_Usuario, sesion_Iniciada
+
+    if sesion_Iniciada:
+        adminCarpetas.remover(p[5])
+    else:
+        print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+
+
+
+# EDIT
+def p_comando_edit(p):
+    """comando: EDIT listas_edit"""
+
+    path_edit = ""
+    cont_edit = ""
+    for atributo in p[2]:
+        if atributo[0] == "path":
+            path_edit = atributo[1]
+        elif atributo[0] == "cont":
+            cont_edit = atributo[1]
+    
+    if user != "":
+        if path_edit != "" and cont_edit != "":
+            if sesion_Iniciada:
+                print(f"Comando EDIT")
+                print(f"Path {path_edit}")
+                print(f"Cont: {cont_edit}")
+                adminCarpetas.edit(path_edit,cont_edit)
+            else:
+                print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+        else:
+            print("EL COMANDO EDIT NECISTA DE UN PATH Y UN CONT")
+    else:
+        print("Porfavor INICIE SESION para ejecutar este comando")
+
+
+def p_listaFilesEDIT(p):
+    '''listas_edit : listas_edit atributosSolo_EDIT
+                        | atributosSolo_EDIT'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_EDIT(p):
+    '''atributosSolo_EDIT : GUION PATH IGUAL DIR
+                         |  GUION CONT IGUAL DIR'''
+    p[0] = (p[2], p[4])
+
+
+
+# RENAME
+def p_comando_rename(p):
+    """comando: RENAME lista_rename"""
+
+    path_rename = ""
+    name_rename = ""
+    for atributo in p[2]:
+        if atributo[0] == "path":
+            path_rename = atributo[1]
+        elif atributo[0] == "name":
+            name_rename = atributo[1]
+
+    if user != "":
+        if path_rename != "" and name_rename != "":
+            if sesion_Iniciada:
+                print(f"Comando EDIT")
+                print(f"Path {path_rename}")
+                print(f"Name: {name_rename}")
+                adminCarpetas.rename(path_rename,name_rename)
+            else:
+                print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+        else:
+            print("EL Comando RENAME necesita de un Path y Name")
+    else:
+        print("Porfavor INICIE SESION para ejecutar este comando")
+    
+    
+    
+def p_listaFilesRENAME(p):
+    '''lista_rename : lista_rename atributosSolo_RENAME
+                        | atributosSolo_RENAME'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_RENAME(p):
+    '''atributosSolo_RENAME : GUION PATH IGUAL DIR
+                            | GUION NAME IGUAL CADENA'''
+    p[0] = (p[2], p[4])
+
+
+
+# MKDIR
+def p_comando_mkdir(p):
+    """comando : MKDIR lista_mkdir"""
+    global user, sesion_Iniciada
+
+    path_mkdir = ""
+    r_mkdir = False
+    
+    for atributo in p[2]:
+        if atributo[0] == "path":
+            path_mkdir = atributo[1]
+        elif atributo[0] == "r":
+            r_mkdir = True
+
+    if user != "":
+        if path_mkdir != "":
+            if sesion_Iniciada:
+                print(f"Comando EDIT")
+                print(f"Path {path_mkdir}")
+                print(f"R: {r_mkdir}")
+                adminCarpetas.mkdir(path_mkdir,r_mkdir)
+            else:
+                print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+        else:
+            print("EL Comando MKDIR necesita de un Path")
+    else:
+        print("Porfavor INICIE SESION para ejecutar este comando")
+
+
+def p_listaFilesMKDIR(p):
+    '''lista_mkdir : lista_mkdir atributosSolo_MKDIR
+                        | atributosSolo_MKDIR'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_MKDIR(p):
+    '''atributosSolo_MKDIR : GUION PATH IGUAL DIR
+                           | GUION R'''
+    if len(p) == 3:
+        p[0] = (p[2], p[1])
+    else:
+        p[0] = (p[2], p[4])
+
+
+
+# COPY
+def p_comando_copy(p):
+    """comando : COPY lista_copy"""
+    global user, sesion_Iniciada, password
+
+    path_copy = ""
+    destino_copy = ""
+    
+    for atributo in p[2]:
+        if atributo[0] == "path":
+            path_copy = atributo[1]
+        elif atributo[0] == "destino":
+            destino_copy = atributo[1]
+
+    if user != "":
+        if path_copy != "" and destino_copy != "":
+            if sesion_Iniciada:
+                print(f"Comando EDIT")
+                print(f"Path {path_copy}")
+                print(f"Destino: {destino_copy}")
+                adminCarpetas.copy(path_copy,destino_copy)
+            else:
+                print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
+        else:
+            print("EL Comando MKDIR necesita de un Path")
+    else:
+        print("Porfavor INICIE SESION para ejecutar este comando")
+
+
+def p_listaFilesCOPY(p):
+    '''lista_copy : lista_copy atributosSolo_COPY
+                        | atributosSolo_COPY'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_COPY(p):
+    '''atributosSolo_COPY : GUION PATH IGUAL DIR
+                          | GUION DESTINO IGUAL DIR'''
+
+    p[0] = (p[2], p[4])
+
+
+
+
+# MOVE
+
 
 
 

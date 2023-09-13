@@ -611,10 +611,6 @@ def leerDATA(path):
 
 
 
-
-
-    
-
 """================================== PRUEBAS ================================== """
 path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
 
@@ -624,16 +620,17 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # print(uid)
 # print(gid)
 
-# CREAR GRUPO
+# # CREAR GRUPO
 # mkgrp(path,"pal")
 
 # # ELIMINAR GRUPO
 # rmgrp(path, "pal")
 
-# CREAR USUARIO
+# # CREAR USUARIO
 # mkusr(path,"oscar","777","pal")
 
 # # ELIMINAR USUARIO
 # rmusr(path,"oscar")
 
 # leerDATA(path)
+
