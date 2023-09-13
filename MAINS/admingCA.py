@@ -123,7 +123,7 @@ def escribirUltimoPP(pp):
     with open("MAINS/backs/pp.txt","w") as pp_archivo:
         pp_archivo.write(str(pp))
 
-def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
+def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid, relleno_Archivo):
     global ultimo_b_inodo
 
     
@@ -280,7 +280,7 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
 
             # Crear instancia de BloquesArchivos
                 block_archivos = structs.BloquesArchivos()
-                block_archivos.b_content = ""
+                block_archivos.b_content = relleno_Archivo
 
                 file.write(bytes(block_carpeta))
                 file.write(bytes(block_archivos))
@@ -467,7 +467,7 @@ def imprimirBloques(path):
         recuperado = bytearray(len(bytes_carpetas))  # Crear un bytearray del mismo tamaño
 
         block_start = data[16]
-        block_start += 64+64+64+64+64+64+64+64
+        block_start += 64+64+64
         file.seek(block_start)
         file.readinto(recuperado)
         # print(recuperado)
@@ -515,10 +515,10 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # print(bloqueFinal)
 
 
-# mkfile(path,r"/home/user/sol/puta.txt",True,"rol","555","2","2")
+# mkfile(path,r"/home/user/sol/puta.txt",True,"rol","555","2","2","0123456789")
 # mkfile(path,r"/home/mis documentos/archivo2.txt",False,"rol","222","2","2")
 # mkfile(path,r"/home/mis_2/archivo3.txt",False,"rol","664","2","2")
 
 
-imprimirInodes(path)
-# imprimirBloques(path)
+# imprimirInodes(path)
+imprimirBloques(path)

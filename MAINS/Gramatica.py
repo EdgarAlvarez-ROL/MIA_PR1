@@ -8,6 +8,7 @@ import adminUG
 import adminCarpetas
 from mkfs import MKFS
 import structs
+import admin
 
 # Definición de tokens
 tokens = (
@@ -230,6 +231,8 @@ bandera_mkfile = False
 pp = -1
 block_start = -1
 
+first = True
+
 
 # Reglas de gramática
 def p_comando_mkdisk(p):
@@ -273,7 +276,7 @@ def p_comando_mkdisk(p):
     # reseteo de las variables para su uso futuro
     size = ""
     unit = ""
-    path = ""
+    path_del_disco = path
     # mkdisk -size=5 -unit=M -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk
     
 
@@ -410,6 +413,9 @@ def p_comando_rmdisk(p):
         path = path[1:-1]
 
     print(f"Ruta del archivo a eliminar: {path}")
+    rm = RmDisk()
+    rm.path = path
+    rm.remove()
 
 
 def p_comando_mount(p):
@@ -510,7 +516,7 @@ def p_atributoSolo_mkfs(p):
 
 def p_comando_login(p):
     '''comando : LOGIN atributos_login'''
-    global sesion_Iniciada, user, password, id, permiso_Usuario, uid, gid
+    global sesion_Iniciada, user, password, id, permiso_Usuario, uid, gid, path_del_disco
     command = "login"
     print(f"Command: {command}")
     for atributo in p[2]:
@@ -526,7 +532,7 @@ def p_comando_login(p):
         print(f"Pass: {password}")
         print(f"ID: {id}")
         
-        encontrado, uid, gid = adminUG.login(user,password)
+        encontrado, uid, gid = admin.login(path_del_disco,user,password)
         # print(encontrado)
         sesion_Iniciada = encontrado
 
@@ -535,7 +541,7 @@ def p_comando_login(p):
                 permiso_Usuario = "777"
             else:
                 permiso_Usuario = "664"
-            print("mandamos la data a la particion con el id")
+            # print("mandamos la data a la particion con el id")
 
         else:
             print("Usuario NO encontrado")
@@ -573,12 +579,12 @@ def p_comando_logout(p):
 # solo lo puede usar el ROOT
 def p_comando_mkgrp(p):
     '''comando : MKGRP GUION NAME IGUAL CADENA'''
-    global sesion_Iniciada, user
+    global sesion_Iniciada, user, path_del_disco
     name = p[5]
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: MKGRP usuario ROOT")
-            adminUG.crearGrupo(name)
+            admin.mkgrp(path_del_disco, name)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -588,12 +594,13 @@ def p_comando_mkgrp(p):
 
 def p_comando_rmgrp(p):
     '''comando : RMGRP GUION NAME IGUAL CADENA'''
-    global sesion_Iniciada, user
+    global sesion_Iniciada, user, path_del_disco
     name = p[5]
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: RMGRP usuario ROOT")
-            adminUG.eliminarGrupo(name)
+            admin.rmgrp(path_del_disco,name)
+            # adminUG.eliminarGrupo(name)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -603,7 +610,7 @@ def p_comando_rmgrp(p):
 
 def p_comando_mkusr(p):
     '''comando : MKUSR atributos_mkusr'''       
-    global sesion_Iniciada, sesion_Iniciada
+    global sesion_Iniciada, sesion_Iniciada, path_del_disco
     name_ingresar = ""
     pass_ingresar = ""
     grp = ""
@@ -619,7 +626,8 @@ def p_comando_mkusr(p):
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: RMGRP usuario ROOT")
-            adminUG.mkusr(name_ingresar,pass_ingresar,grp)
+            # adminUG.mkusr(name_ingresar,pass_ingresar,grp)
+            admin.mkusr(path_del_disco,name_ingresar,pass_ingresar,grp)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -648,13 +656,15 @@ def p_atributoSolo_mkusr(p):
 
 def p_comando_rmusr(p):
     '''comando : RMUSR GUION NAME IGUAL CADENA'''
+    global sesion_Iniciada, user, sesion_Iniciada, path_del_disco
     name_ingresar = p[5]
-    global sesion_Iniciada, user,sesion_Iniciada
+    
 
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: RMUSR usuario ROOT")
-            adminUG.rmuser(name_ingresar)
+            # adminUG.rmuser(name_ingresar)
+            admin.rmusr(path_del_disco,name_ingresar)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -663,6 +673,10 @@ def p_comando_rmusr(p):
 
 
 
+
+
+
+# MKFILE
 def p_comando_mkfile(p):
     '''comando : MKFILE atributos_mkfile'''
     global permiso_Usuario, user, sesion_Iniciada, bandera_mkfile, pp, block_start
@@ -700,11 +714,22 @@ def p_comando_mkfile(p):
             else:
                 print("Ejecutando...")
                 # print("Comando MKFILE")
+                caracteres_escritos = 0
+                cont = 0
+                secuencia = "0123456789"
+                relleno_archivo = ""
+                while caracteres_escritos < size_mkfile:
+                        if cont > 9:
+                            cont = 0
+                        relleno_archivo += (secuencia[cont])
+                        caracteres_escritos += 1
+                        cont += 1
                 
-                aa, bb = adminCarpetas.crearArchivo(path_del_disco,path_mkfile,int(size_mkfile),r,cont_mkfile,user,permiso_Usuario,uid,gid,bandera_mkfile,pp,block_start)
-                pp = aa
-                block_start = bb
-                bandera_mkfile = True
+                # aa, bb = adminCarpetas.crearArchivo(path_del_disco,path_mkfile,int(size_mkfile),r,cont_mkfile,user,permiso_Usuario,uid,gid,bandera_mkfile,pp,block_start)
+                # pp = aa
+                # block_start = bb
+                # bandera_mkfile = True
+                first = False
     
 
         else:
