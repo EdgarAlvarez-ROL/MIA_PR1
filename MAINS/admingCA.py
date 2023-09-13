@@ -8,6 +8,19 @@ import time
 
 ultimo_b_inodo = -1
 
+def escribirUltimoInodo(endInodo):
+    with open("MAINS/backs/endinodo.txt","w") as archivo:
+        archivo.write(str(endInodo))
+
+def leerUltimoInodo():
+    contendio = ""
+    with open("MAINS/backs/endinodo.txt","r") as archivo:
+        contendio = archivo.read()
+    return int(contendio)
+
+
+
+
 def leerBloquesFinal(path):
     global ultimo_b_inodo
     """ LECTOR DEL SUPERBLOQUE PARA ENCONTRAR LOS STARST """
@@ -70,7 +83,8 @@ def leerBloquesFinal(path):
                         break  # Si no quedan suficientes bytes para un registro completo, sal del bucle
                     resultado = struct.unpack(formato, parte)
                     cadena, entero = resultado
-                    print(f"Name: {cadena.decode('utf-8')} | Inodo: {entero}")
+                    """PRINT"""
+                    # print(f"Name: {cadena.decode('utf-8')} | Inodo: {entero}")
                     if entero != -1:
                         ultimo_b_inodo = entero
                     posicion += tamanio_struct
@@ -104,6 +118,11 @@ def obtenerPP():
         contenido = pp_archivo.read()
     return int(contenido)
 
+
+def escribirUltimoPP(pp):
+    with open("MAINS/backs/pp.txt","w") as pp_archivo:
+        pp_archivo.write(str(pp))
+
 def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
     global ultimo_b_inodo
 
@@ -117,23 +136,28 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
     carpetas = ruta.split("/")
     del carpetas[0]
     del carpetas[-1]
-    # print(carpetas)
+    
+    carpetas.append(name_archivo)
 
     bloque_start = 0
     s_inode_start = 0
     if fisrt:
         bloque_start = leerBloquesFinal(path)
-        s_inode_start = escribirUltimoPP(path)
+        s_inode_start = firstObtenerPP(path)
     else:
-        bloque_start = leerFinalSecond(path)
-
-    s_inode_start = obtenerPP()
+        bloque_start = leerFinalSecond()
+        s_inode_start = obtenerPP()
+        ultimo_b_inodo = leerUltimoInodo()
+        
+        
+    
     # print(type(bloque_start))
-    bloque_start = int(bloque_start)
+    # bloque_start = int(bloque_start)
     # print(type(bloque_start))
 
 
-    s_inode_start 
+    print(carpetas)
+    # print(bloque_start)
 
 
     # INFORMACION PA QUE NO CRASHEE
@@ -163,30 +187,29 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
                 
                 """ AQUI SE EMPIEZA A ESCRIBIR LA INFO DE LA CARPETA """
                 """                                                  """
-
-                
-
-                # CREANDO INODES PARA LAS CARPETAS Y LOS BLOQUES
+                # Crear instancia de BloquesCarpetas
                 block_carpeta = structs.BloquesCarpetas()
-                bytes_block_carpeta = bytes(block_carpeta)
-                
-                block_archivos = structs.BloquesArchivos()
-                bytes_block_archivo = bytes(block_archivos)
-                block_archivos.b_content = ""
 
-                
+                # Obtener el inicio del bloque
+                # bloque_start = leerBloquesFinal(path)
 
-                ultimo_b_inodo += 1
+                # Obtener el último PP
+                # s_inode_start = escribirUltimoPP(path)
+
                 for indice, valor in enumerate(carpetas):
-                    print(str(ultimo_b_inodo) + " - "+ (valor))
+                    print(str(ultimo_b_inodo) + " - " + valor)
                     if indice == 4:
                         break
+
+                    block_carpeta.b_content[indice].b_name = valor
+                    block_carpeta.b_content[indice].b_inodo = ultimo_b_inodo
+
                     if indice == len(carpetas) - 1:
-                        print(str(ultimo_b_inodo+1) + " - " + name_archivo)
-                        block_carpeta.b_content[0].b_name = name_archivo
-                        block_carpeta.b_content[0].b_inodo = ultimo_b_inodo+1
-                        
-                        # inodo de la carpeta
+                        # print(str(ultimo_b_inodo + 1) + " - " + name_archivo)
+                        block_carpeta.b_content[indice].b_name = name_archivo
+                        block_carpeta.b_content[indice].b_inodo = ultimo_b_inodo + 1
+
+                        # Crear inodo de la carpeta
                         inode = structs.Inodos()
                         inode.i_uid = int(uid)
                         inode.i_gid = int(gid)
@@ -197,40 +220,36 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
                         inode.i_type = 0
                         inode.i_perm = int(permisos)
 
-                        for _ in inode.i_block:
+                        for cont, _ in enumerate(inode.i_block):
                             if _ == -1:
-                                inode.i_block[cont] = ultimo_b_inodo + 1 
-                        # print(inode.i_block)
+                                inode.i_block[cont] = ultimo_b_inodo + 1
+                                break
 
+                        # Escribir el inodo en el disco
                         with open(path, "rb+") as bfiles:
                             bfiles.seek(s_inode_start)
                             bfiles.write(bytes(inode))
-                        
+
                         s_inode_start += 101
 
-                        
-                        """Inodo Archivo"""
-                        inode.i_type = 1
-                        inode.i_size = 0
-                        inode.i_block[0] = 0
-                        with open(path, "rb+") as bfiles:
-                            bfiles.seek(s_inode_start)
-                            bfiles.write(bytes(inode))
-                        
-                        s_inode_start += 101
-                        escribirUltimoPP(path)
-                            
-                        
+                        # # Crear inodo del archivo
+                        # inode.i_type = 1
+                        # inode.i_size = 0
+                        # inode.i_block[0] = 0
+
+                        # # Escribir el inodo en el disco
+                        # with open(path, "rb+") as bfiles:
+                        #     bfiles.seek(s_inode_start)
+                        #     bfiles.write(bytes(inode))
+
+                        # s_inode_start += 101
+                        escribirUltimoPP(s_inode_start)
+                        escribirUltimoInodo((ultimo_b_inodo+1))
+                        # print("PUTA")
+
                     else:
-
-                        # print(ultimo_b_inodo)
-                        # print("salir")
-
                         block_carpeta.b_content[indice].b_name = valor
                         block_carpeta.b_content[indice].b_inodo = ultimo_b_inodo
-                        
-                        # print(type(ultimo_b_inodo))
-                        # print(ultimo_b_inodo)
 
                         inode = structs.Inodos()
                         inode.i_uid = int(uid)
@@ -241,16 +260,11 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
                         inode.i_mtime = int(time.time())
                         inode.i_type = 0
                         inode.i_perm = int(permisos)
-                        
-                        cont = 0
-                        for _ in inode.i_block:
+
+                        for cont, _ in enumerate(inode.i_block):
                             if _ == -1:
-                                inode.i_block[cont] = ultimo_b_inodo + 1 
+                                inode.i_block[cont] = ultimo_b_inodo + 1
 
-                        # inode.i_block[indice]  = ultimo_b_inodo+1
-
-                        
-                        # print(inode.i_block)
                         ultimo_b_inodo += 1
 
                         with open(path, "rb+") as bfiles:
@@ -258,39 +272,39 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid):
                             bfiles.write(bytes(inode))
 
                         s_inode_start += 101
-                        """"""
-                
-                # for _ in block_carpeta.b_content:
-                #     print(_.b_name)
-                # print(block_archivos.b_content)
-                # print("===========")
-                # print(inode.i_block)
 
+                # with open(path, "rb+") as file:
                 file.seek(bloque_start)
+                # file.write(bytes(block_carpeta))
+                # bloque_start += 64
+
+            # Crear instancia de BloquesArchivos
+                block_archivos = structs.BloquesArchivos()
+                block_archivos.b_content = ""
+
                 file.write(bytes(block_carpeta))
                 file.write(bytes(block_archivos))
+                bloque_start += 64
 
     except Exception as e:
         print("\tERROR: No se pudo leer el disco en la ruta: " +path+", debido a: "+str(e))
-    
-    bloque_final = bloque_start + 128
-    # Abre un archivo en modo esc
-    # ritura ('w' para escribir, 'a' para agregar al final)
+                            
     with open("MAINS/backs/block_final.txt", 'w') as archivo:
-        # Escribe una cadena en el archivo
-        archivo.write(str(bloque_final))
-        # print("Bloque Final Guardado")
+                    archivo.write(str(bloque_start))
     """"""
     
-def leerFinalSecond(path):
+def leerFinalSecond():
     contenido = ""
     with open("MAINS/backs/block_final.txt", 'r') as archivo:
         # Escribe una cadena en el archivo
         contenido = archivo.read()
         # print("Bloque Final Guardado")
-    return contenido
+    return int(contenido)
 
-def escribirUltimoPP(path):
+
+
+
+def firstObtenerPP(path):
     """ LECTOR DEL SUPERBLOQUE PARA ENCONTRAR LOS STARST """
     mbr_format = "<iiiiB"
     mbr_size = struct.calcsize(mbr_format)
@@ -338,12 +352,13 @@ def escribirUltimoPP(path):
     bandera = 0
     while bandera != -1:
         with open(path, "rb") as archivo:
-            print(pp)
+            "prints del pp"
+            # print(pp)
             archivo.seek(pp)
             archivo.readinto(recuperado)
 
             inode.__setstate__(recuperado)
-            print(inode.i_perm)
+            # print(inode.i_perm)
             
             if inode.i_uid == -1:
                 bandera = -1
@@ -351,12 +366,145 @@ def escribirUltimoPP(path):
                 pp = pp + len(recuperado) 
         archivo.close()
 
-    with open("MAINS/backs/pp.txt","w") as pp_archivo:
-        pp_archivo.write(str(pp))
+    # with open("MAINS/backs/pp.txt","w") as pp_archivo:
+    #     pp_archivo.write(str(pp))
 
-        """"""  
+    return pp
+    """"""  
 
 
+def imprimirInodes(path):
+    """ LECTOR DEL SUPERBLOQUE PARA ENCONTRAR LOS STARST """
+    mbr_format = "<iiiiB"
+    mbr_size = struct.calcsize(mbr_format)
+    # partition_format = "c2s3i3i16s"
+    partition_format = "c2s3i3i16s"
+    partition_size = struct.calcsize(partition_format)
+    data = ""
+    pp = 0
+    try: 
+        with open(path, "rb") as file:
+            mbr_data = file.read(mbr_size)
+            particion_data = file.read(partition_size)
+            superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+            # print(particion_data)
+            mbr = MBR()
+            (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+            mbr.disk_fit = chr(disk_fit % 128)
+            partition1 = Particion()
+            particion_data = b'1PW'+ particion_data
+            particion_data = particion_data[:-2]
+            # print("PARTICON DATA")
+            # print(particion_data)
+            partition1.__setstate__(particion_data)
+            """==================================="""
+            # print(superBloque_data)
+            # super_Bloque = SuperBloque()
+            superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+            superBloque_data = superBloque_data[:-6]
+            # print(superBloque_data)
+            data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+            # print(superBloque_data)
+            # print("============================")
+            """==================================="""
+
+            
+            file.close()
+    except Exception as e:
+        print("\tERROR: No se pudo leer el disco en la ruta: " +path+", debido a: "+str(e))
+
+    pp = int(data[15])
+    inode = structs.Inodos()  # Crear una instancia de SuperBloque
+    bytes_inodo= bytes(inode)  # Obtener los bytes de la instancia
+    recuperado = bytearray(len(bytes_inodo))  # Crear un bytearray del mismo tamaño
+
+    bandera = 0
+    while bandera != -1:
+        with open(path, "rb") as archivo:
+            "prints del pp"
+            print(pp)
+            archivo.seek(pp)
+            archivo.readinto(recuperado)
+
+            inode.__setstate__(recuperado)
+            print(f"UID: {inode.i_uid} , GID: {inode.i_gid} , Permisos: {inode.i_perm}")
+            print(f"Apuntadores 0-4:")
+            print({inode.i_block})
+            # print(f"1: {inode.i_block[1]}")
+            # print(f"2: {inode.i_block[2]}")
+            # print(f"3: {inode.i_block[3]}")
+            
+            if inode.i_uid == -1:
+                bandera = -1
+            else:
+                pp = pp + len(recuperado) 
+        archivo.close()
+    """----------------------------"""
+
+
+def imprimirBloques(path):
+
+    mbr_format = "<iiiiB"
+    mbr_size = struct.calcsize(mbr_format)
+    # partition_format = "c2s3i3i16s"
+    partition_format = "c2s3i3i16s"
+    partition_size = struct.calcsize(partition_format)
+    data = ""
+    with open(path, "rb+") as file:
+        mbr_data = file.read(mbr_size)
+        particion_data = file.read(partition_size)
+        
+        """Block Start"""
+        superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+        superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+        superBloque_data = superBloque_data[:-6]
+        # print(superBloque_data)F
+        data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+        # block_start = data[16]
+        # print(block_start)
+        bloques_carpetas = structs.BloquesCarpetas()
+        bytes_carpetas= bytes(bloques_carpetas)  # Obtener los bytes de la instancia
+        recuperado = bytearray(len(bytes_carpetas))  # Crear un bytearray del mismo tamaño
+
+        block_start = data[16]
+        block_start += 64+64+64+64+64+64+64+64
+        file.seek(block_start)
+        file.readinto(recuperado)
+        # print(recuperado)
+
+        data_hex = bytearray(recuperado)
+        # Convierte los datos hexadecimales en una lista de bytes
+        byte_list = list(data_hex)
+
+        # Imprime la lista de bytes
+        # print(byte_list)
+
+        # Define el formato esperado, que incluye una cadena (12s) y un entero (i)
+        formato = "12s i"
+
+        # Calcula el tamaño del struct en bytes para leer una vez a la vez
+        tamanio_struct = struct.calcsize(formato)
+
+        posicion = 0
+
+        # print(len(data_hex))
+        while posicion < len(data_hex):
+            parte = data_hex[posicion:posicion + tamanio_struct]
+            # print(tamanio_struct)
+            # print(len(parte))
+            if len(parte) < tamanio_struct:
+                break  # Si no quedan suficientes bytes para un registro completo, sal del bucle
+            resultado = struct.unpack(formato, parte)
+            cadena, entero = resultado
+            print(f"Name: {cadena.decode('utf-8')} | Inodo: {entero}")
+            if entero != -1:
+                ultimo_b_inodo = entero
+            posicion += tamanio_struct
+            
+        # Este código asume que los datos se organizan en registros alternados de 12 bytes para la cadena y 4 bytes para el entero, 
+        # lo que corresponde al formato especificado en formato. Puedes ajustar el formato y el procesamiento según la estructura 
+        # real de tus datos. Asegúrate de manejar los casos en los que no haya suficientes bytes para un registro 
+        # completo o cuando la lectura llegue al final del bytearray.
 
 
 
@@ -367,5 +515,10 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # print(bloqueFinal)
 
 
-mkfile(path,r"/home/user/puta.txt",True,"rol","555","2","2")
-# escribirUltimoPP(path)
+# mkfile(path,r"/home/user/sol/puta.txt",True,"rol","555","2","2")
+# mkfile(path,r"/home/mis documentos/archivo2.txt",False,"rol","222","2","2")
+# mkfile(path,r"/home/mis_2/archivo3.txt",False,"rol","664","2","2")
+
+
+imprimirInodes(path)
+# imprimirBloques(path)

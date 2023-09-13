@@ -19,7 +19,7 @@ def main():
 
     partition = FDisk()
     # partition.delete = "FULL"
-    partition.size = 3
+    partition.size = 5
     partition.type = "P"
     partition.unit = "M"
     partition.path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
