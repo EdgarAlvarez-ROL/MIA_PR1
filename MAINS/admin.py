@@ -62,7 +62,7 @@ def login(path, user, password):
 
     # Haz algo con el contenido del archivo
     info_user_txt = info_user_txt.rstrip("\n")
-    print(info_user_txt)
+    # print(info_user_txt)
     matriz1 = info_user_txt.split("\n")
     # print(matriz1)
     

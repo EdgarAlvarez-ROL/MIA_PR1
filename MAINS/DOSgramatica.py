@@ -172,39 +172,42 @@ def t_FILE2(t):
 
 # Expresión regular para directorio
 def t_DIR(t):
-    # r'\/[a-zA-Z0-9_\/\.]+ | \"\/[a-zA-Z0-9_\/\.]+\"'
+    # r'=\/[a-zA-Z0-9_\/\.]+ | =\"\/[a-zA-Z0-9_\/\.]+\"'
 
-    # r'C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk | \"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk\"'
+    r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk | =\"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk\"'
 
-    r'C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
-    if t.value.startswith('"') or t.value.startswith("'"):
-        t.value = t.value[1:-1]  # Eliminar las comillas alrededor de la cadena
-
+    # r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
+    if t.value.endswith('"') or t.value.endswith("'"):
+        t.value = t.value[2:-1]  # Eliminar las comillas alrededor de la cadena
+    else:
+        t.value = t.value[1:]
     # r'[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+'
     # r'\\[a-zA-Z0-9_\\\.]+'
     return t
 
-# def t_STRING(t):
-#     r'=(\"[^\"]*\") | =([a-zA-Z0-9_]+[a-zA-Z0-9]*)'
-#     if t.value.startswith('"') or t.value.startswith("'"):
-#         t.value = t.value[1:-1]  # Eliminar las comillas alrededor de la cadena
-#     return t
+def t_STRING(t):
+    r'=(\"[^\"]*\") | =([a-zA-Z0-9_]+[a-zA-Z0-9]*)'
+    if t.value.endswith('"') or t.value.endswith("'"):
+        t.value = t.value[2:-1]  # Eliminar las comillas alrededor de la cadena
+    else:
+        t.value = t.value[1:]
+    return t
 
 
 # Expresiones regulares de cadena para que no entre en conflico con los tokens simples
-def t_CADENA(t):
-    r'(\"[^"]*\"|\'[^\']*\')'
-    if t.value.startswith('"') or t.value.startswith("'"):
-        t.value = t.value[1:-1]  # Eliminar las comillas alrededor de la cadena
-    # Verifica si la cadena es una palabra clave
-    # t.type = reserved.get(t.value, 'CADENA')
-    return t
+# def t_CADENA(t):
+#     r'(\"[^"]*\"|\'[^\']*\')'
+#     if t.value.startswith('"') or t.value.startswith("'"):
+#         t.value = t.value[1:-1]  # Eliminar las comillas alrededor de la cadena
+#     # Verifica si la cadena es una palabra clave
+#     # t.type = reserved.get(t.value, 'CADENA')
+#     return t
 
-def t_NUMERO(t):
-    r'\d+'  # Reconoce secuencias de dígitos como números
-    t.type = 'NUM'
-    t.value = int(t.value)  # Convierte la cadena a un entero
-    return t
+# def t_NUMERO(t):
+#     r'\d+'  # Reconoce secuencias de dígitos como números
+#     t.type = 'NUM'
+#     t.value = int(t.value)  # Convierte la cadena a un entero
+#     return t
 
 def t_COMENTARIOS(t):
     r'\#.*'
@@ -247,7 +250,7 @@ mount = Mount()
 path_mount = ""
 name_mount = ""
 
-path_del_disco = ""
+path_del_disco = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
 bandera_mkfile = False
 pp = -1
 block_start = -1
@@ -279,6 +282,10 @@ def p_comando_mkdisk(p):
     if fit == "":
         fit = "ff"
 
+    # path = path[1:]
+    # size = size[1:]
+    # unit = unit[1:]
+    # fit  = fit[1:]
     # imprimir valores ingresados
     print("Size: "+str(size))
     print("Unit: "+str(unit))
@@ -291,15 +298,15 @@ def p_comando_mkdisk(p):
     disk.path = path
     disk.size = size
     disk.unit = unit
-    disk.fit = fit
+    disk.fit  = fit
     disk.create()
 
     # reseteo de las variables para su uso futuro
     size = ""
     unit = ""
     path_del_disco = path
-    # mkdisk -size=5 -unit=M -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk
-    
+    # mkdisk -size=5 -fit=wf -unit=M -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk
+    # mkdisk -size=5 -fit=wf -unit=M -path=/DISCOS/disco2.dsk
 
 def p_atributosM(p):
     '''atributosm : atributosm atributom
@@ -311,11 +318,11 @@ def p_atributosM(p):
         p[0] = p[1]
 
 def p_atributoM(p):
-    '''atributom : GUION PATH IGUAL DIR
-                 | GUION FIT IGUAL LETRAS_FIT
-                 | GUION UNIT IGUAL LETRA_FDISK
-                 | GUION SIZE IGUAL NUM'''
-    p[0] = (p[2], p[4])
+    '''atributom : GUION PATH DIR
+                 | GUION FIT STRING
+                 | GUION UNIT STRING
+                 | GUION SIZE STRING'''
+    p[0] = (p[2], p[3])
 
 
 
@@ -358,6 +365,7 @@ def p_comando_fdisk(p):
 
         if fit == "":
             fit = "ff"
+
         # Imprimiendo las variables
         print("Size: "+str(size))
         print("Unit: "+str(unit_fkdisk))
@@ -370,7 +378,7 @@ def p_comando_fdisk(p):
 
         partition = FDisk()
         partition.delete = delete
-        partition.size = size
+        partition.size = int(size)
         partition.type = type
         partition.unit = unit_fkdisk
         partition.path = path
@@ -385,6 +393,7 @@ def p_comando_fdisk(p):
     name = ""
     type = ""
     # fdisk -type=E -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk -unit=M -name="Particion1" -size=1
+    # fdisk -type=E -path=/DISCOS/discos2.dsk -unit=M -name="Part icion1" -size=1
 
 
 def p_atributos(p):
@@ -397,24 +406,27 @@ def p_atributos(p):
         p[0] = p[1]
 
 def p_atributo(p):
-    '''atributo : GUION PATH IGUAL DIR
-                | GUION TYPE IGUAL LETRA_FDISK
-                | GUION UNIT IGUAL LETRA_FDISK
-                | GUION NAME IGUAL CADENA
-                | GUION SIZE IGUAL NUM
-                | GUION FIT IGUAL LETRAS_FIT
-                | GUION ADD IGUAL NUM
+    '''atributo : GUION PATH DIR
+                | GUION TYPE STRING
+                | GUION UNIT STRING
+                | GUION NAME STRING
+                | GUION SIZE STRING
+                | GUION FIT STRING
+                | GUION ADD STRING
                 | GUION DELETE'''
-    p[0] = (p[2], p[4])
+    if len(p) == 3:
+        p[0] = (p[2], p[1])
+    else:
+        p[0] = (p[2], p[3])
 
 
 
 # reglas comadno REP
 def p_comando_rep(p):
-    '''comando : REP GUION PATH IGUAL DIR'''
+    '''comando : REP GUION PATH DIR'''
     global path
     
-    path = p[5]
+    path = p[4]
     # Eliminando las comillas del path
     if path.startswith("\""):
         path = path[1:-1]
@@ -425,10 +437,10 @@ def p_comando_rep(p):
 
 
 def p_comando_rmdisk(p):
-    '''comando : RMDISK GUION PATH IGUAL DIR'''
+    '''comando : RMDISK GUION PATH DIR'''
     global path
 
-    path = p[5]
+    path = p[4]
     # Eliminando las comillas del path
     if path.startswith("\""):
         path = path[1:-1]
@@ -473,19 +485,19 @@ def p_atributos_mount(p):
         p[0] = p[1]
 
 def p_atributo_mount(p):
-    '''atributo_mm : GUION PATH IGUAL DIR
-                   | GUION NAME IGUAL CADENA'''
-    p[0] = (p[2], p[4])
+    '''atributo_mm : GUION PATH DIR
+                   | GUION NAME STRING'''
+    p[0] = (p[2], p[3])
 
 
 
 def p_comando_unmount(p):
-    '''comando : UNMOUNT GUION ID IGUAL CADENA'''
+    '''comando : UNMOUNT GUION ID STRING'''
     global path_mount, name_mount, mount
     # id = ""
     command = "unmount"
     print(f"Comando: {command}")
-    id = p[5]
+    id = p[4]
     print(f"ID: {id}")
     mount.unmount(id)
     
@@ -511,11 +523,12 @@ def p_comando_mkfs(p):
         print(f"Type: {type_mkfs}")
         print(f"Fs: {fs_val}")
 
-        fileSystem = MKFS(mount)
-        tks = [id,type,fs_val]
-        fileSystem.mkfs(tks)
+        # fileSystem = MKFS(mount)
+        # tks = [id,type,fs_val]
+        # fileSystem.mkfs(tks)
     else: 
         print("El comando MKFS requiere obligatoriamente de un id")
+        # mkfs -id="parte 1" -type=P -fs=2fs
 
 
 def p_atributos_mkfs(p):
@@ -528,10 +541,10 @@ def p_atributos_mkfs(p):
         p[0] = p[1]
 
 def p_atributoSolo_mkfs(p):
-    '''atributosSolo_mkfs : GUION ID IGUAL NAME
-                            | GUION TYPE IGUAL CADENA
-                            | GUION FS IGUAL FS_VAL'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_mkfs : GUION ID STRING
+                            | GUION TYPE STRING
+                            | GUION FS STRING'''
+    p[0] = (p[2], p[3])
 
 
 
@@ -562,12 +575,14 @@ def p_comando_login(p):
                 permiso_Usuario = "777"
             else:
                 permiso_Usuario = "664"
-            # print("mandamos la data a la particion con el id")
-
+            print("    Usuario Encontrado")
+            print(f"    Bienvendio {user}.")
         else:
             print("Usuario NO encontrado")
     else:
         print("Porfavor ingrese todos los datos del user, password, id\n")
+    # login -user=root -pass=123 -id=441disco
+    # login -user="mi usuario" -pass="mi pwd" -id=061Disco1
 
 
 def p_atributos_login(p):
@@ -580,21 +595,21 @@ def p_atributos_login(p):
         p[0] = p[1]
 
 def p_atributoSolo_login(p):
-    '''atributosSolo_login :  GUION USER IGUAL CADENA
-                            | GUION PASS IGUAL CADENA
-                            | GUION ID IGUAL CADENA'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_login :  GUION USER STRING
+                            | GUION PASS STRING
+                            | GUION ID STRING'''
+    p[0] = (p[2], p[3])
 
 
 # SALE DE LA SESION
 def p_comando_logout(p):
     '''comando : LOGOUT'''
-    global user, id, password
-    print(f"SALIENDO de la Sesion {user} ...")
+    global user, id, password, sesion_Iniciada
+    print(f"SALIENDO de la Sesion usuario {user} ...")
     user = ""
     id = ""
     password = ""
-
+    sesion_Iniciada = False
 
 # ESCRIBE un grupo en el users.txt 
 # solo lo puede usar el ROOT
