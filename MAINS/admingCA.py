@@ -401,6 +401,7 @@ def imprimirInodes(path):
             """==================================="""
             # print(superBloque_data)
             # super_Bloque = SuperBloque()
+            print(superBloque_data)
             superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
             superBloque_data = superBloque_data[:-6]
             # print(superBloque_data)
@@ -414,6 +415,7 @@ def imprimirInodes(path):
     except Exception as e:
         print("\tERROR: No se pudo leer el disco en la ruta: " +path+", debido a: "+str(e))
 
+    print(data)
     pp = int(data[15])
     inode = structs.Inodos()  # Crear una instancia de SuperBloque
     bytes_inodo= bytes(inode)  # Obtener los bytes de la instancia
@@ -435,7 +437,7 @@ def imprimirInodes(path):
             # print(f"2: {inode.i_block[2]}")
             # print(f"3: {inode.i_block[3]}")
             
-            if inode.i_uid == -1:
+            if inode.i_uid == -1 or inode.i_uid == 0:
                 bandera = -1
             else:
                 pp = pp + len(recuperado) 
@@ -580,9 +582,23 @@ def buscarCAT(path, buscar,contador):
             # print(entero)
             # Crear un nuevo bytearray excluyendo los bytes \xFF
             filtered_byte_array = bytearray(byte for byte in cadena if byte != 0xFF)
-
+            # print(cadena)
             # print(filtered_byte_array)
-            name = filtered_byte_array.decode('utf-8').rstrip("\0")
+            name = ""
+            try:
+                # Supongamos que filtered_byte_array contiene la secuencia de bytes
+                name = filtered_byte_array.decode('utf-8').rstrip("\0")
+                # print(f"Nombre limpio: {name}")
+            except UnicodeDecodeError as e:
+                pass
+                # Manejar una excepción si la decodificación UTF-8 falla
+                # print(f"Error al decodificar UTF-8: {e}")
+            except Exception as ex:
+                pass
+                # Manejar cualquier otra excepción que pueda ocurrir
+                # print(f"Error inesperado: {ex}")
+
+
             # print(f"Name: {name} | Inodo: {entero}")
             if name == buscar:
                 # print("encontrado")
@@ -610,8 +626,7 @@ def buscarCAT(path, buscar,contador):
 
 
 """================================== PRUEBAS ================================== """
-path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
-
+# path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
 # bloqueFinal = leerBloquesFinal(path)
 # print(bloqueFinal)
 
@@ -624,14 +639,14 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # imprimirInodes(path)
 
 """"""
-contendio = ""
-with open("MAINS/backs/endinodo.txt","r") as archivo:
-    contendio = archivo.read()
-    
-cont = 0
-for _ in range(int(contendio)):
-    imprimirBloques(path, cont)
-    cont += 64+64
+# contendio = ""
+# with open("MAINS/backs/endinodo.txt","r") as archivo:
+#     contendio = archivo.read()
+   
+# cont = 0
+# for _ in range(int(contendio)):
+#     imprimirBloques(path, cont)
+#     cont += 64+64
 
 
 # lista = ["puta.txt","a.txt","archivo3.txt","soy.txt"]

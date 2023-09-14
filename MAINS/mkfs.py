@@ -66,7 +66,7 @@ class MKFS:
 
 
             # print(f"Este es n: {n}")
-            print(f"Este es tamanioInodos: {tamanioInodos}")
+            # print(f"Este es tamanioInodos: {tamanioInodos}")
             # print(f"Este es tamanioInodos2: {tamanioInodos2}")
             # print(f"Este es Tamaño : {tamanioSuperBloque}")
 

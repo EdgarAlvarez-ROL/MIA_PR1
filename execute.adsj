@@ -1,0 +1,3 @@
+login -user=root -pass=123 -id=441Disco 
+rep -name=MBR -path=/home/user/reporte.txt -id=441Disco
+rep -name=disk -path=/home/user/reporte.txt -id=441Disco

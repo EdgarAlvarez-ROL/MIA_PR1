@@ -47,5 +47,95 @@ digraph MBR {
                         <TD>cosa</TD>
                     </TR>
 
+        
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>1</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>E</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>W</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>5242936</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>1048576</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>logica</TD>
+                    </TR>
+
+        
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>1</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>L</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>W</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>0</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>0</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>0PBF</TD>
+                    </TR>
+
+        
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>1</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>L</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>W</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>808464689</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>808464432</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>0000000000000000</TD>
+                    </TR>
+
         </TABLE>>]
 }

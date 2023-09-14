@@ -21,11 +21,11 @@ def main():
 
     # partition = FDisk()
     # # partition.delete = "FULL"
-    # partition.size = 1
-    # partition.type = "E"
+    # partition.size = 4
+    # partition.type = "p"
     # partition.unit = "M"
     # partition.path = path
-    # partition.name = "logica"
+    # partition.name = "cosa"
     # partition.fit = "WF"
     # # # partition.add = '100'
     # partition.fdisk()
@@ -46,7 +46,7 @@ def main():
 
     repo = reporte()
     repo.path = path
-    repo.rep()
+    repo.repSuperBloque()
 
     # repo = reporte()
     # repo.path = r'\Users\JONATHAN ALVARADO\Desktop\disco.dk'

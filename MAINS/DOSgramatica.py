@@ -12,6 +12,7 @@ import admin
 import admingCA
 import re
 import time
+import graficas
 
 # Definición de tokens
 tokens = (
@@ -173,9 +174,9 @@ def t_FILE2(t):
 
 # Expresión regular para directorio
 def t_DIR(t):
-    # r'=\/[a-zA-Z0-9_\/\.]+ | =\"\/[a-zA-Z0-9_\/\.]+\"'
+    r'=\/[a-zA-Z0-9_\/\.]+ | =\"\/[a-zA-Z0-9_\/\.]+\"'
 
-    r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+ | =\"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+\"'
+    # r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+ | =\"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+\"'
 
     # r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
     if t.value.endswith('"') or t.value.endswith("'"):
@@ -251,7 +252,7 @@ mount = Mount()
 path_mount = ""
 name_mount = ""
 
-path_del_disco = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
+path_del_disco = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
 bandera_mkfile = False
 pp = -1
 block_start = -1
@@ -1112,14 +1113,88 @@ def p_comando_rep(p):
     path_rep = ""
     name_rep = ""
 
-    
-    # Eliminando las comillas del path
-    if path.startswith("\""):
-        path = path[1:-1]
+    for atributo in p[2]:
+        if atributo[0] == "path":
+            path_rep = atributo[1]
+        elif atributo[0] == "name":
+            name_rep = atributo[1]
+        elif atributo[0] == "id":
+            id_rep = atributo[1]
 
-    repo = reporte()
-    repo.path = path
-    repo.rep()
+    if user != "":
+        if path_rep != "":
+            if sesion_Iniciada:
+                print(f"Comando REP")
+                print(f"Path {path_rep}")
+                print(f"ID: {id_rep}")
+                print(f"NAME: {name_rep}")
+
+                lts_p_reportes = ["mbr","disk","inode","journaling","block","bm_inode","bm_block","tree","sb","file","ls"]
+                repo = reporte()
+                repo.path = path_del_disco
+                
+                if (name_rep).lower() == "mbr":
+                    print("")
+                    print("Creando Reporte MBR")
+                    repo.repMBR()
+                elif name_rep.lower() == "disk":
+                    print("")
+                    print("CReando Reporte DISK")
+
+                    total_size = -1
+                    size_part1 = -1
+                    size_part2= -1
+                    size_part2 = -1
+                    size_part4 = -1
+                    final_part = 0
+                    for _ in range(4):
+                        size, total_size = repo.repFDISK2(final_part)
+                        final_part += 44
+
+                        if _ == 0:
+                            size_part1 = size
+                        elif _ == 1:
+                            size_part2 = size
+                        elif _ == 2:
+                            size_part3 = size
+                        elif _ == 3:
+                            size_part4 = size
+
+                    print(f"MBR tamaño: {total_size}")
+                    print(f"PART1 : {size_part1}")
+                    print(f"PART2 : {size_part2}")
+                    print(f"PART3 : {size_part3}")
+                    print(f"PART4 : {size_part4}")
+                    graficas.rep_FDISK(total_size,size_part1,size_part2,size_part3,size_part4)
+                    print("")
+                elif name_rep.lower() == "inode":
+                    print("")
+                elif name_rep.lower() == "journaling":
+                    print("")
+                elif name_rep.lower() == "block":
+                    print("")
+                elif name_rep.lower() == "bm_inode":
+                    print("")
+                elif name_rep.lower() == "bm_block":
+                    print("")
+                elif name_rep.lower() == "tree":
+                    print("")
+                elif name_rep.lower() == "sb":
+                    print("")
+                elif name_rep.lower() == "file":
+                    print("")
+                elif name_rep.lower() == "js":
+                    print("")
+            
+
+            else:
+                print("Porfavor INICIE SESION para ejecutar este comando")
+        else:
+            print("EL Comando REP necesita de un Path")
+    else:
+        print("Porfavor INICIE SESION para ejecutar este comando")
+
+
 
 def p_listaFilesREP(p):
     '''lista_rep : lista_rep atributosSolo_REP
@@ -1130,7 +1205,7 @@ def p_listaFilesREP(p):
         p[1].append(p[2])
         p[0] = p[1]
 
-def p_atributoSolo_COPY(p):
+def p_atributoSolo_REP(p):
     '''atributosSolo_REP : GUION ID STRING
                          | GUION PATH DIR
                          | GUION NAME STRING'''

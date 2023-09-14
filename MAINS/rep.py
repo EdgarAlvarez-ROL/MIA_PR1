@@ -13,7 +13,7 @@ class reporte:
     def __init__(self):
         self.path = ''
 
-    def rep(self):
+    def repMBR(self):
         if self.path:
             if self.path.startswith("\"") and self.path.endswith("\""):
                 self.path = self.path[1:-1]
@@ -152,21 +152,26 @@ class reporte:
         '''
 
 
-        dot+= '''</TABLE>>'''
-        # print(dot)
-        # graficas.rep_MBR(dot)
+        
+        
 
-        self.obtenerParticonExtendida(partition1.part_size)
+        info_E = self.obtenerParticonExtendida(partition1.part_size)
+        part3 = self.obtenerParticion3(44+44)
+        part4 = self.obtenerParticion3(44+44+44)
+        dot += info_E + part3 + part4
+        dot+= '''</TABLE>>'''
         
-        
-        
-        
+        # print(dot)
+        graficas.rep_MBR(dot)
+
+
         # pp = data[15]
         # self.replicaa(pp)
         # print(data)
         
     def obtenerParticonExtendida(self, final_particion1):
         ''''''
+        dot = ''
         try: 
             mbr_format = "<iiiiB"
             mbr_size = struct.calcsize(mbr_format)
@@ -178,7 +183,7 @@ class reporte:
             # print(partition_size)
 
 
-
+            partition1 = Particion()
             # print(particion_size)
             tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
             data = ""
@@ -194,34 +199,148 @@ class reporte:
                 (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
                 mbr.disk_fit = chr(disk_fit % 128) 
 
-                print(particion_data)
-                partition1 = Particion()
-                particion_data = b'1PW'+ particion_data
+                # print(particion_data)
+                
+                particion_data = b'1EW'+ particion_data
                 particion_data = particion_data[:-2]
                 # print("PARTICON DATA")
                 
                 partition1.__setstate__(particion_data)
-                print(partition1.part_size)
-
-                """==================================="""
-                # print("============================")
-                # print(superBloque_data)
-                super_Bloque = SuperBloque()
-                
-                # print(len(superBloque_data))
-                # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
-                superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
-                superBloque_data = superBloque_data[:-6]
-                # print(superBloque_data)
-                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
-                # print(superBloque_data)
-                # print("============================")
-                """==================================="""
-               
+                # print(partition1.part_size)
                 
         except Exception as e:
             print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+        
 
+        print("\t============ PARTICION EXTENDIDA ===========")
+        print("\tMBR Particion Status: ", partition1.part_status)
+        print("\tMBR Particion TYpe: ", partition1.part_type)
+        print("\tMBR Particion FIt: ", partition1.part_fit)
+        print("\tMBR Particion Start: ", partition1.part_start)
+        print("\tMBR Particion SIze: ", partition1.part_size)
+        print("\tMBR Particion Name: ", partition1.part_name)
+
+        dot += f'''
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>{partition1.part_status}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>{partition1.part_type}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>{partition1.part_fit}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>{partition1.part_start}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>{partition1.part_size}</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>{partition1.part_name}</TD>
+                    </TR>
+
+        '''
+
+
+        return dot
+
+
+    def obtenerParticion3(self, final_particion1):
+        ''''''
+        dot = ''
+        try: 
+            mbr_format = "<iiiiB"
+            mbr_size = struct.calcsize(mbr_format)
+
+            # partition_format = "c2s3i3i16s"
+            partition_format = "c2s3i3i16s"
+            partition_size = struct.calcsize(partition_format)
+            
+            # print(partition_size)
+
+
+            partition1 = Particion()
+            # print(particion_size)
+            tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
+            data = ""
+            with open(self.path, "rb") as file:
+                
+                mbr_data = file.read(mbr_size)
+                
+                file.seek(final_particion1)
+                particion_data = file.read(partition_size)
+                superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                # print(particion_data)
+                mbr = MBR()
+                (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                mbr.disk_fit = chr(disk_fit % 128) 
+
+                # print(particion_data)
+                
+                particion_data = b'1LW'+ particion_data
+                particion_data = particion_data[:-2]
+                # print("PARTICON DATA")
+                
+                partition1.__setstate__(particion_data)
+                # print(partition1.part_size)
+                
+        except Exception as e:
+            print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+        
+
+        print("\t============ PARTICION ===========")
+        print("\tMBR Particion Status: ", partition1.part_status)
+        print("\tMBR Particion TYpe: ", partition1.part_type)
+        print("\tMBR Particion FIt: ", partition1.part_fit)
+        print("\tMBR Particion Start: ", partition1.part_start)
+        print("\tMBR Particion SIze: ", partition1.part_size)
+        print("\tMBR Particion Name: ", partition1.part_name)
+
+        dot += f'''
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>{partition1.part_status}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>{partition1.part_type}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>{partition1.part_fit}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>{partition1.part_start}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>{partition1.part_size}</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>{partition1.part_name}</TD>
+                    </TR>
+
+        '''
+
+
+        return dot
 
 
     def replicaa(self, p):
@@ -269,19 +388,221 @@ class reporte:
             # print(inode.i_block)
             # print(inode.i_type )
             # print(inode.i_perm )
-                        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
             
         except Exception as e:
             print(e)
+
+
+
+    def repFDISK2(self, final_part):
+        total = 0
+        tamano_MBR = 0
+        if final_part != 0:
+            try: 
+                mbr_format = "<iiiiB"
+                mbr_size = struct.calcsize(mbr_format)
+
+                # partition_format = "c2s3i3i16s"
+                partition_format = "c2s3i3i16s"
+                partition_size = struct.calcsize(partition_format)
+                # print(particion_size)
+                tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
+                data = ""
+                with open(self.path, "rb") as file:
+
+                    mbr_data = file.read(mbr_size)
+
+                    file.seek(final_part)
+                    particion_data = file.read(partition_size)
+                    superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                    # print(particion_data)
+                    mbr = MBR()
+                    (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                    mbr.disk_fit = chr(disk_fit % 128) 
+
+
+                    partition1 = Particion()
+                    particion_data = b'1PW'+ particion_data
+                    particion_data = particion_data[:-2]
+                    # print("PARTICON DATA")
+                    # print(particion_data)
+                    partition1.__setstate__(particion_data)
+
+                    total = int(partition1.part_size)
+                    tamano_MBR = mbr.mbr_tamano
+                    """==================================="""
+                    # print("============================")
+                    # print(superBloque_data)
+                    super_Bloque = SuperBloque()
+
+                    # print(len(superBloque_data))
+                    # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                    superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                    superBloque_data = superBloque_data[:-6]
+                    # print(superBloque_data)
+                    data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                    # print(superBloque_data)
+                    # print("============================")
+                    """==================================="""
+                    # lo que deberia
+                    # b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00'
+                    # b'                  \x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00\x0011000'
+                    # lo que salio
+
+                    # if superBloque_data == b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00':
+                        # print("chupala")
+
+                    # Data es la info del superbloque
+                    # print("###########################")
+                    # b'\x01\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\x98\x02\x00\x00'
+                    # b'\x01\x00\x00\x00\x01\x00\x00\x00[\x00\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x01\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x98\x02\x00\x00'
+                    # print("###########################")
+                    # 
+                    # print("ASDLÑFKAJSFDLKÑJ")
+                    file.close()
+            except Exception as e:
+                print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+
+        else:
+            try: 
+                mbr_format = "<iiiiB"
+                mbr_size = struct.calcsize(mbr_format)
+
+                # partition_format = "c2s3i3i16s"
+                partition_format = "c2s3i3i16s"
+                partition_size = struct.calcsize(partition_format)
+                # print(particion_size)
+                tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
+                data = ""
+                with open(self.path, "rb") as file:
+                    mbr_data = file.read(mbr_size)
+                    particion_data = file.read(partition_size)
+                    superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                    # print(particion_data)
+                    mbr = MBR()
+                    (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                    mbr.disk_fit = chr(disk_fit % 128) 
+
+                    tamano_MBR = mbr.mbr_tamano
+                    
+                    partition1 = Particion()
+                    particion_data = b'1PW'+ particion_data
+                    particion_data = particion_data[:-2]
+                    # print("PARTICON DATA")
+                    # print(particion_data)
+                    partition1.__setstate__(particion_data)
+                    total = int(partition1.part_size)
+
+                    """==================================="""
+                    # print("============================")
+                    # print(superBloque_data)
+                    super_Bloque = SuperBloque()
+                    
+                    # print(len(superBloque_data))
+                    # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                    # superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                    # superBloque_data = superBloque_data[:-6]
+                    # print(superBloque_data)
+                    data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                    print(data)
+                    # print("============================")
+                    """==================================="""
+                    # lo que deberia
+                    # b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00'
+                    # b'                  \x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00\x0011000'
+                    # lo que salio
+
+                    # if superBloque_data == b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00':
+                        # print("chupala")
+
+                    # Data es la info del superbloque
+                    # print("###########################")
+                    # b'\x01\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\x98\x02\x00\x00'
+                    # b'\x01\x00\x00\x00\x01\x00\x00\x00[\x00\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x01\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x98\x02\x00\x00'
+                    # print("###########################")
+                    # 
+                    file.close()
+            except Exception as e:
+                print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+
+        return int(total), int(tamano_MBR)
+
+
+
+
+    def repSuperBloque(self):
+        try: 
+            mbr_format = "<iiiiB"
+            mbr_size = struct.calcsize(mbr_format)
+
+            # partition_format = "c2s3i3i16s"
+            partition_format = "c2s3i3i16s"
+            partition_size = struct.calcsize(partition_format)
+            # print(particion_size)
+            tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
+
+            data = ""
+            with open(self.path, "rb") as file:
+
+                mbr_data = file.read(mbr_size)
+
+                file.seek(44)
+
+                particion_data = file.read(partition_size)
+                superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                # print(particion_data)
+                # print(particion_data)
+                mbr = MBR()
+                (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                mbr.disk_fit = chr(disk_fit % 128) 
+
+                
+                partition1 = Particion()
+                particion_data = b'1PW'+ particion_data
+                particion_data = particion_data[:-2]
+                # print("PARTICON DATA")
+                # print(particion_data)
+                partition1.__setstate__(particion_data)
+                print(partition1.part_name)
+                file.seek(partition1.part_start)
+                superBloque_data = file.read(tamanioSuperBloque)
+                """==================================="""
+                # print("============================")
+                print(superBloque_data)
+                super_Bloque = SuperBloque()
+                
+
+                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                print(data)
+                
+                # print(len(superBloque_data))
+                # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)+
+
+
+                # superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                # superBloque_data = superBloque_data[:-6]
+
+
+
+                # print(superBloque_data)
+                
+                # print("============================")
+                """==================================="""
+                # lo que deberia
+                # b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00'
+                # b'                  \x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00\x0011000'
+                # lo que salio
+
+                # if superBloque_data == b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00':
+                    # print("chupala")
+
+                # Data es la info del superbloque
+                # print("###########################")
+                # b'\x01\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\x98\x02\x00\x00'
+                # b'\x01\x00\x00\x00\x01\x00\x00\x00[\x00\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x01\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x98\x02\x00\x00'
+                # print("###########################")
+                # 
+                file.close()
+        except Exception as e:
+            print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+
