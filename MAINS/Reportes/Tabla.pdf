@@ -1,11 +1,6 @@
-import graphviz
-
-
-
-s = graphviz.Digraph('Tabla', filename='MAINS/Reportes/Tabla.pdf',
-                     node_attr={'shape': 'plaintext'})
-
-table_content = '''<
+digraph Tabla {
+	node [shape=plaintext]
+	struct1 [label=<
 <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">  <TR>
                         <TD>REPORTE MBR</TD>
                         <TD>    </TD>
@@ -25,8 +20,5 @@ table_content = '''<
                     
                     
                     
-        </TABLE>>'''
-
-s.node('struct1', table_content)
-s.view()
-# print(s)
+        </TABLE>>]
+}

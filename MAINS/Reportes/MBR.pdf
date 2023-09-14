@@ -1,0 +1,51 @@
+digraph MBR {
+	node [shape=plaintext]
+	struct1 [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">  <TR>
+                        <TD>REPORTE MBR</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_tamaño:</TD>
+                        <TD>12582912</TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_fecha_creacion:</TD>
+                        <TD>2023-09-14 18:55:41</TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_disk_signature:</TD>
+                        <TD>197</TD>
+                    </TR>
+                    
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>1</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>P</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>W</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>56</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>5242880</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>cosa</TD>
+                    </TR>
+
+        </TABLE>>]
+}

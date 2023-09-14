@@ -6,30 +6,32 @@ from mount import Mount
 from mkfs import MKFS
 
 def main():
+    path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
+
     # disk = MkDisk()
     # disk.fit  = "FF"
-    # disk.path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
+    # disk.path = path
     # disk.size = 12
     # disk.unit = "M"
     # disk.create()
 
-    # # rm = RmDisk()
-    # # rm.path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
-    # # rm.remove()
+    # # # rm = RmDisk()
+    # # # rm.path = path
+    # # # rm.remove()
 
     # partition = FDisk()
     # # partition.delete = "FULL"
-    # partition.size = 5
-    # partition.type = "P"
+    # partition.size = 1
+    # partition.type = "E"
     # partition.unit = "M"
-    # partition.path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
-    # partition.name = "cosa"
+    # partition.path = path
+    # partition.name = "logica"
     # partition.fit = "WF"
     # # # partition.add = '100'
     # partition.fdisk()
 
     # mount = Mount()
-    # path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
+    # # path = path
     # name = "cosa" #nombre de la particion a cargar
     # mount.mount(path, name)
     # mount.listaMount()
@@ -43,7 +45,7 @@ def main():
     
 
     repo = reporte()
-    repo.path = r'C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk'
+    repo.path = path
     repo.rep()
 
     # repo = reporte()

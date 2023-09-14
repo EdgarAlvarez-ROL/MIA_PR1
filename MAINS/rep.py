@@ -6,6 +6,8 @@ import mount as Mount
 import fdisk2
 import datetime
 import time
+import graficas
+
 
 class reporte:
     def __init__(self):
@@ -109,14 +111,118 @@ class reporte:
                     </TR>
                     '''
         # print(dot)
-        print("\t============ PARTICION 1 ============")
-        print("\tMBR Particion 1-NAME: ", partition1.part_name)
-        
+        print("\t============ PARTICION ===========")
+        print("\tMBR Particion Status: ", partition1.part_status)
+        print("\tMBR Particion TYpe: ", partition1.part_type)
+        print("\tMBR Particion FIt: ", partition1.part_fit)
+        print("\tMBR Particion Start: ", partition1.part_start)
+        print("\tMBR Particion SIze: ", partition1.part_size)
+        print("\tMBR Particion Name: ", partition1.part_name)
 
-        pp = data[15]
-        self.replicaa(pp)
+        dot += f'''
+                    <TR>
+                        <TD>PARTICION</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>part_status:</TD>
+                        <TD>{partition1.part_status}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_type</TD>
+                        <TD>{partition1.part_type}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_fit</TD>
+                        <TD>{partition1.part_fit}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_start</TD>
+                        <TD>{partition1.part_start}</TD>
+                    </TR>
+                    <TR>
+                        <TD>part_size</TD>
+                        <TD>{partition1.part_size}</TD>
+                    </TR>
+                     <TR>
+                        <TD>part_name</TD>
+                        <TD>{partition1.part_name}</TD>
+                    </TR>
+
+        '''
+
+
+        dot+= '''</TABLE>>'''
+        # print(dot)
+        # graficas.rep_MBR(dot)
+
+        self.obtenerParticonExtendida(partition1.part_size)
         
-    
+        
+        
+        
+        # pp = data[15]
+        # self.replicaa(pp)
+        # print(data)
+        
+    def obtenerParticonExtendida(self, final_particion1):
+        ''''''
+        try: 
+            mbr_format = "<iiiiB"
+            mbr_size = struct.calcsize(mbr_format)
+
+            # partition_format = "c2s3i3i16s"
+            partition_format = "c2s3i3i16s"
+            partition_size = struct.calcsize(partition_format)
+            
+            # print(partition_size)
+
+
+
+            # print(particion_size)
+            tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
+            data = ""
+            with open(self.path, "rb") as file:
+                
+                mbr_data = file.read(mbr_size)
+                
+                file.seek(44)
+                particion_data = file.read(partition_size)
+                superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                # print(particion_data)
+                mbr = MBR()
+                (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                mbr.disk_fit = chr(disk_fit % 128) 
+
+                print(particion_data)
+                partition1 = Particion()
+                particion_data = b'1PW'+ particion_data
+                particion_data = particion_data[:-2]
+                # print("PARTICON DATA")
+                
+                partition1.__setstate__(particion_data)
+                print(partition1.part_size)
+
+                """==================================="""
+                # print("============================")
+                # print(superBloque_data)
+                super_Bloque = SuperBloque()
+                
+                # print(len(superBloque_data))
+                # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                superBloque_data = superBloque_data[:-6]
+                # print(superBloque_data)
+                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                # print(superBloque_data)
+                # print("============================")
+                """==================================="""
+               
+                
+        except Exception as e:
+            print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
+
+
 
     def replicaa(self, p):
         try:
@@ -131,7 +237,8 @@ class reporte:
                 archivo.seek(p)
                 archivo.readinto(recuperado)
                 # inodos_data = archivo.read(101)
-            
+
+            # print(recuperado)
             # Desempaquetar los datos del bytearray recuperado
             inode.i_uid   = struct.unpack("<i", recuperado[:4])[0]
             inode.i_gid   = struct.unpack("<i", recuperado[4:8])[0] 
