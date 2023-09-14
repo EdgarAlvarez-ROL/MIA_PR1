@@ -11,6 +11,7 @@ import structs
 import admin
 import admingCA
 import re
+import time
 
 # Definición de tokens
 tokens = (
@@ -174,7 +175,7 @@ def t_FILE2(t):
 def t_DIR(t):
     # r'=\/[a-zA-Z0-9_\/\.]+ | =\"\/[a-zA-Z0-9_\/\.]+\"'
 
-    r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk | =\"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.dsk\"'
+    r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+ | =\"C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-z]+\"'
 
     # r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
     if t.value.endswith('"') or t.value.endswith("'"):
@@ -421,19 +422,6 @@ def p_atributo(p):
 
 
 
-# reglas comadno REP
-def p_comando_rep(p):
-    '''comando : REP GUION PATH DIR'''
-    global path
-    
-    path = p[4]
-    # Eliminando las comillas del path
-    if path.startswith("\""):
-        path = path[1:-1]
-
-    repo = reporte()
-    repo.path = path
-    repo.rep()
 
 
 def p_comando_rmdisk(p):
@@ -579,6 +567,7 @@ def p_comando_login(p):
             print(f"    Bienvendio {user}.")
         else:
             print("Usuario NO encontrado")
+            user = ""
     else:
         print("Porfavor ingrese todos los datos del user, password, id\n")
     # login -user=root -pass=123 -id=441disco
@@ -611,16 +600,19 @@ def p_comando_logout(p):
     password = ""
     sesion_Iniciada = False
 
+
+
 # ESCRIBE un grupo en el users.txt 
 # solo lo puede usar el ROOT
 def p_comando_mkgrp(p):
-    '''comando : MKGRP GUION NAME IGUAL CADENA'''
+    '''comando : MKGRP GUION NAME STRING'''
     global sesion_Iniciada, user, path_del_disco
-    name = p[5]
+    name = p[4]
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: MKGRP usuario ROOT")
             admin.mkgrp(path_del_disco, name)
+            admin.leerDATA(path_del_disco)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -629,14 +621,14 @@ def p_comando_mkgrp(p):
 
 
 def p_comando_rmgrp(p):
-    '''comando : RMGRP GUION NAME IGUAL CADENA'''
+    '''comando : RMGRP GUION NAME STRING'''
     global sesion_Iniciada, user, path_del_disco
-    name = p[5]
+    name = p[4]
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: RMGRP usuario ROOT")
             admin.rmgrp(path_del_disco,name)
-            # adminUG.eliminarGrupo(name)
+            admin.leerDATA(path_del_disco)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -664,6 +656,7 @@ def p_comando_mkusr(p):
             print("Comando: RMGRP usuario ROOT")
             # adminUG.mkusr(name_ingresar,pass_ingresar,grp)
             admin.mkusr(path_del_disco,name_ingresar,pass_ingresar,grp)
+            admin.leerDATA(path_del_disco)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -682,25 +675,25 @@ def p_atributos_mkusr(p):
         p[0] = p[1]
 
 def p_atributoSolo_mkusr(p):
-    '''atributosSolo_mkusr :  GUION USER IGUAL CADENA
-                            | GUION PASS IGUAL CADENA
-                            | GUION GRP IGUAL CADENA'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_mkusr :  GUION USER STRING
+                            | GUION PASS STRING
+                            | GUION GRP STRING'''
+    p[0] = (p[2], p[3])
 
 
 
 
 def p_comando_rmusr(p):
-    '''comando : RMUSR GUION NAME IGUAL CADENA'''
+    '''comando : RMUSR GUION NAME STRING'''
     global sesion_Iniciada, user, sesion_Iniciada, path_del_disco
-    name_ingresar = p[5]
+    name_ingresar = p[4]
     
 
     if user == "root" or user == "ROOT":
         if sesion_Iniciada:
             print("Comando: RMUSR usuario ROOT")
-            # adminUG.rmuser(name_ingresar)
             admin.rmusr(path_del_disco,name_ingresar)
+            admin.leerDATA(path_del_disco)
         else:
             print("Porfavor INICIE SESION como ROOT para ejecutar este comando")
     else:
@@ -715,7 +708,7 @@ def p_comando_rmusr(p):
 # MKFILE
 def p_comando_mkfile(p):
     '''comando : MKFILE atributos_mkfile'''
-    global permiso_Usuario, user, sesion_Iniciada, bandera_mkfile, pp, block_start, path_del_disco
+    global permiso_Usuario, user, sesion_Iniciada, bandera_mkfile, pp, block_start, path_del_disco, first
     
     path_mkfile =""
     size_mkfile = ""
@@ -765,6 +758,7 @@ def p_comando_mkfile(p):
                 # pp = aa
                 # block_start = bb
                 # bandera_mkfile = True
+            
                 admingCA.mkfile(path_del_disco,path_mkfile,first,user,permiso_Usuario,uid,gid,relleno_archivo)
                 first = False
     
@@ -786,14 +780,14 @@ def p_atributos_mkfile(p):
         p[0] = p[1]
 
 def p_atributoSolo_mkfile(p):
-    '''atributosSolo_mkfile : GUION PATH IGUAL DIR
-                            | GUION SIZE IGUAL NUM
-                            | GUION CONT IGUAL CADENA
+    '''atributosSolo_mkfile : GUION PATH DIR
+                            | GUION SIZE STRING
+                            | GUION CONT STRING
                             | GUION R'''
     if len(p) == 3:
         p[0] = (p[2], p[1])
     else:
-        p[0] = (p[2], p[4])
+        p[0] = (p[2], p[3])
 
 # =======================================================================================================
 
@@ -842,7 +836,7 @@ def p_comando_cat(p):
 
     # lista = ["puta.txt","a.txt","archivo3.txt","soy.txt"]
     contador = 0
-    path_del_disco = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
+    # path_del_disco = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk"
     for arch_list in lista_cat:
         # print(arch_list)
         for _ in range(int(contendio)):
@@ -879,8 +873,6 @@ def p_comando_cat(p):
 # cat -file1="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt" -file2="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\hola to.txt" -file3="C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\G\sxaa.txt"
 
 
-
-
 def p_listaFilesCAT(p):
     '''listaFilesCAT : listaFilesCAT atributosSolo_CAT
                         | atributosSolo_CAT'''
@@ -890,10 +882,11 @@ def p_listaFilesCAT(p):
         p[1].append(p[2])
         p[0] = p[1]
 
+# =============probar 
 def p_atributoSolo_CAT(p):
-    '''atributosSolo_CAT : GUION FILE2 IGUAL DIR
-                         | GUION FILE1 IGUAL DIR'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_CAT : GUION FILE2 STRING
+                         | GUION FILE1 STRING'''
+    p[0] = (p[2], p[3])
 
 #  =======================================================================================================
 
@@ -1093,8 +1086,57 @@ def p_atributoSolo_COPY(p):
 
 
 def p_comando_execute(p):
-    """comando : EXECUTE GUION PATH IGUAL DIR"""
-    print("HOLA")
+    """comando : EXECUTE GUION PATH DIR"""
+    path_ejecutar = p[4]
+    contenido = ""
+    with open(path_ejecutar,"r") as archivo:
+        contenido = archivo.read()
+    
+    # Número de segundos de retraso
+    delay_seconds = 2  # Cambia esto al valor deseado
+    print(f"=-=-=-=-= Ejecutando comandos en {path_ejecutar} =-=-=-=-=")
+    
+    comandos = contenido.split("\n")
+    for comando in comandos:
+        print(comando)
+        parser.parse(comando)
+        time.sleep(delay_seconds)
+    
+
+# reglas comadno REP
+def p_comando_rep(p):
+    '''comando : REP lista_rep'''
+    global path_del_disco
+    
+    id_rep = ""
+    path_rep = ""
+    name_rep = ""
+
+    
+    # Eliminando las comillas del path
+    if path.startswith("\""):
+        path = path[1:-1]
+
+    repo = reporte()
+    repo.path = path
+    repo.rep()
+
+def p_listaFilesREP(p):
+    '''lista_rep : lista_rep atributosSolo_REP
+                        | atributosSolo_REP'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_atributoSolo_COPY(p):
+    '''atributosSolo_REP : GUION ID STRING
+                         | GUION PATH DIR
+                         | GUION NAME STRING'''
+    p[0] = (p[2], p[3])
+
+
 
 # Manejo de errores sintácticos
 def p_error(p):

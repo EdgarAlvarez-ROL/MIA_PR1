@@ -620,7 +620,7 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # print(uid)
 # print(gid)
 
-# # CREAR GRUPO
+# CREAR GRUPO
 # mkgrp(path,"pal")
 
 # # ELIMINAR GRUPO

@@ -624,14 +624,14 @@ path = r"C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_
 # imprimirInodes(path)
 
 """"""
-# contendio = ""
-# with open("MAINS/backs/endinodo.txt","r") as archivo:
-#     contendio = archivo.read()
+contendio = ""
+with open("MAINS/backs/endinodo.txt","r") as archivo:
+    contendio = archivo.read()
     
-# cont = 0
-# for _ in range(int(contendio)):
-#     imprimirBloques(path, cont)
-#     cont += 64+64
+cont = 0
+for _ in range(int(contendio)):
+    imprimirBloques(path, cont)
+    cont += 64+64
 
 
 # lista = ["puta.txt","a.txt","archivo3.txt","soy.txt"]

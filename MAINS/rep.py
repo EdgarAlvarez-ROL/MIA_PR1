@@ -4,6 +4,8 @@ import structs
 import pickle
 import mount as Mount
 import fdisk2
+import datetime
+import time
 
 class reporte:
     def __init__(self):
@@ -13,7 +15,8 @@ class reporte:
         if self.path:
             if self.path.startswith("\"") and self.path.endswith("\""):
                 self.path = self.path[1:-1]
-
+        dot = '''<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">'''
         try: 
             mbr_format = "<iiiiB"
             mbr_size = struct.calcsize(mbr_format)
@@ -53,7 +56,7 @@ class reporte:
                 superBloque_data = superBloque_data[:-6]
                 # print(superBloque_data)
                 data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
-                print(superBloque_data)
+                # print(superBloque_data)
                 # print("============================")
                 """==================================="""
                 # lo que deberia
@@ -71,25 +74,48 @@ class reporte:
                 # print("###########################")
                 # 
                 file.close()
-            
-           
-
-            print("\t============ MBR \t============")
-            print("\tMBR tamaño:", mbr.mbr_tamano)
-            print("\tMBR fecha creación:", mbr.mbr_fecha_creacion)
-            print("\tDisco fit:", mbr.disk_fit)
-            print("\tMBR disk signature:", mbr.mbr_disk_signature)
-
-            print("\t============ PARTICION 1 ============")
-            print("\tMBR Particion 1-NAME: ", partition1.part_name)
-            
-
-            pp = data[15]
-            self.replicaa(pp)
         except Exception as e:
             print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
 
 
+           
+
+        print("\t============ MBR \t============")
+        print("\tMBR tamaño:", mbr.mbr_tamano)
+        print("\tMBR fecha creación:", mbr.mbr_fecha_creacion)
+        print("\tDisco fit:", mbr.disk_fit)
+        print("\tMBR disk signature:", mbr.mbr_disk_signature)
+
+        fecha_y_hora = datetime.datetime.utcfromtimestamp(mbr.mbr_fecha_creacion)
+
+        # Formatear la fecha y hora según tus preferencias
+        formato = "%Y-%m-%d %H:%M:%S"  # Puedes ajustar el formato como desees
+        fecha_formateada = fecha_y_hora.strftime(formato)
+        dot += f'''  <TR>
+                        <TD>REPORTE MBR</TD>
+                        <TD>    </TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_tamaño:</TD>
+                        <TD>{mbr.mbr_tamano}</TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_fecha_creacion:</TD>
+                        <TD>{fecha_formateada}</TD>
+                    </TR>
+                    <TR>
+                        <TD>mbr_disk_signature:</TD>
+                        <TD>{mbr.mbr_disk_signature}</TD>
+                    </TR>
+                    '''
+        # print(dot)
+        print("\t============ PARTICION 1 ============")
+        print("\tMBR Particion 1-NAME: ", partition1.part_name)
+        
+
+        pp = data[15]
+        self.replicaa(pp)
+        
     
 
     def replicaa(self, p):
