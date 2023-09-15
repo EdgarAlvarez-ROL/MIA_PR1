@@ -63,6 +63,7 @@ tokens = (
     'DESTINO',
     'MKDIR',
     'EXECUTE',
+    'RUTA',
     'STRING',
     'CADENA',
 )
@@ -115,6 +116,7 @@ reserved = {
     'mkdir' : 'MKDIR',
     'execute' : 'EXECUTE',
     'string' : 'STRING',
+    'ruta' : 'RUTA',
     'grp' : 'GRP'
     # Agrega todas tus palabras clave aquí
 }
@@ -164,6 +166,8 @@ t_COPY = r'copy'
 t_DESTINO = r'destino'
 t_MKDIR = r'mkdir'
 t_EXECUTE = r'execute'
+t_RUTA = r'ruta'
+
 
 def t_FILE1(t):
     r'file[0-9]'
@@ -768,6 +772,7 @@ def p_comando_mkfile(p):
                 # bandera_mkfile = True
             
                 admingCA.mkfile(path_del_disco,path_mkfile,first,user,permiso_Usuario,uid,gid,relleno_archivo)
+                # admingCA.imprimirInodes(path_del_disco)
                 first = False
     
 
@@ -902,7 +907,7 @@ def p_atributoSolo_CAT(p):
 
 # REMOVE
 def p_comando_remove(p):
-    '''comando : REMOVE GUION PATH IGUAL DIR'''
+    '''comando : REMOVE GUION PATH DIR'''
     global user, password, id, permiso_Usuario, sesion_Iniciada
 
     if sesion_Iniciada:
@@ -949,9 +954,9 @@ def p_listaFilesEDIT(p):
         p[0] = p[1]
 
 def p_atributoSolo_EDIT(p):
-    '''atributosSolo_EDIT : GUION PATH IGUAL DIR
-                         |  GUION CONT IGUAL DIR'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_EDIT : GUION PATH DIR
+                         |  GUION CONT DIR'''
+    p[0] = (p[2], p[3])
 
 
 
@@ -993,9 +998,9 @@ def p_listaFilesRENAME(p):
         p[0] = p[1]
 
 def p_atributoSolo_RENAME(p):
-    '''atributosSolo_RENAME : GUION PATH IGUAL DIR
-                            | GUION NAME IGUAL CADENA'''
-    p[0] = (p[2], p[4])
+    '''atributosSolo_RENAME : GUION PATH DIR
+                            | GUION NAME STRING'''
+    p[0] = (p[2], p[3])
 
 
 
@@ -1038,12 +1043,12 @@ def p_listaFilesMKDIR(p):
         p[0] = p[1]
 
 def p_atributoSolo_MKDIR(p):
-    '''atributosSolo_MKDIR : GUION PATH IGUAL DIR
+    '''atributosSolo_MKDIR : GUION PATH DIR
                            | GUION R'''
     if len(p) == 3:
         p[0] = (p[2], p[1])
     else:
-        p[0] = (p[2], p[4])
+        p[0] = (p[2], p[3])
 
 
 
@@ -1086,10 +1091,10 @@ def p_listaFilesCOPY(p):
         p[0] = p[1]
 
 def p_atributoSolo_COPY(p):
-    '''atributosSolo_COPY : GUION PATH IGUAL DIR
-                          | GUION DESTINO IGUAL DIR'''
+    '''atributosSolo_COPY : GUION PATH DIR
+                          | GUION DESTINO DIR'''
 
-    p[0] = (p[2], p[4])
+    p[0] = (p[2], p[3])
 
 
 
@@ -1119,6 +1124,8 @@ def p_comando_rep(p):
     id_rep = ""
     path_rep = ""
     name_rep = ""
+    ruta_rep = ""
+
 
     for atributo in p[2]:
         if atributo[0] == "path":
@@ -1127,6 +1134,8 @@ def p_comando_rep(p):
             name_rep = atributo[1]
         elif atributo[0] == "id":
             id_rep = atributo[1]
+        elif atributo[0] == "ruta":
+            ruta_rep = atributo[1]
 
     if user != "":
         if path_rep != "":
@@ -1175,24 +1184,58 @@ def p_comando_rep(p):
                     graficas.rep_FDISK(total_size,size_part1,size_part2,size_part3,size_part4)
                     print("")
                 elif name_rep.lower() == "inode":
+                    repo.repInodes()
                     print("")
                 elif name_rep.lower() == "journaling":
+
+                    graficas.rep_Journaling()
                     print("")
                 elif name_rep.lower() == "block":
+                    contendio = ""
+                    with open("MAINS/backs/endinodo.txt","r") as archivo:
+                        contendio = archivo.read()
+                    
+                    cont = 0
+                    dot = """<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> """
+                    for _ in range(int(contendio)):
+                        dot += repo.imprimirBloques(cont)
+                        cont += 64+64
+                    dot += """</TABLE>>"""
+                    graficas.rep_BLOQUES(dot)
                     print("")
                 elif name_rep.lower() == "bm_inode":
                     print("")
                 elif name_rep.lower() == "bm_block":
                     print("")
                 elif name_rep.lower() == "tree":
+                    graficas.rep_Tree()
                     print("")
                 elif name_rep.lower() == "sb":
                     if e_local == False:
                         repo.repSuperBloque()
                     print("")
                 elif name_rep.lower() == "file":
+                    print(f"RUTA: {ruta_rep}")
+                    name_ruta = os.path.basename(ruta_rep)
+                    contendio = ""
+                    with open("MAINS/backs/endinodo.txt","r") as archivo:
+                        contendio = archivo.read()
+                    
+                    lista = [name_ruta]
+                    contador = 0
+                    data_valor = ""
+                    for arch_list in lista:
+                        # print(arch_list)
+                        for _ in range(int(contendio)):
+                            # buscarCAT(path, arch_list,contador)
+                            admingCA.reporteFILE(path_del_disco,arch_list,contador,path_rep)
+                            contador += 128
+                        contador = 0
+                    
+
                     print("")
-                elif name_rep.lower() == "js":
+                elif name_rep.lower() == "ls":
+                    graficas.rep_LS()
                     print("")
             
 
@@ -1217,10 +1260,15 @@ def p_listaFilesREP(p):
 def p_atributoSolo_REP(p):
     '''atributosSolo_REP : GUION ID STRING
                          | GUION PATH DIR
-                         | GUION NAME STRING'''
+                         | GUION NAME STRING
+                         | GUION RUTA DIR'''
     p[0] = (p[2], p[3])
 
-
+def p_comando_pause(p):
+    '''comando : PAUSE '''
+    print("PAUSE . . . ")
+    delay_seconds = 2
+    time.sleep(delay_seconds)
 
 # Manejo de errores sintácticos
 def p_error(p):

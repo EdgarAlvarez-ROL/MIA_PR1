@@ -401,7 +401,7 @@ def imprimirInodes(path):
             """==================================="""
             # print(superBloque_data)
             # super_Bloque = SuperBloque()
-            print(superBloque_data)
+            # print(superBloque_data)
             superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
             superBloque_data = superBloque_data[:-6]
             # print(superBloque_data)
@@ -415,7 +415,7 @@ def imprimirInodes(path):
     except Exception as e:
         print("\tERROR: No se pudo leer el disco en la ruta: " +path+", debido a: "+str(e))
 
-    print(data)
+    # print(data)
     pp = int(data[15])
     inode = structs.Inodos()  # Crear una instancia de SuperBloque
     bytes_inodo= bytes(inode)  # Obtener los bytes de la instancia
@@ -446,7 +446,7 @@ def imprimirInodes(path):
 
 
 def imprimirBloques(path, contador):
-
+    
     mbr_format = "<iiiiB"
     mbr_size = struct.calcsize(mbr_format)
     # partition_format = "c2s3i3i16s"
@@ -507,18 +507,24 @@ def imprimirBloques(path, contador):
 
             # print(filtered_byte_array)
             name = filtered_byte_array.decode('utf-8')
+
+            
             print(f"Name: {name} | Inodo: {entero}")
+            
+            
             # if entero != -1:
             #     ultimo_b_inodo = entero
             posicion += tamanio_struct
+
             
+
         # Este código asume que los datos se organizan en registros alternados de 12 bytes para la cadena y 4 bytes para el entero, 
         # lo que corresponde al formato especificado en formato. Puedes ajustar el formato y el procesamiento según la estructura 
         # real de tus datos. Asegúrate de manejar los casos en los que no haya suficientes bytes para un registro 
         # completo o cuando la lectura llegue al final del bytearray.
         
-        # imprimirBloques(path)
-
+        # imprimirBloques(  path)
+        
 
 # def cat(path, listaArchivos):
 
@@ -625,13 +631,122 @@ def buscarCAT(path, buscar,contador):
         # imprimirBloques(path)
 
 
+def reporteFILE(path, buscar,contador,path_rep):
+    mbr_format = "<iiiiB"
+    mbr_size = struct.calcsize(mbr_format)
+    # partition_format = "c2s3i3i16s"
+    partition_format = "c2s3i3i16s"
+    partition_size = struct.calcsize(partition_format)
+    data = ""
+    ya = ""
+    with open(path, "rb+") as file:
+        mbr_data = file.read(mbr_size)
+        particion_data = file.read(partition_size)
+        
+        """Block Start"""
+        superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+        superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+        superBloque_data = superBloque_data[:-6]
+        # print(superBloque_data)F
+        data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+        # block_start = data[16]
+        # print(block_start)
+        bloques_carpetas = structs.BloquesCarpetas()
+        bytes_carpetas= bytes(bloques_carpetas)  # Obtener los bytes de la instancia
+        recuperado = bytearray(len(bytes_carpetas))  # Crear un bytearray del mismo tamaño
+
+        # recuperado += recuperado
+
+        block_start = data[16]
+        block_start += contador
+        file.seek(block_start)
+        file.readinto(recuperado)
+        # print(recuperado)
+
+        data_hex = bytearray(recuperado)
+        # Convierte los datos hexadecimales en una lista de bytes
+        byte_list = list(data_hex)
+
+        # Imprime la lista de bytes
+        # print(byte_list)
+
+        # Define el formato esperado, que incluye una cadena (12s) y un entero (i)
+        formato = "12s i"
+
+        # Calcula el tamaño del struct en bytes para leer una vez a la vez
+        tamanio_struct = struct.calcsize(formato)
+
+        posicion = 0
+
+        # print(len(data_hex))
+        while posicion < len(data_hex):
+            parte = data_hex[posicion:posicion + tamanio_struct]
+            # print(tamanio_struct)
+            # print(len(parte))
+            if len(parte) < tamanio_struct:
+                break  # Si no quedan suficientes bytes para un registro completo, sal del bucle
+            resultado = struct.unpack(formato, parte)
+            cadena, entero = resultado
+            # print(entero)
+            # Crear un nuevo bytearray excluyendo los bytes \xFF
+            filtered_byte_array = bytearray(byte for byte in cadena if byte != 0xFF)
+            # print(cadena)
+            # print(filtered_byte_array)
+            name = ""
+            try:
+                # Supongamos que filtered_byte_array contiene la secuencia de bytes
+                name = filtered_byte_array.decode('utf-8').rstrip("\0")
+                # print(f"Nombre limpio: {name}")
+            except UnicodeDecodeError as e:
+                pass
+                # Manejar una excepción si la decodificación UTF-8 falla
+                # print(f"Error al decodificar UTF-8: {e}")
+            except Exception as ex:
+                pass
+                # Manejar cualquier otra excepción que pueda ocurrir
+                # print(f"Error inesperado: {ex}")
+
+
+            # print(f"Name: {name} | Inodo: {entero}")
+            if name == buscar:
+                # print("encontrado")
+                # print(name)
+                file.seek(block_start+64)
+                recuperado2 = bytearray(len(bytes_carpetas))  # Crear un bytearray del mismo tamaño
+                file.readinto(recuperado2)
+                # resultado2 = struct.unpack(formato, parte)
+                soy = recuperado2.decode("utf-8").rstrip("\0")
+               
+                # print(recuperado2)
+                # print(soy)
+                # Abre el archivo en modo escritura ('w')
+                try:
+                    with open(path_rep, 'w') as archivo:
+                        # Escribe los datos en el archivo
+                        archivo.write(soy)
+
+                    print("Archivo creado y datos escritos con éxito.")
+                except Exception as e:
+                    print(f"Error al crear y escribir en el archivo: {e}")
+
+
+                
+
+
+            # if entero != -1:
+            #     ultimo_b_inodo = entero
+            posicion += tamanio_struct
+    
+         
+
+
 """================================== PRUEBAS ================================== """
 # path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
 # bloqueFinal = leerBloquesFinal(path)
 # print(bloqueFinal)
 
 
-# mkfile(path,r"/home/user/sol/puta.txt",True,"rol","555","2","2","0123456789")
+# mkfile(path,r"/home/user/sol/archivo.txt",True,"rol","555","2","2","0123456789")
 # mkfile(path,r"/home/mis documentos/archivo2.txt",False,"rol","222","2","2","0123")
 # mkfile(path,r"/home/mis_2/a.txt",False,"rol","417","2","2","0123456789")
 # mkfile(path,r"/home/user/soy.txt",False,"rol","417","2","2","hola")
@@ -649,12 +764,23 @@ def buscarCAT(path, buscar,contador):
 #     cont += 64+64
 
 
-# lista = ["puta.txt","a.txt","archivo3.txt","soy.txt"]
+# lista = ["archivo.txt"]
 # contador = 0
 # for arch_list in lista:
 #     # print(arch_list)
 #     for _ in range(int(contendio)):
 #         buscarCAT(path, arch_list,contador)
+#         contador += 128
+#     contador = 0
+
+
+# lista = ["archivo.txt"]
+# contador = 0
+# data = ""
+# for arch_list in lista:
+#     # print(arch_list)
+#     for _ in range(int(contendio)):
+#         reporteFILE(path, arch_list,contador,r"/home/rol/Tareas/PR1/MIA_PR1/repo.txt")
 #         contador += 128
 #     contador = 0
 

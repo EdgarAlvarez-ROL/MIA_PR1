@@ -1,3 +1,6 @@
 login -user=root -pass=123 -id=441Disco 
-rep -name=MBR -path=/home/user/reporte.txt -id=441Disco
-rep -name=disk -path=/home/user/reporte.txt -id=441Disco
+# rep -name=MBR -path=/home/user/reporte.txt -id=441Disco
+# rep -name=disk -path=/home/user/reporte.txt -id=441Disco
+# rep -name=file -path=/home/rol/Tareas/PR1/MIA_PR1/repo.txt -ruta=/home/archivo1.txt -id=441Disco
+# rep -name=inode -path=/home/user/reporte.txt -id=441Disco
+rep -name=block -path=/home/user/reporte.txt -id=441Disco

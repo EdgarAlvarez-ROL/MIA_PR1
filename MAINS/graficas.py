@@ -44,3 +44,96 @@ def rep_SB(dot):
 
     s.node('struct3', dot)
     s.view() 
+
+
+def rep_INODES(dot):
+    s = graphviz.Digraph('INODES', filename='MAINS/Reportes/INODES.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+
+    s.node('struct4', dot)
+    s.view() 
+
+
+
+def rep_BLOQUES(dot):
+    s = graphviz.Digraph('BLOCKS', filename='MAINS/Reportes/BLOCKS.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+
+    s.node('struct5', dot)
+    s.view() 
+
+
+def rep_Journaling():
+    s = graphviz.Digraph('JS', filename='MAINS/Reportes/Journaling.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+    table_content = f"""<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> 
+        <tr>
+            <td>JOURNALING</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+</TABLE>>"""
+
+    s.node('struct6', table_content)
+    s.view() 
+
+
+def rep_LS():
+    s = graphviz.Digraph('LS', filename='MAINS/Reportes/LS.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+    table_content = f"""<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> 
+        <tr>
+        <td>PERMISOS</td>
+        <td>OWNER</td>
+        <td>GRUPO</td>
+        <td>SIZE</td>
+        <td>FECHA</td>
+        <td>HORA/td>
+        <td>TIPO</td>
+        <td>NAME/td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</TABLE>>"""
+
+    s.node('struct6', table_content)
+    s.view() 
+
+
+def rep_Tree():
+    s = graphviz.Digraph('TREE', filename='MAINS/Reportes/TREE.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+    table_content = f"""<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> 
+        <tr>
+            <td>TREE</td>
+        </tr>
+</TABLE>>"""
+
+    s.node("struck1", "TABLA INODO /.")
+
+    s.node('struct6', table_content)
+    s.view() 

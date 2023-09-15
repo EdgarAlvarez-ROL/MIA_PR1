@@ -2,7 +2,9 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    CADENA
     FS_VAL
+    IGUAL
     LETRAS_FIT
     LETRA_FDISK
     LETRA_MKDISK
@@ -70,27 +72,27 @@ Rule 56    listaFilesCAT -> listaFilesCAT atributosSolo_CAT
 Rule 57    listaFilesCAT -> atributosSolo_CAT
 Rule 58    atributosSolo_CAT -> GUION FILE2 STRING
 Rule 59    atributosSolo_CAT -> GUION FILE1 STRING
-Rule 60    comando -> REMOVE GUION PATH IGUAL DIR
+Rule 60    comando -> REMOVE GUION PATH DIR
 Rule 61    comando -> EDIT listas_edit
 Rule 62    listas_edit -> listas_edit atributosSolo_EDIT
 Rule 63    listas_edit -> atributosSolo_EDIT
-Rule 64    atributosSolo_EDIT -> GUION PATH IGUAL DIR
-Rule 65    atributosSolo_EDIT -> GUION CONT IGUAL DIR
+Rule 64    atributosSolo_EDIT -> GUION PATH DIR
+Rule 65    atributosSolo_EDIT -> GUION CONT DIR
 Rule 66    comando -> RENAME lista_rename
 Rule 67    lista_rename -> lista_rename atributosSolo_RENAME
 Rule 68    lista_rename -> atributosSolo_RENAME
-Rule 69    atributosSolo_RENAME -> GUION PATH IGUAL DIR
-Rule 70    atributosSolo_RENAME -> GUION NAME IGUAL CADENA
+Rule 69    atributosSolo_RENAME -> GUION PATH DIR
+Rule 70    atributosSolo_RENAME -> GUION NAME STRING
 Rule 71    comando -> MKDIR lista_mkdir
 Rule 72    lista_mkdir -> lista_mkdir atributosSolo_MKDIR
 Rule 73    lista_mkdir -> atributosSolo_MKDIR
-Rule 74    atributosSolo_MKDIR -> GUION PATH IGUAL DIR
+Rule 74    atributosSolo_MKDIR -> GUION PATH DIR
 Rule 75    atributosSolo_MKDIR -> GUION R
 Rule 76    comando -> COPY lista_copy
 Rule 77    lista_copy -> lista_copy atributosSolo_COPY
 Rule 78    lista_copy -> atributosSolo_COPY
-Rule 79    atributosSolo_COPY -> GUION PATH IGUAL DIR
-Rule 80    atributosSolo_COPY -> GUION DESTINO IGUAL DIR
+Rule 79    atributosSolo_COPY -> GUION PATH DIR
+Rule 80    atributosSolo_COPY -> GUION DESTINO DIR
 Rule 81    comando -> EXECUTE GUION PATH DIR
 Rule 82    comando -> REP lista_rep
 Rule 83    lista_rep -> lista_rep atributosSolo_REP
@@ -98,17 +100,18 @@ Rule 84    lista_rep -> atributosSolo_REP
 Rule 85    atributosSolo_REP -> GUION ID STRING
 Rule 86    atributosSolo_REP -> GUION PATH DIR
 Rule 87    atributosSolo_REP -> GUION NAME STRING
+Rule 88    atributosSolo_REP -> GUION RUTA DIR
 
 Terminals, with rules where they appear
 
 ADD                  : 17
-CADENA               : 70
+CADENA               : 
 CAT                  : 55
 CONT                 : 53 65
 COPY                 : 76
 DELETE               : 18
 DESTINO              : 80
-DIR                  : 4 11 19 23 51 60 64 65 69 74 79 80 81 86
+DIR                  : 4 11 19 23 51 60 64 65 69 74 79 80 81 86 88
 EDIT                 : 61
 EXECUTE              : 81
 FDISK                : 8
@@ -118,9 +121,9 @@ FIT                  : 5 16
 FS                   : 31
 FS_VAL               : 
 GRP                  : 46
-GUION                : 4 5 6 7 11 12 13 14 15 16 17 18 19 23 24 25 29 30 31 35 36 37 39 40 44 45 46 47 51 52 53 54 58 59 60 64 65 69 70 74 75 79 80 81 85 86 87
+GUION                : 4 5 6 7 11 12 13 14 15 16 17 18 19 23 24 25 29 30 31 35 36 37 39 40 44 45 46 47 51 52 53 54 58 59 60 64 65 69 70 74 75 79 80 81 85 86 87 88
 ID                   : 25 29 37 85
-IGUAL                : 60 64 65 69 70 74 79 80
+IGUAL                : 
 LETRAS_FIT           : 
 LETRA_FDISK          : 
 LETRA_MKDISK         : 
@@ -144,8 +147,9 @@ REP                  : 82
 RMDISK               : 19
 RMGRP                : 40
 RMUSR                : 47
+RUTA                 : 88
 SIZE                 : 7 15 52
-STRING               : 5 6 7 12 13 14 15 16 17 24 25 29 30 31 35 36 37 39 40 44 45 46 47 52 53 58 59 85 87
+STRING               : 5 6 7 12 13 14 15 16 17 24 25 29 30 31 35 36 37 39 40 44 45 46 47 52 53 58 59 70 85 87
 TYPE                 : 12 30
 UNIT                 : 6 13
 UNMOUNT              : 25
@@ -201,7 +205,7 @@ state 0
     (47) comando -> . RMUSR GUION NAME STRING
     (48) comando -> . MKFILE atributos_mkfile
     (55) comando -> . CAT listaFilesCAT
-    (60) comando -> . REMOVE GUION PATH IGUAL DIR
+    (60) comando -> . REMOVE GUION PATH DIR
     (61) comando -> . EDIT listas_edit
     (66) comando -> . RENAME lista_rename
     (71) comando -> . MKDIR lista_mkdir
@@ -400,7 +404,7 @@ state 15
 
 state 16
 
-    (60) comando -> REMOVE . GUION PATH IGUAL DIR
+    (60) comando -> REMOVE . GUION PATH DIR
 
     GUION           shift and go to state 52
 
@@ -410,8 +414,8 @@ state 17
     (61) comando -> EDIT . listas_edit
     (62) listas_edit -> . listas_edit atributosSolo_EDIT
     (63) listas_edit -> . atributosSolo_EDIT
-    (64) atributosSolo_EDIT -> . GUION PATH IGUAL DIR
-    (65) atributosSolo_EDIT -> . GUION CONT IGUAL DIR
+    (64) atributosSolo_EDIT -> . GUION PATH DIR
+    (65) atributosSolo_EDIT -> . GUION CONT DIR
 
     GUION           shift and go to state 55
 
@@ -423,8 +427,8 @@ state 18
     (66) comando -> RENAME . lista_rename
     (67) lista_rename -> . lista_rename atributosSolo_RENAME
     (68) lista_rename -> . atributosSolo_RENAME
-    (69) atributosSolo_RENAME -> . GUION PATH IGUAL DIR
-    (70) atributosSolo_RENAME -> . GUION NAME IGUAL CADENA
+    (69) atributosSolo_RENAME -> . GUION PATH DIR
+    (70) atributosSolo_RENAME -> . GUION NAME STRING
 
     GUION           shift and go to state 58
 
@@ -436,7 +440,7 @@ state 19
     (71) comando -> MKDIR . lista_mkdir
     (72) lista_mkdir -> . lista_mkdir atributosSolo_MKDIR
     (73) lista_mkdir -> . atributosSolo_MKDIR
-    (74) atributosSolo_MKDIR -> . GUION PATH IGUAL DIR
+    (74) atributosSolo_MKDIR -> . GUION PATH DIR
     (75) atributosSolo_MKDIR -> . GUION R
 
     GUION           shift and go to state 61
@@ -449,8 +453,8 @@ state 20
     (76) comando -> COPY . lista_copy
     (77) lista_copy -> . lista_copy atributosSolo_COPY
     (78) lista_copy -> . atributosSolo_COPY
-    (79) atributosSolo_COPY -> . GUION PATH IGUAL DIR
-    (80) atributosSolo_COPY -> . GUION DESTINO IGUAL DIR
+    (79) atributosSolo_COPY -> . GUION PATH DIR
+    (80) atributosSolo_COPY -> . GUION DESTINO DIR
 
     GUION           shift and go to state 64
 
@@ -472,6 +476,7 @@ state 22
     (85) atributosSolo_REP -> . GUION ID STRING
     (86) atributosSolo_REP -> . GUION PATH DIR
     (87) atributosSolo_REP -> . GUION NAME STRING
+    (88) atributosSolo_REP -> . GUION RUTA DIR
 
     GUION           shift and go to state 68
 
@@ -786,7 +791,7 @@ state 51
 
 state 52
 
-    (60) comando -> REMOVE GUION . PATH IGUAL DIR
+    (60) comando -> REMOVE GUION . PATH DIR
 
     PATH            shift and go to state 111
 
@@ -795,8 +800,8 @@ state 53
 
     (61) comando -> EDIT listas_edit .
     (62) listas_edit -> listas_edit . atributosSolo_EDIT
-    (64) atributosSolo_EDIT -> . GUION PATH IGUAL DIR
-    (65) atributosSolo_EDIT -> . GUION CONT IGUAL DIR
+    (64) atributosSolo_EDIT -> . GUION PATH DIR
+    (65) atributosSolo_EDIT -> . GUION CONT DIR
 
     $end            reduce using rule 61 (comando -> EDIT listas_edit .)
     GUION           shift and go to state 55
@@ -813,8 +818,8 @@ state 54
 
 state 55
 
-    (64) atributosSolo_EDIT -> GUION . PATH IGUAL DIR
-    (65) atributosSolo_EDIT -> GUION . CONT IGUAL DIR
+    (64) atributosSolo_EDIT -> GUION . PATH DIR
+    (65) atributosSolo_EDIT -> GUION . CONT DIR
 
     PATH            shift and go to state 113
     CONT            shift and go to state 114
@@ -824,8 +829,8 @@ state 56
 
     (66) comando -> RENAME lista_rename .
     (67) lista_rename -> lista_rename . atributosSolo_RENAME
-    (69) atributosSolo_RENAME -> . GUION PATH IGUAL DIR
-    (70) atributosSolo_RENAME -> . GUION NAME IGUAL CADENA
+    (69) atributosSolo_RENAME -> . GUION PATH DIR
+    (70) atributosSolo_RENAME -> . GUION NAME STRING
 
     $end            reduce using rule 66 (comando -> RENAME lista_rename .)
     GUION           shift and go to state 58
@@ -842,8 +847,8 @@ state 57
 
 state 58
 
-    (69) atributosSolo_RENAME -> GUION . PATH IGUAL DIR
-    (70) atributosSolo_RENAME -> GUION . NAME IGUAL CADENA
+    (69) atributosSolo_RENAME -> GUION . PATH DIR
+    (70) atributosSolo_RENAME -> GUION . NAME STRING
 
     PATH            shift and go to state 116
     NAME            shift and go to state 117
@@ -853,7 +858,7 @@ state 59
 
     (71) comando -> MKDIR lista_mkdir .
     (72) lista_mkdir -> lista_mkdir . atributosSolo_MKDIR
-    (74) atributosSolo_MKDIR -> . GUION PATH IGUAL DIR
+    (74) atributosSolo_MKDIR -> . GUION PATH DIR
     (75) atributosSolo_MKDIR -> . GUION R
 
     $end            reduce using rule 71 (comando -> MKDIR lista_mkdir .)
@@ -871,7 +876,7 @@ state 60
 
 state 61
 
-    (74) atributosSolo_MKDIR -> GUION . PATH IGUAL DIR
+    (74) atributosSolo_MKDIR -> GUION . PATH DIR
     (75) atributosSolo_MKDIR -> GUION . R
 
     PATH            shift and go to state 119
@@ -882,8 +887,8 @@ state 62
 
     (76) comando -> COPY lista_copy .
     (77) lista_copy -> lista_copy . atributosSolo_COPY
-    (79) atributosSolo_COPY -> . GUION PATH IGUAL DIR
-    (80) atributosSolo_COPY -> . GUION DESTINO IGUAL DIR
+    (79) atributosSolo_COPY -> . GUION PATH DIR
+    (80) atributosSolo_COPY -> . GUION DESTINO DIR
 
     $end            reduce using rule 76 (comando -> COPY lista_copy .)
     GUION           shift and go to state 64
@@ -900,8 +905,8 @@ state 63
 
 state 64
 
-    (79) atributosSolo_COPY -> GUION . PATH IGUAL DIR
-    (80) atributosSolo_COPY -> GUION . DESTINO IGUAL DIR
+    (79) atributosSolo_COPY -> GUION . PATH DIR
+    (80) atributosSolo_COPY -> GUION . DESTINO DIR
 
     PATH            shift and go to state 122
     DESTINO         shift and go to state 123
@@ -921,6 +926,7 @@ state 66
     (85) atributosSolo_REP -> . GUION ID STRING
     (86) atributosSolo_REP -> . GUION PATH DIR
     (87) atributosSolo_REP -> . GUION NAME STRING
+    (88) atributosSolo_REP -> . GUION RUTA DIR
 
     $end            reduce using rule 82 (comando -> REP lista_rep .)
     GUION           shift and go to state 68
@@ -940,10 +946,12 @@ state 68
     (85) atributosSolo_REP -> GUION . ID STRING
     (86) atributosSolo_REP -> GUION . PATH DIR
     (87) atributosSolo_REP -> GUION . NAME STRING
+    (88) atributosSolo_REP -> GUION . RUTA DIR
 
     ID              shift and go to state 126
     PATH            shift and go to state 127
     NAME            shift and go to state 128
+    RUTA            shift and go to state 129
 
 
 state 69
@@ -958,28 +966,28 @@ state 70
 
     (4) atributom -> GUION PATH . DIR
 
-    DIR             shift and go to state 129
+    DIR             shift and go to state 130
 
 
 state 71
 
     (5) atributom -> GUION FIT . STRING
 
-    STRING          shift and go to state 130
+    STRING          shift and go to state 131
 
 
 state 72
 
     (6) atributom -> GUION UNIT . STRING
 
-    STRING          shift and go to state 131
+    STRING          shift and go to state 132
 
 
 state 73
 
     (7) atributom -> GUION SIZE . STRING
 
-    STRING          shift and go to state 132
+    STRING          shift and go to state 133
 
 
 state 74
@@ -994,49 +1002,49 @@ state 75
 
     (11) atributo -> GUION PATH . DIR
 
-    DIR             shift and go to state 133
+    DIR             shift and go to state 134
 
 
 state 76
 
     (12) atributo -> GUION TYPE . STRING
 
-    STRING          shift and go to state 134
+    STRING          shift and go to state 135
 
 
 state 77
 
     (13) atributo -> GUION UNIT . STRING
 
-    STRING          shift and go to state 135
+    STRING          shift and go to state 136
 
 
 state 78
 
     (14) atributo -> GUION NAME . STRING
 
-    STRING          shift and go to state 136
+    STRING          shift and go to state 137
 
 
 state 79
 
     (15) atributo -> GUION SIZE . STRING
 
-    STRING          shift and go to state 137
+    STRING          shift and go to state 138
 
 
 state 80
 
     (16) atributo -> GUION FIT . STRING
 
-    STRING          shift and go to state 138
+    STRING          shift and go to state 139
 
 
 state 81
 
     (17) atributo -> GUION ADD . STRING
 
-    STRING          shift and go to state 139
+    STRING          shift and go to state 140
 
 
 state 82
@@ -1051,7 +1059,7 @@ state 83
 
     (19) comando -> RMDISK GUION PATH . DIR
 
-    DIR             shift and go to state 140
+    DIR             shift and go to state 141
 
 
 state 84
@@ -1066,21 +1074,21 @@ state 85
 
     (23) atributo_mm -> GUION PATH . DIR
 
-    DIR             shift and go to state 141
+    DIR             shift and go to state 142
 
 
 state 86
 
     (24) atributo_mm -> GUION NAME . STRING
 
-    STRING          shift and go to state 142
+    STRING          shift and go to state 143
 
 
 state 87
 
     (25) comando -> UNMOUNT GUION ID . STRING
 
-    STRING          shift and go to state 143
+    STRING          shift and go to state 144
 
 
 state 88
@@ -1095,21 +1103,21 @@ state 89
 
     (29) atributosSolo_mkfs -> GUION ID . STRING
 
-    STRING          shift and go to state 144
+    STRING          shift and go to state 145
 
 
 state 90
 
     (30) atributosSolo_mkfs -> GUION TYPE . STRING
 
-    STRING          shift and go to state 145
+    STRING          shift and go to state 146
 
 
 state 91
 
     (31) atributosSolo_mkfs -> GUION FS . STRING
 
-    STRING          shift and go to state 146
+    STRING          shift and go to state 147
 
 
 state 92
@@ -1124,35 +1132,35 @@ state 93
 
     (35) atributosSolo_login -> GUION USER . STRING
 
-    STRING          shift and go to state 147
+    STRING          shift and go to state 148
 
 
 state 94
 
     (36) atributosSolo_login -> GUION PASS . STRING
 
-    STRING          shift and go to state 148
+    STRING          shift and go to state 149
 
 
 state 95
 
     (37) atributosSolo_login -> GUION ID . STRING
 
-    STRING          shift and go to state 149
+    STRING          shift and go to state 150
 
 
 state 96
 
     (39) comando -> MKGRP GUION NAME . STRING
 
-    STRING          shift and go to state 150
+    STRING          shift and go to state 151
 
 
 state 97
 
     (40) comando -> RMGRP GUION NAME . STRING
 
-    STRING          shift and go to state 151
+    STRING          shift and go to state 152
 
 
 state 98
@@ -1167,28 +1175,28 @@ state 99
 
     (44) atributosSolo_mkusr -> GUION USER . STRING
 
-    STRING          shift and go to state 152
+    STRING          shift and go to state 153
 
 
 state 100
 
     (45) atributosSolo_mkusr -> GUION PASS . STRING
 
-    STRING          shift and go to state 153
+    STRING          shift and go to state 154
 
 
 state 101
 
     (46) atributosSolo_mkusr -> GUION GRP . STRING
 
-    STRING          shift and go to state 154
+    STRING          shift and go to state 155
 
 
 state 102
 
     (47) comando -> RMUSR GUION NAME . STRING
 
-    STRING          shift and go to state 155
+    STRING          shift and go to state 156
 
 
 state 103
@@ -1203,21 +1211,21 @@ state 104
 
     (51) atributosSolo_mkfile -> GUION PATH . DIR
 
-    DIR             shift and go to state 156
+    DIR             shift and go to state 157
 
 
 state 105
 
     (52) atributosSolo_mkfile -> GUION SIZE . STRING
 
-    STRING          shift and go to state 157
+    STRING          shift and go to state 158
 
 
 state 106
 
     (53) atributosSolo_mkfile -> GUION CONT . STRING
 
-    STRING          shift and go to state 158
+    STRING          shift and go to state 159
 
 
 state 107
@@ -1240,21 +1248,21 @@ state 109
 
     (58) atributosSolo_CAT -> GUION FILE2 . STRING
 
-    STRING          shift and go to state 159
+    STRING          shift and go to state 160
 
 
 state 110
 
     (59) atributosSolo_CAT -> GUION FILE1 . STRING
 
-    STRING          shift and go to state 160
+    STRING          shift and go to state 161
 
 
 state 111
 
-    (60) comando -> REMOVE GUION PATH . IGUAL DIR
+    (60) comando -> REMOVE GUION PATH . DIR
 
-    IGUAL           shift and go to state 161
+    DIR             shift and go to state 162
 
 
 state 112
@@ -1267,16 +1275,16 @@ state 112
 
 state 113
 
-    (64) atributosSolo_EDIT -> GUION PATH . IGUAL DIR
+    (64) atributosSolo_EDIT -> GUION PATH . DIR
 
-    IGUAL           shift and go to state 162
+    DIR             shift and go to state 163
 
 
 state 114
 
-    (65) atributosSolo_EDIT -> GUION CONT . IGUAL DIR
+    (65) atributosSolo_EDIT -> GUION CONT . DIR
 
-    IGUAL           shift and go to state 163
+    DIR             shift and go to state 164
 
 
 state 115
@@ -1289,16 +1297,16 @@ state 115
 
 state 116
 
-    (69) atributosSolo_RENAME -> GUION PATH . IGUAL DIR
+    (69) atributosSolo_RENAME -> GUION PATH . DIR
 
-    IGUAL           shift and go to state 164
+    DIR             shift and go to state 165
 
 
 state 117
 
-    (70) atributosSolo_RENAME -> GUION NAME . IGUAL CADENA
+    (70) atributosSolo_RENAME -> GUION NAME . STRING
 
-    IGUAL           shift and go to state 165
+    STRING          shift and go to state 166
 
 
 state 118
@@ -1311,9 +1319,9 @@ state 118
 
 state 119
 
-    (74) atributosSolo_MKDIR -> GUION PATH . IGUAL DIR
+    (74) atributosSolo_MKDIR -> GUION PATH . DIR
 
-    IGUAL           shift and go to state 166
+    DIR             shift and go to state 167
 
 
 state 120
@@ -1334,23 +1342,23 @@ state 121
 
 state 122
 
-    (79) atributosSolo_COPY -> GUION PATH . IGUAL DIR
+    (79) atributosSolo_COPY -> GUION PATH . DIR
 
-    IGUAL           shift and go to state 167
+    DIR             shift and go to state 168
 
 
 state 123
 
-    (80) atributosSolo_COPY -> GUION DESTINO . IGUAL DIR
+    (80) atributosSolo_COPY -> GUION DESTINO . DIR
 
-    IGUAL           shift and go to state 168
+    DIR             shift and go to state 169
 
 
 state 124
 
     (81) comando -> EXECUTE GUION PATH . DIR
 
-    DIR             shift and go to state 169
+    DIR             shift and go to state 170
 
 
 state 125
@@ -1365,24 +1373,31 @@ state 126
 
     (85) atributosSolo_REP -> GUION ID . STRING
 
-    STRING          shift and go to state 170
+    STRING          shift and go to state 171
 
 
 state 127
 
     (86) atributosSolo_REP -> GUION PATH . DIR
 
-    DIR             shift and go to state 171
+    DIR             shift and go to state 172
 
 
 state 128
 
     (87) atributosSolo_REP -> GUION NAME . STRING
 
-    STRING          shift and go to state 172
+    STRING          shift and go to state 173
 
 
 state 129
+
+    (88) atributosSolo_REP -> GUION RUTA . DIR
+
+    DIR             shift and go to state 174
+
+
+state 130
 
     (4) atributom -> GUION PATH DIR .
 
@@ -1390,7 +1405,7 @@ state 129
     $end            reduce using rule 4 (atributom -> GUION PATH DIR .)
 
 
-state 130
+state 131
 
     (5) atributom -> GUION FIT STRING .
 
@@ -1398,7 +1413,7 @@ state 130
     $end            reduce using rule 5 (atributom -> GUION FIT STRING .)
 
 
-state 131
+state 132
 
     (6) atributom -> GUION UNIT STRING .
 
@@ -1406,7 +1421,7 @@ state 131
     $end            reduce using rule 6 (atributom -> GUION UNIT STRING .)
 
 
-state 132
+state 133
 
     (7) atributom -> GUION SIZE STRING .
 
@@ -1414,7 +1429,7 @@ state 132
     $end            reduce using rule 7 (atributom -> GUION SIZE STRING .)
 
 
-state 133
+state 134
 
     (11) atributo -> GUION PATH DIR .
 
@@ -1422,7 +1437,7 @@ state 133
     $end            reduce using rule 11 (atributo -> GUION PATH DIR .)
 
 
-state 134
+state 135
 
     (12) atributo -> GUION TYPE STRING .
 
@@ -1430,7 +1445,7 @@ state 134
     $end            reduce using rule 12 (atributo -> GUION TYPE STRING .)
 
 
-state 135
+state 136
 
     (13) atributo -> GUION UNIT STRING .
 
@@ -1438,7 +1453,7 @@ state 135
     $end            reduce using rule 13 (atributo -> GUION UNIT STRING .)
 
 
-state 136
+state 137
 
     (14) atributo -> GUION NAME STRING .
 
@@ -1446,7 +1461,7 @@ state 136
     $end            reduce using rule 14 (atributo -> GUION NAME STRING .)
 
 
-state 137
+state 138
 
     (15) atributo -> GUION SIZE STRING .
 
@@ -1454,7 +1469,7 @@ state 137
     $end            reduce using rule 15 (atributo -> GUION SIZE STRING .)
 
 
-state 138
+state 139
 
     (16) atributo -> GUION FIT STRING .
 
@@ -1462,7 +1477,7 @@ state 138
     $end            reduce using rule 16 (atributo -> GUION FIT STRING .)
 
 
-state 139
+state 140
 
     (17) atributo -> GUION ADD STRING .
 
@@ -1470,14 +1485,14 @@ state 139
     $end            reduce using rule 17 (atributo -> GUION ADD STRING .)
 
 
-state 140
+state 141
 
     (19) comando -> RMDISK GUION PATH DIR .
 
     $end            reduce using rule 19 (comando -> RMDISK GUION PATH DIR .)
 
 
-state 141
+state 142
 
     (23) atributo_mm -> GUION PATH DIR .
 
@@ -1485,7 +1500,7 @@ state 141
     $end            reduce using rule 23 (atributo_mm -> GUION PATH DIR .)
 
 
-state 142
+state 143
 
     (24) atributo_mm -> GUION NAME STRING .
 
@@ -1493,14 +1508,14 @@ state 142
     $end            reduce using rule 24 (atributo_mm -> GUION NAME STRING .)
 
 
-state 143
+state 144
 
     (25) comando -> UNMOUNT GUION ID STRING .
 
     $end            reduce using rule 25 (comando -> UNMOUNT GUION ID STRING .)
 
 
-state 144
+state 145
 
     (29) atributosSolo_mkfs -> GUION ID STRING .
 
@@ -1508,7 +1523,7 @@ state 144
     $end            reduce using rule 29 (atributosSolo_mkfs -> GUION ID STRING .)
 
 
-state 145
+state 146
 
     (30) atributosSolo_mkfs -> GUION TYPE STRING .
 
@@ -1516,7 +1531,7 @@ state 145
     $end            reduce using rule 30 (atributosSolo_mkfs -> GUION TYPE STRING .)
 
 
-state 146
+state 147
 
     (31) atributosSolo_mkfs -> GUION FS STRING .
 
@@ -1524,7 +1539,7 @@ state 146
     $end            reduce using rule 31 (atributosSolo_mkfs -> GUION FS STRING .)
 
 
-state 147
+state 148
 
     (35) atributosSolo_login -> GUION USER STRING .
 
@@ -1532,7 +1547,7 @@ state 147
     $end            reduce using rule 35 (atributosSolo_login -> GUION USER STRING .)
 
 
-state 148
+state 149
 
     (36) atributosSolo_login -> GUION PASS STRING .
 
@@ -1540,7 +1555,7 @@ state 148
     $end            reduce using rule 36 (atributosSolo_login -> GUION PASS STRING .)
 
 
-state 149
+state 150
 
     (37) atributosSolo_login -> GUION ID STRING .
 
@@ -1548,21 +1563,21 @@ state 149
     $end            reduce using rule 37 (atributosSolo_login -> GUION ID STRING .)
 
 
-state 150
+state 151
 
     (39) comando -> MKGRP GUION NAME STRING .
 
     $end            reduce using rule 39 (comando -> MKGRP GUION NAME STRING .)
 
 
-state 151
+state 152
 
     (40) comando -> RMGRP GUION NAME STRING .
 
     $end            reduce using rule 40 (comando -> RMGRP GUION NAME STRING .)
 
 
-state 152
+state 153
 
     (44) atributosSolo_mkusr -> GUION USER STRING .
 
@@ -1570,7 +1585,7 @@ state 152
     $end            reduce using rule 44 (atributosSolo_mkusr -> GUION USER STRING .)
 
 
-state 153
+state 154
 
     (45) atributosSolo_mkusr -> GUION PASS STRING .
 
@@ -1578,7 +1593,7 @@ state 153
     $end            reduce using rule 45 (atributosSolo_mkusr -> GUION PASS STRING .)
 
 
-state 154
+state 155
 
     (46) atributosSolo_mkusr -> GUION GRP STRING .
 
@@ -1586,14 +1601,14 @@ state 154
     $end            reduce using rule 46 (atributosSolo_mkusr -> GUION GRP STRING .)
 
 
-state 155
+state 156
 
     (47) comando -> RMUSR GUION NAME STRING .
 
     $end            reduce using rule 47 (comando -> RMUSR GUION NAME STRING .)
 
 
-state 156
+state 157
 
     (51) atributosSolo_mkfile -> GUION PATH DIR .
 
@@ -1601,7 +1616,7 @@ state 156
     $end            reduce using rule 51 (atributosSolo_mkfile -> GUION PATH DIR .)
 
 
-state 157
+state 158
 
     (52) atributosSolo_mkfile -> GUION SIZE STRING .
 
@@ -1609,7 +1624,7 @@ state 157
     $end            reduce using rule 52 (atributosSolo_mkfile -> GUION SIZE STRING .)
 
 
-state 158
+state 159
 
     (53) atributosSolo_mkfile -> GUION CONT STRING .
 
@@ -1617,7 +1632,7 @@ state 158
     $end            reduce using rule 53 (atributosSolo_mkfile -> GUION CONT STRING .)
 
 
-state 159
+state 160
 
     (58) atributosSolo_CAT -> GUION FILE2 STRING .
 
@@ -1625,7 +1640,7 @@ state 159
     $end            reduce using rule 58 (atributosSolo_CAT -> GUION FILE2 STRING .)
 
 
-state 160
+state 161
 
     (59) atributosSolo_CAT -> GUION FILE1 STRING .
 
@@ -1633,70 +1648,77 @@ state 160
     $end            reduce using rule 59 (atributosSolo_CAT -> GUION FILE1 STRING .)
 
 
-state 161
-
-    (60) comando -> REMOVE GUION PATH IGUAL . DIR
-
-    DIR             shift and go to state 173
-
-
 state 162
 
-    (64) atributosSolo_EDIT -> GUION PATH IGUAL . DIR
+    (60) comando -> REMOVE GUION PATH DIR .
 
-    DIR             shift and go to state 174
+    $end            reduce using rule 60 (comando -> REMOVE GUION PATH DIR .)
 
 
 state 163
 
-    (65) atributosSolo_EDIT -> GUION CONT IGUAL . DIR
+    (64) atributosSolo_EDIT -> GUION PATH DIR .
 
-    DIR             shift and go to state 175
+    GUION           reduce using rule 64 (atributosSolo_EDIT -> GUION PATH DIR .)
+    $end            reduce using rule 64 (atributosSolo_EDIT -> GUION PATH DIR .)
 
 
 state 164
 
-    (69) atributosSolo_RENAME -> GUION PATH IGUAL . DIR
+    (65) atributosSolo_EDIT -> GUION CONT DIR .
 
-    DIR             shift and go to state 176
+    GUION           reduce using rule 65 (atributosSolo_EDIT -> GUION CONT DIR .)
+    $end            reduce using rule 65 (atributosSolo_EDIT -> GUION CONT DIR .)
 
 
 state 165
 
-    (70) atributosSolo_RENAME -> GUION NAME IGUAL . CADENA
+    (69) atributosSolo_RENAME -> GUION PATH DIR .
 
-    CADENA          shift and go to state 177
+    GUION           reduce using rule 69 (atributosSolo_RENAME -> GUION PATH DIR .)
+    $end            reduce using rule 69 (atributosSolo_RENAME -> GUION PATH DIR .)
 
 
 state 166
 
-    (74) atributosSolo_MKDIR -> GUION PATH IGUAL . DIR
+    (70) atributosSolo_RENAME -> GUION NAME STRING .
 
-    DIR             shift and go to state 178
+    GUION           reduce using rule 70 (atributosSolo_RENAME -> GUION NAME STRING .)
+    $end            reduce using rule 70 (atributosSolo_RENAME -> GUION NAME STRING .)
 
 
 state 167
 
-    (79) atributosSolo_COPY -> GUION PATH IGUAL . DIR
+    (74) atributosSolo_MKDIR -> GUION PATH DIR .
 
-    DIR             shift and go to state 179
+    GUION           reduce using rule 74 (atributosSolo_MKDIR -> GUION PATH DIR .)
+    $end            reduce using rule 74 (atributosSolo_MKDIR -> GUION PATH DIR .)
 
 
 state 168
 
-    (80) atributosSolo_COPY -> GUION DESTINO IGUAL . DIR
+    (79) atributosSolo_COPY -> GUION PATH DIR .
 
-    DIR             shift and go to state 180
+    GUION           reduce using rule 79 (atributosSolo_COPY -> GUION PATH DIR .)
+    $end            reduce using rule 79 (atributosSolo_COPY -> GUION PATH DIR .)
 
 
 state 169
+
+    (80) atributosSolo_COPY -> GUION DESTINO DIR .
+
+    GUION           reduce using rule 80 (atributosSolo_COPY -> GUION DESTINO DIR .)
+    $end            reduce using rule 80 (atributosSolo_COPY -> GUION DESTINO DIR .)
+
+
+state 170
 
     (81) comando -> EXECUTE GUION PATH DIR .
 
     $end            reduce using rule 81 (comando -> EXECUTE GUION PATH DIR .)
 
 
-state 170
+state 171
 
     (85) atributosSolo_REP -> GUION ID STRING .
 
@@ -1704,7 +1726,7 @@ state 170
     $end            reduce using rule 85 (atributosSolo_REP -> GUION ID STRING .)
 
 
-state 171
+state 172
 
     (86) atributosSolo_REP -> GUION PATH DIR .
 
@@ -1712,7 +1734,7 @@ state 171
     $end            reduce using rule 86 (atributosSolo_REP -> GUION PATH DIR .)
 
 
-state 172
+state 173
 
     (87) atributosSolo_REP -> GUION NAME STRING .
 
@@ -1720,65 +1742,10 @@ state 172
     $end            reduce using rule 87 (atributosSolo_REP -> GUION NAME STRING .)
 
 
-state 173
-
-    (60) comando -> REMOVE GUION PATH IGUAL DIR .
-
-    $end            reduce using rule 60 (comando -> REMOVE GUION PATH IGUAL DIR .)
-
-
 state 174
 
-    (64) atributosSolo_EDIT -> GUION PATH IGUAL DIR .
+    (88) atributosSolo_REP -> GUION RUTA DIR .
 
-    GUION           reduce using rule 64 (atributosSolo_EDIT -> GUION PATH IGUAL DIR .)
-    $end            reduce using rule 64 (atributosSolo_EDIT -> GUION PATH IGUAL DIR .)
-
-
-state 175
-
-    (65) atributosSolo_EDIT -> GUION CONT IGUAL DIR .
-
-    GUION           reduce using rule 65 (atributosSolo_EDIT -> GUION CONT IGUAL DIR .)
-    $end            reduce using rule 65 (atributosSolo_EDIT -> GUION CONT IGUAL DIR .)
-
-
-state 176
-
-    (69) atributosSolo_RENAME -> GUION PATH IGUAL DIR .
-
-    GUION           reduce using rule 69 (atributosSolo_RENAME -> GUION PATH IGUAL DIR .)
-    $end            reduce using rule 69 (atributosSolo_RENAME -> GUION PATH IGUAL DIR .)
-
-
-state 177
-
-    (70) atributosSolo_RENAME -> GUION NAME IGUAL CADENA .
-
-    GUION           reduce using rule 70 (atributosSolo_RENAME -> GUION NAME IGUAL CADENA .)
-    $end            reduce using rule 70 (atributosSolo_RENAME -> GUION NAME IGUAL CADENA .)
-
-
-state 178
-
-    (74) atributosSolo_MKDIR -> GUION PATH IGUAL DIR .
-
-    GUION           reduce using rule 74 (atributosSolo_MKDIR -> GUION PATH IGUAL DIR .)
-    $end            reduce using rule 74 (atributosSolo_MKDIR -> GUION PATH IGUAL DIR .)
-
-
-state 179
-
-    (79) atributosSolo_COPY -> GUION PATH IGUAL DIR .
-
-    GUION           reduce using rule 79 (atributosSolo_COPY -> GUION PATH IGUAL DIR .)
-    $end            reduce using rule 79 (atributosSolo_COPY -> GUION PATH IGUAL DIR .)
-
-
-state 180
-
-    (80) atributosSolo_COPY -> GUION DESTINO IGUAL DIR .
-
-    GUION           reduce using rule 80 (atributosSolo_COPY -> GUION DESTINO IGUAL DIR .)
-    $end            reduce using rule 80 (atributosSolo_COPY -> GUION DESTINO IGUAL DIR .)
+    GUION           reduce using rule 88 (atributosSolo_REP -> GUION RUTA DIR .)
+    $end            reduce using rule 88 (atributosSolo_REP -> GUION RUTA DIR .)
 

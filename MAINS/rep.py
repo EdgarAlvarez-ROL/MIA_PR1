@@ -686,3 +686,241 @@ class reporte:
         </TABLE>>"""
 
         graficas.rep_SB(dot)
+
+
+        
+    def repInodes(self):
+        dot = """<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> """
+        """ LECTOR DEL SUPERBLOQUE PARA ENCONTRAR LOS STARST """
+        mbr_format = "<iiiiB"
+        mbr_size = struct.calcsize(mbr_format)
+        # partition_format = "c2s3i3i16s"
+        partition_format = "c2s3i3i16s"
+        partition_size = struct.calcsize(partition_format)
+        data = ""
+        pp = 0
+        try: 
+            with open(self.path, "rb") as file:
+                mbr_data = file.read(mbr_size)
+                particion_data = file.read(partition_size)
+                superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+                # print(particion_data)
+                mbr = MBR()
+                (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
+                mbr.disk_fit = chr(disk_fit % 128)
+                partition1 = Particion()
+                particion_data = b'1PW'+ particion_data
+                particion_data = particion_data[:-2]
+                # print("PARTICON DATA")
+                # print(particion_data)
+                partition1.__setstate__(particion_data)
+                """==================================="""
+                # print(superBloque_data)
+                # super_Bloque = SuperBloque()
+                # print(superBloque_data)
+                superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                superBloque_data = superBloque_data[:-6]
+                # print(superBloque_data)
+                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                # print(superBloque_data)
+                # print("============================")
+                """==================================="""
+
+                
+                file.close()
+        except Exception as e:
+            print("\tERROR: No se pudo leer el disco en la ruta: " +self.path+", debido a: "+str(e))
+
+        # print(data)
+        pp = int(data[15])
+        inode = structs.Inodos()  # Crear una instancia de SuperBloque
+        bytes_inodo= bytes(inode)  # Obtener los bytes de la instancia
+        recuperado = bytearray(len(bytes_inodo))  # Crear un bytearray del mismo tamaño
+
+        bandera = 0
+        while bandera != -1:
+            with open(self.path, "rb") as archivo:
+                "prints del pp"
+                print(pp)
+                archivo.seek(pp)
+                archivo.readinto(recuperado)
+
+                inode.__setstate__(recuperado)
+                print("INodes")
+                print(f"UID: {inode.i_uid} , GID: {inode.i_gid} , Permisos: {inode.i_perm}")
+                # print(f"Apuntadores 0-4:")
+                # print({inode.i_block})
+
+                timestamp = int(inode.i_atime) # Suponiendo que tienes una marca de tiempo en `timestamp`
+                fecha_y_hora = datetime.datetime.utcfromtimestamp(timestamp)
+
+                # Formatear la fecha y hora según tus preferencias
+                formato = "%Y-%m-%d %H:%M:%S"  # Puedes ajustar el formato como desees
+                fecha_formateada = fecha_y_hora.strftime(formato)
+
+                dot += f"""
+                <tr>
+                    <td>INODES</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td>i_uid</td>
+                    <td>{inode.i_uid}</td>
+                </tr>
+                <tr>
+                    <td>i_gid</td>
+                    <td>{inode.i_gid}</td>
+                </tr>
+                <tr>
+                    <td>i_size</td>
+                    <td>{inode.i_size}</td>
+                </tr>
+                <tr>
+                    <td>i_atime</td>
+                    <td>{fecha_formateada}</td>
+                </tr>
+                <tr>
+                    <td>i_ctime</td>
+                    <td>{fecha_formateada}</td>
+                </tr>
+                <tr>
+                    <td>i_mtime</td>
+                    <td>{fecha_formateada}</td>
+                </tr>
+                <tr>
+                    <td>i_block</td>
+                    <td>{inode.i_block}</td>
+                </tr>
+                <tr>
+                    <td>i_type</td>
+                    <td>{inode.i_type}</td>
+                </tr>
+                <tr>
+                    <td>i_perm</td>
+                    <td>{inode.i_perm}</td>
+                </tr>
+                
+            
+                """
+                # print(f"1: {inode.i_block[1]}")
+                # print(f"2: {inode.i_block[2]}")
+                # print(f"3: {inode.i_block[3]}")
+                
+                if inode.i_uid == -1 or inode.i_uid == 0:
+                    bandera = -1
+                else:
+                    pp = pp + len(recuperado) 
+            archivo.close()
+
+
+        # print(dot)
+        dot += """</TABLE>>"""
+        graficas.rep_INODES(dot)
+        """----------------------------"""
+
+
+
+
+    
+    def imprimirBloques(self, contador):
+        dot = """"""
+        mbr_format = "<iiiiB"
+        mbr_size = struct.calcsize(mbr_format)
+        # partition_format = "c2s3i3i16s"
+        partition_format = "c2s3i3i16s"
+        partition_size = struct.calcsize(partition_format)
+        data = ""
+        with open(self.path, "rb+") as file:
+            mbr_data = file.read(mbr_size)
+            particion_data = file.read(partition_size)
+            
+            """Block Start"""
+            superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
+            superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+            superBloque_data = superBloque_data[:-6]
+            # print(superBloque_data)F
+            data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+            # block_start = data[16]
+            # print(block_start)
+            bloques_carpetas = structs.BloquesCarpetas()
+            bytes_carpetas= bytes(bloques_carpetas)  # Obtener los bytes de la instancia
+            recuperado = bytearray(len(bytes_carpetas))  # Crear un bytearray del mismo tamaño
+
+            # recuperado += recuperado
+
+            block_start = data[16]
+            block_start += contador
+            file.seek(block_start)
+            file.readinto(recuperado)
+            # print(recuperado)
+
+            data_hex = bytearray(recuperado)
+            # Convierte los datos hexadecimales en una lista de bytes
+            byte_list = list(data_hex)
+
+            # Imprime la lista de bytes
+            # print(byte_list)
+
+            # Define el formato esperado, que incluye una cadena (12s) y un entero (i)
+            formato = "12s i"
+
+            # Calcula el tamaño del struct en bytes para leer una vez a la vez
+            tamanio_struct = struct.calcsize(formato)
+
+            posicion = 0
+
+            while posicion < len(data_hex):
+                parte = data_hex[posicion:posicion + tamanio_struct]
+                # print(tamanio_struct)
+                # print(len(parte))
+                if len(parte) < tamanio_struct:
+                    break  # Si no quedan suficientes bytes para un registro completo, sal del bucle
+                resultado = struct.unpack(formato, parte)
+                cadena, entero = resultado
+                # print(entero)
+                # Crear un nuevo bytearray excluyendo los bytes \xFF
+                filtered_byte_array = bytearray(byte for byte in cadena if byte != 0xFF)
+
+                # print(filtered_byte_array)
+                name = filtered_byte_array.decode('utf-8').rstrip("\0")
+
+                
+                print(f"Name: {name} | Inodo: {entero}")
+
+                if "." in name:
+                    name = "punto"
+
+                dot += f"""
+                    <tr>
+                        <td>BLOCK</td>
+                        <td>     </td>
+                    </tr>
+                    <tr>
+                        <td>NAME</td>
+                        <td>{name}</td>
+                    </tr>
+                    <tr>
+                        <td>Inodo</td>
+                        <td>{entero}</td>
+                    </tr>
+                    """
+                
+                
+                # if entero != -1:
+                #     ultimo_b_inodo = entero
+                posicion += tamanio_struct
+                
+
+             
+               
+            
+            # Este código asume que los datos se organizan en registros alternados de 12 bytes para la cadena y 4 bytes para el entero, 
+            # lo que corresponde al formato especificado en formato. Puedes ajustar el formato y el procesamiento según la estructura 
+            # real de tus datos. Asegúrate de manejar los casos en los que no haya suficientes bytes para un registro 
+            # completo o cuando la lectura llegue al final del bytearray.
+            
+            # imprimirBloques(path)
+        # dot += """</TABLE>>"""
+        # print(dot)
+        # graficas.rep_BLOQUES(dot)
+        return dot

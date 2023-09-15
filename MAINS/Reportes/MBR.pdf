@@ -11,11 +11,11 @@ digraph MBR {
                     </TR>
                     <TR>
                         <TD>mbr_fecha_creacion:</TD>
-                        <TD>2023-09-14 18:55:41</TD>
+                        <TD>2023-09-15 00:16:49</TD>
                     </TR>
                     <TR>
                         <TD>mbr_disk_signature:</TD>
-                        <TD>197</TD>
+                        <TD>7596</TD>
                     </TR>
                     
                     <TR>
@@ -40,7 +40,7 @@ digraph MBR {
                     </TR>
                     <TR>
                         <TD>part_size</TD>
-                        <TD>5242880</TD>
+                        <TD>4194304</TD>
                     </TR>
                      <TR>
                         <TD>part_name</TD>
@@ -66,15 +66,15 @@ digraph MBR {
                     </TR>
                     <TR>
                         <TD>part_start</TD>
-                        <TD>5242936</TD>
+                        <TD>70</TD>
                     </TR>
                     <TR>
                         <TD>part_size</TD>
-                        <TD>1048576</TD>
+                        <TD>0</TD>
                     </TR>
                      <TR>
                         <TD>part_name</TD>
-                        <TD>logica</TD>
+                        <TD></TD>
                     </TR>
 
         
@@ -96,15 +96,15 @@ digraph MBR {
                     </TR>
                     <TR>
                         <TD>part_start</TD>
-                        <TD>0</TD>
+                        <TD>21092672</TD>
                     </TR>
                     <TR>
                         <TD>part_size</TD>
-                        <TD>0</TD>
+                        <TD>1392508928</TD>
                     </TR>
                      <TR>
                         <TD>part_name</TD>
-                        <TD>0PBF</TD>
+                        <TD></TD>
                     </TR>
 
         
