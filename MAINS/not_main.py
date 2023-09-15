@@ -6,7 +6,7 @@ from mount import Mount
 from mkfs import MKFS
 
 def main():
-    path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
+    path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk"
 
     # disk = MkDisk()
     # disk.fit  = "FF"
@@ -30,18 +30,18 @@ def main():
     # # # partition.add = '100'
     # partition.fdisk()
 
-    # mount = Mount()
-    # # path = path
-    # name = "cosa" #nombre de la particion a cargar
-    # mount.mount(path, name)
+    mount = Mount()
+    # path = path
+    name = "cosa" #nombre de la particion a cargar
+    mount.mount(path, name)
+    mount.listaMount()
+    # mount.unmount("441disco")
     # mount.listaMount()
-    # # mount.unmount("441disco")
-    # # mount.listaMount()
 
     
-    # fileSystem = MKFS(mount)
-    # tks = ["441disco","Full","2fs"]
-    # fileSystem.mkfs(tks)
+    fileSystem = MKFS(mount)
+    tks = ["441disco","Full","2fs"]
+    fileSystem.mkfs(tks)
     
 
     repo = reporte()

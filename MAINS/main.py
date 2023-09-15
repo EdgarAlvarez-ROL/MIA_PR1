@@ -263,6 +263,11 @@ path_mount = ""
 name_mount = ""
 
 path_del_disco = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
+with open(r"/home/rol/Tareas/PR1/MIA_PR1/MAINS/backs/path_disco.txt","r") as xde:
+    path_del_disco = xde.read()
+
+
+
 bandera_mkfile = False
 pp = -1
 block_start = -1
@@ -314,12 +319,15 @@ def p_comando_mkdisk(p):
     disk.fit  = fit
     disk.create()
 
+
+    with open(r"/home/rol/Tareas/PR1/MIA_PR1/MAINS/backs/path_disco.txt","w") as xde:
+        xde.write(path)
     # reseteo de las variables para su uso futuro
     size = ""
     unit = ""
     path_del_disco = path
     # mkdisk -size=5 -fit=wf -unit=M -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk
-    # mkdisk -size=5 -fit=wf -unit=M -path=/DISCOS/disco2.dsk
+    # mkdisk -size=5 -fit=wf -unit=M -path=/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk
 
 def p_atributosM(p):
     '''atributosm : atributosm atributom
@@ -412,7 +420,7 @@ def p_comando_fdisk(p):
     name = ""
     type = ""
     # fdisk -type=E -path=C:\Users\wwwed\OneDrive\Escritorio\Octavo_Semestre\LAB_Archivos\MIA_T2_202001144\T2\DISCOS\disco.dsk -unit=M -name="Particion1" -size=1
-    # fdisk -type=E -path=/DISCOS/discos2.dsk -unit=M -name="Part icion1" -size=1
+    # fdisk -type=P -path=/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk -unit=M -name=hola -size=2
 
 
 def p_atributos(p):
@@ -475,10 +483,10 @@ def p_comando_mount(p):
     else:
         print("Path: "+str(path_mount))
         print("Name de la particion a usar: "+str(name_mount))
-        mount(path_mount, name_mount)
+        mount.mount(path_mount, name_mount)
         mount.listaMount()
 
-    
+        # mount -path=/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk -name=hola
 
 
 def p_atributos_mount(p):
@@ -506,12 +514,14 @@ def p_comando_unmount(p):
     id = p[4]
     print(f"ID: {id}")
     mount.unmount(id)
+    mount.listaMount()
     
 
 
 def p_comando_mkfs(p):
     '''comando : MKFS atributos_mkfs'''
     global fs_val, id, type, mount
+    
     type_mkfs = "Full"
     fs_val = "2fs"
     command = "mkfs"
@@ -529,9 +539,15 @@ def p_comando_mkfs(p):
         print(f"Type: {type_mkfs}")
         print(f"Fs: {fs_val}")
 
-        # fileSystem = MKFS(mount)
-        # tks = [id,type,fs_val]
-        # fileSystem.mkfs(tks)
+        type_mkfs = "Full"
+        fs_val = "2fs"
+
+        fileSystem = MKFS(mount)
+        tks = [id,type,fs_val]
+        fileSystem.mkfs(tks)
+
+        # mkfs -id=441disco2 -type=FUll -fs=2fs
+
     else: 
         print("El comando MKFS requiere obligatoriamente de un id")
         # mkfs -id="parte 1" -type=P -fs=2fs
@@ -571,6 +587,7 @@ def p_comando_login(p):
         print(f"User: {user}")
         print(f"Pass: {password}")
         print(f"ID: {id}")
+        
         
         encontrado, uid, gid = admin.login(path_del_disco,user,password)
         # print(encontrado)

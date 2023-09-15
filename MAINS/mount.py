@@ -224,7 +224,7 @@ class Mount:
             raise RuntimeError("el primer identificador no es válido")
         past = id
         letter = id[3:]
-        id = id[2:-5]
+        id = id[2:3]
         i = int(id) - 1
         if i < 0:
             raise RuntimeError("identificador de disco inválido")
