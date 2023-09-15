@@ -110,7 +110,7 @@ def leerBloquesFinal(path):
 
     return bloque_final
     """"""
-    
+
 
 def obtenerPP():
     contenido = ""
@@ -157,6 +157,7 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid, relleno
 
 
     print(carpetas)
+
     # print(bloque_start)
 
 
@@ -294,6 +295,24 @@ def mkfile(path, ruta_ingresar_archivo, fisrt, user, permisos, uid, gid, relleno
                     archivo.write(str(bloque_start))
     """"""
     
+
+def b_block(carpetas):
+    contenido_actual = ""
+    with open('MAINS/Reportes/b_block.txt', 'r') as archivo:
+        contenido_actual = archivo.read()
+
+    bas = ""
+    for c in carpetas:
+        bas += "1"
+    
+    contenidoCompleto = bas + contenido_actual
+    with open('MAINS/Reportes/b_inode.txt', 'w') as archivo:
+        archivo.write(contenidoCompleto)
+    
+    with open('MAINS/Reportes/b_block.txt', 'w') as archivo:
+        archivo.write(contenidoCompleto)
+
+
 def leerFinalSecond():
     contenido = ""
     with open("MAINS/backs/block_final.txt", 'r') as archivo:
@@ -301,6 +320,8 @@ def leerFinalSecond():
         contenido = archivo.read()
         # print("Bloque Final Guardado")
     return int(contenido)
+
+
 
 
 

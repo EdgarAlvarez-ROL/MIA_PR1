@@ -1204,8 +1204,16 @@ def p_comando_rep(p):
                     graficas.rep_BLOQUES(dot)
                     print("")
                 elif name_rep.lower() == "bm_inode":
+                    contendio = ""
+                    with open("MAINS/Reportes/b_inode.txt","r") as archivo:
+                        contendio = archivo.read()
+                        print(contendio)
                     print("")
                 elif name_rep.lower() == "bm_block":
+                    contendio = ""
+                    with open("MAINS/Reportes/b_block.txt","r") as archivo:
+                        contendio = archivo.read()
+                        print(contendio)
                     print("")
                 elif name_rep.lower() == "tree":
                     graficas.rep_Tree()
