@@ -34,3 +34,13 @@ def rep_FDISK(total, part1, part2, part3, part4):
 
     s.node('struct2', table_content)
     s.view()
+
+
+def rep_SB(dot):
+    s = graphviz.Digraph('SB', filename='MAINS/Reportes/SB.pdf',
+                     node_attr={'shape': 'plaintext'})
+
+    # print(table_content)
+
+    s.node('struct3', dot)
+    s.view() 

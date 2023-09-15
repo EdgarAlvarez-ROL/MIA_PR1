@@ -48,10 +48,7 @@ def main():
     repo.path = path
     repo.repSuperBloque()
 
-    # repo = reporte()
-    # repo.path = r'\Users\JONATHAN ALVARADO\Desktop\disco.dk'
-    # repo.rep()
-    # pass
+
 
 if __name__ == '__main__':
     main()

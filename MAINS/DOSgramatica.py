@@ -258,6 +258,7 @@ pp = -1
 block_start = -1
 
 first = True
+e_local = False
 
 
 # Reglas de gramática
@@ -331,7 +332,7 @@ def p_atributoM(p):
 # Reglas para el comando fdisk
 def p_comando_fdisk(p):
     '''comando : FDISK atributos'''
-    global command, size, unit_fkdisk, path, name, type, fit, add
+    global command, size, unit_fkdisk, path, name, type, fit, add, path_del_disco, e_local
     command = "fdisk"
     delete = ""
     print(f"Comando: {command}")
@@ -377,6 +378,12 @@ def p_comando_fdisk(p):
         print("Fit: "+fit)
         print(f"Add: {add}")
         print("Delete: "+delete)
+
+        if type.lower() == "e":
+            repo = reporte()
+            repo.path = path_del_disco
+            repo.repSuperBloque()
+            e_local = True
 
         partition = FDisk()
         partition.delete = delete
@@ -1107,7 +1114,7 @@ def p_comando_execute(p):
 # reglas comadno REP
 def p_comando_rep(p):
     '''comando : REP lista_rep'''
-    global path_del_disco
+    global path_del_disco, e_local
     
     id_rep = ""
     path_rep = ""
@@ -1180,6 +1187,8 @@ def p_comando_rep(p):
                 elif name_rep.lower() == "tree":
                     print("")
                 elif name_rep.lower() == "sb":
+                    if e_local == False:
+                        repo.repSuperBloque()
                     print("")
                 elif name_rep.lower() == "file":
                     print("")

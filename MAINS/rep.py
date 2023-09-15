@@ -540,17 +540,11 @@ class reporte:
             partition_size = struct.calcsize(partition_format)
             # print(particion_size)
             tamanioSuperBloque = struct.calcsize("<iiiiiddiiiiiiiiii")
-
             data = ""
             with open(self.path, "rb") as file:
-
                 mbr_data = file.read(mbr_size)
-
-                file.seek(44)
-
                 particion_data = file.read(partition_size)
                 superBloque_data = file.read(struct.calcsize("<iiiiiddiiiiiiiiii"))
-                # print(particion_data)
                 # print(particion_data)
                 mbr = MBR()
                 (mbr.mbr_tamano, mbr.mbr_fecha_creacion, mbr.mbr_disk_signature, disk_fit, mbr.mbr_Partition_1, *_) = struct.unpack(mbr_format, mbr_data)
@@ -563,46 +557,132 @@ class reporte:
                 # print("PARTICON DATA")
                 # print(particion_data)
                 partition1.__setstate__(particion_data)
-                print(partition1.part_name)
-                file.seek(partition1.part_start)
-                superBloque_data = file.read(tamanioSuperBloque)
+                
+
                 """==================================="""
                 # print("============================")
-                print(superBloque_data)
+                # print(superBloque_data)
                 super_Bloque = SuperBloque()
                 
-
-                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
-                print(data)
-                
                 # print(len(superBloque_data))
-                # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)+
-
-
-                # superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
-                # superBloque_data = superBloque_data[:-6]
-
-
-
+                # data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                superBloque_data = b'\x02\x00\x00\x00)7' + superBloque_data 
+                superBloque_data = superBloque_data[:-6]
                 # print(superBloque_data)
-                
+                data = struct.unpack("<iiiiiddiiiiiiiiii", superBloque_data)
+                # print(data)
                 # print("============================")
                 """==================================="""
-                # lo que deberia
-                # b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00'
-                # b'                  \x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00\x0011000'
-                # lo que salio
 
-                # if superBloque_data == b'\x02\x00\x00\x00)7\x00\x00{\xa5\x00\x00{\xa5\x00\x00)7\x00\x00\x00\x00@\xd2\xfb>\xd9A\x00\x00@\xd2\xfb>\xd9A\x01\x00\x00\x00S\xef\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\x00\x00\x00\xad7\x00\x00(\xdd\x00\x00\xb1\xc3\x15\x00':
-                    # print("chupala")
-
-                # Data es la info del superbloque
-                # print("###########################")
-                # b'\x01\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\x98\x02\x00\x00'
-                # b'\x01\x00\x00\x00\x01\x00\x00\x00[\x00\x00\x00\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x00\x00\x80k\x06?\xd9A\x01\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x98\x02\x00\x00'
-                # print("###########################")
-                # 
-                file.close()
         except Exception as e:
             print("\tERROR: No se pudo leer el disco en la ruta: " + self.path+", debido a: "+str(e))
 
+        
+        print("\t============ SUPERBLOQUE ============")
+        print("\tSB s_filesystem_type:", data[0])
+        print("\tSB s_inodes_count:", (data[1]))
+        print("\tSB s_block_count:", data[2])
+        print("\tSB s_free_blocks_count:", data[3])
+        print("\tSB s_free_inodes:count:", data[4])
+        timestamp = data[5] #  Suponiendo que tienes una marca de tiempo en `timestamp`
+        fecha_y_hora = datetime.datetime.utcfromtimestamp(timestamp)
+        # Formatear la fecha y hora según tus preferencias
+        formato = "%Y-%m-%d %H:%M:%S"  # Puedes ajustar el formato como desees
+        fecha_formateada1 = fecha_y_hora.strftime(formato)
+        print("\tSB s_mtime:", fecha_formateada1)
+
+        timestamp = data[6] #  Suponiendo que tienes una marca de tiempo en `timestamp`
+        fecha_y_hora = datetime.datetime.utcfromtimestamp(timestamp)
+        # Formatear la fecha y hora según tus preferencias
+        formato = "%Y-%m-%d %H:%M:%S"  # Puedes ajustar el formato como desees
+        fecha_formateada2 = fecha_y_hora.strftime(formato)
+        print("\tSB s_umtime:", fecha_formateada2)
+        print("\tSB s_mnt_count:", data[7])
+        print("\tSB s_magic:", data[8])
+        print("\tSB s_inode_size:", data[9])
+        print("\tSB s_block_size:", data[10])
+        print("\tSB s_first_ino:", data[11])
+        print("\tSB s_first_blo:", data[12])
+        print("\tSB s_bm_inode_start:", data[13])
+        print("\tSB s_bm_block_start:", data[14])
+        print("\tSB s_inode_start:", data[15])
+        print("\tSB s_block_start:", data[16])
+        print("=====================================")
+
+        dot = f"""<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"> 
+                <tr>
+                    <td>SUPERBLOQUE</td>
+                    <td>    </td>
+                </tr>
+                <tr>
+                    <td>s_filesystem_type</td>
+                    <td>{data[0]}</td>
+                </tr>
+                <tr>
+                    <td>s_inodes_count</td>
+                    <td>{data[1]}</td>
+                </tr>
+                <tr>
+                    <td>s_block_count</td>
+                    <td>{data[2]}</td>
+                </tr>
+                <tr>
+                    <td>s_free_blocks_count</td>
+                    <td>{data[3]}</td>
+                </tr>
+                <tr>
+                    <td>s_free_inodes</td>
+                    <td>{data[4]}</td>
+                </tr>
+                <tr>
+                    <td>s_mtime</td>
+                    <td>{fecha_formateada1}</td>
+                </tr>
+                <tr>
+                    <td>s_umtime</td>
+                    <td>{fecha_formateada2}</td>
+                </tr>
+                <tr>
+                    <td>s_mnt_count</td>
+                    <td>{data[7]}</td>
+                </tr>
+                <tr>
+                    <td>s_magic</td>
+                    <td>{data[8]}</td>
+                </tr>
+                <tr>
+                    <td>s_inode_size</td>
+                    <td>{data[9]}</td>
+                </tr>
+                <tr>
+                    <td>s_block_size</td>
+                    <td>{data[10]}</td>
+                </tr>
+                <tr>
+                    <td>s_first_ino</td>
+                    <td>{data[11]}</td>
+                </tr>
+                <tr>
+                    <td>s_first_blo</td>
+                    <td>{data[12]}</td>
+                </tr>
+                <tr>
+                    <td>s_bm_inode_start</td>
+                    <td>{data[13]}</td>
+                </tr>
+                <tr>
+                    <td>s_bm_block_start</td>
+                    <td>{data[14]}</td>
+                </tr>
+                <tr>
+                    <td>s_inode_start</td>
+                    <td>{data[15]}</td>
+                </tr>
+                <tr>
+                    <td>s_block_start</td>
+                    <td>{data[16]}</td>
+                </tr>
+        </TABLE>>"""
+
+        graficas.rep_SB(dot)
