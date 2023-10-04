@@ -191,6 +191,7 @@ def t_DIR(t):
     # r'=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+ | \"=C:\\[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+\"'
     if t.value.endswith('"') or t.value.endswith("'"):
         t.value = t.value[2:-1]  # Eliminar las comillas alrededor de la cadena
+        # print(t)
     else:
         t.value = t.value[1:]
     # r'[^\\]+(\\[^\\]+)*\\[^.]+\.[a-zA-Z0-9]+'
@@ -400,7 +401,10 @@ def p_comando_fdisk(p):
         if type.lower() == "e":
             repo = reporte()
             repo.path = path_del_disco
-            repo.repSuperBloque()
+            try:
+                repo.repSuperBloque()
+            except Exception as e: 
+                print(str(e))
             e_local = True
 
         partition = FDisk()
@@ -467,7 +471,7 @@ def p_comando_rmdisk(p):
 
 def p_comando_mount(p):
     '''comando : MOUNT atributos_mount'''
-    global numParticion, path_mount, name_mount, mount
+    global numParticion, path_mount, name_mount, mount, path_del_disco
     # MONTA UNA PARTICION DEL DISCO, como: saber?
     # inicioParticion = "44"
     command = "mount"
@@ -487,7 +491,7 @@ def p_comando_mount(p):
         mount.listaMount()
 
         # mount -path=/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk -name=hola
-
+    path_del_disco = path_mount
 
 def p_atributos_mount(p):
     '''atributos_mount : atributos_mount atributo_mm
@@ -1124,10 +1128,13 @@ def p_atributoSolo_COPY(p):
 def p_comando_execute(p):
     """comando : EXECUTE GUION PATH DIR"""
     path_ejecutar = p[4]
+    print(path_ejecutar)
     contenido = ""
-    with open(path_ejecutar,"r") as archivo:
-        contenido = archivo.read()
     
+    with open(path_ejecutar,"r") as archivo:
+            contenido = archivo.read()
+    
+   
     # Número de segundos de retraso
     delay_seconds = 2  # Cambia esto al valor deseado
     print(f"=-=-=-=-= Ejecutando comandos en {path_ejecutar} =-=-=-=-=")
@@ -1160,13 +1167,15 @@ def p_comando_rep(p):
         elif atributo[0] == "ruta":
             ruta_rep = atributo[1]
 
-    if user != "":
+    
         if path_rep != "":
-            if sesion_Iniciada:
                 print(f"Comando REP")
                 print(f"Path {path_rep}")
                 print(f"ID: {id_rep}")
                 print(f"NAME: {name_rep}")
+
+                if path_rep[1:3] != "tmp":
+                    path_del_disco = r"/tmp/"+str(id_rep[3:])+".dsk" 
 
                 lts_p_reportes = ["mbr","disk","inode","journaling","block","bm_inode","bm_block","tree","sb","file","ls"]
                 repo = reporte()
@@ -1270,12 +1279,8 @@ def p_comando_rep(p):
                     print("")
             
 
-            else:
-                print("Porfavor INICIE SESION para ejecutar este comando")
         else:
             print("EL Comando REP necesita de un Path")
-    else:
-        print("Porfavor INICIE SESION para ejecutar este comando")
 
 
 

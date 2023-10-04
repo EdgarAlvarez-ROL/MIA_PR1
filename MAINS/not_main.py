@@ -6,29 +6,29 @@ from mount import Mount
 from mkfs import MKFS
 
 def main():
-    path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco2.dsk"
+    path = r"/home/rol/Tareas/PR1/MIA_PR1/Discos/disco.dsk"
 
-    # disk = MkDisk()
-    # disk.fit  = "FF"
-    # disk.path = path
-    # disk.size = 12
-    # disk.unit = "M"
-    # disk.create()
+    disk = MkDisk()
+    disk.fit  = "FF"
+    disk.path = path
+    disk.size = 12
+    disk.unit = "M"
+    disk.create()
 
     # # # rm = RmDisk()
     # # # rm.path = path
     # # # rm.remove()
 
-    # partition = FDisk()
-    # # partition.delete = "FULL"
-    # partition.size = 4
-    # partition.type = "p"
-    # partition.unit = "M"
-    # partition.path = path
-    # partition.name = "cosa"
-    # partition.fit = "WF"
-    # # # partition.add = '100'
-    # partition.fdisk()
+    partition = FDisk()
+    # partition.delete = "FULL"
+    partition.size = 4
+    partition.type = "p"
+    partition.unit = "M"
+    partition.path = path
+    partition.name = "cosa"
+    partition.fit = "WF"
+    # # partition.add = '100'
+    partition.fdisk()
 
     mount = Mount()
     # path = path
@@ -47,6 +47,9 @@ def main():
     repo = reporte()
     repo.path = path
     repo.repSuperBloque()
+    # repo.repFDISK2(tks)
+    repo.repMBR()
+    
 
 
 

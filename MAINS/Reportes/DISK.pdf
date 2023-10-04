@@ -5,9 +5,9 @@ digraph DISK {
         <tr>
             <td>MBR</td>
             <td>ESPACIO LIBRE 
- 8388608M 0.6666666666666666%</td>
+ -26214299M -259547.51485148515%</td>
             <td>PARTICION 1 
- 4194304</td>
+ 26214400</td>
             <td>PARTICION 2 
  0</td>
             <td>PARTICION 3 
