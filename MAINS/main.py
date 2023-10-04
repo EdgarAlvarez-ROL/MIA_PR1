@@ -1136,6 +1136,7 @@ def p_comando_execute(p):
     
    
     # Número de segundos de retraso
+    # COMENTARIO AJFDÑAKDJFAÑFK
     delay_seconds = 2  # Cambia esto al valor deseado
     print(f"=-=-=-=-= Ejecutando comandos en {path_ejecutar} =-=-=-=-=")
     
